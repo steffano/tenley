@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		00E356F31AD99517003FC87E /* TenleyTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* TenleyTests.m */; };
+		081A96AF190F4E899015E432 /* VisbyCF-DemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6F44305939754182AAEAC8E4 /* VisbyCF-DemiBold.ttf */; };
+		0EA86A3AE0194AA3A0881DB4 /* Poppins-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5780F6998785406FA58CD991 /* Poppins-Italic.ttf */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB11A68108700A75B9A /* LaunchScreen.xib */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
@@ -18,8 +20,13 @@
 		2DCD954D1E0B4F2C00145EB5 /* TenleyTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* TenleyTests.m */; };
 		606F3AA4719988587A246C87 /* libPods-Tenley-TenleyTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6F2E26E5D2D4E54290F43187 /* libPods-Tenley-TenleyTests.a */; };
 		9A0E997F56A39CBDA7211E9B /* libPods-Tenley.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A2E79C7816409B5F75E07DB2 /* libPods-Tenley.a */; };
+		B45EB03AF41648F0BFE6EA0B /* VisbyCF-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 34B4660033864AF79A603C30 /* VisbyCF-ExtraBold.ttf */; };
 		B4C68D2B22C4FF9DB5EBBD84 /* libPods-Tenley-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 06EE5EF782DEB193ABAD60C9 /* libPods-Tenley-tvOS.a */; };
+		D326828DED4F405497849522 /* Poppins-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3825C7E3428D40A9BEE631B9 /* Poppins-Medium.ttf */; };
+		D6868F90A90D4842A0140922 /* Poppins-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CF23A9CC928B4BC68BF4F106 /* Poppins-Regular.ttf */; };
+		E2FA5181765F435D86456A4E /* Poppins-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6644089DAA9A460EB634BBEC /* Poppins-Bold.ttf */; };
 		F17A1CE6CAFAB4F90AFA0E1B /* libPods-Tenley-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E392248975174996BF12BB5 /* libPods-Tenley-tvOSTests.a */; };
+		FAD1D83582FA4B94A439440F /* VisbyCF-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 09440DDE5E9F4CB4A5AF5593 /* VisbyCF-Medium.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -45,6 +52,7 @@
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* TenleyTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TenleyTests.m; sourceTree = "<group>"; };
 		06EE5EF782DEB193ABAD60C9 /* libPods-Tenley-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Tenley-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		09440DDE5E9F4CB4A5AF5593 /* VisbyCF-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "VisbyCF-Medium.ttf"; path = "../src/assets/fonts/VisbyCF-Medium.ttf"; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* Tenley.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tenley.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = Tenley/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = Tenley/AppDelegate.m; sourceTree = "<group>"; };
@@ -56,12 +64,18 @@
 		2C53DF6CFC19193578A3A2CA /* Pods-Tenley-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Tenley-tvOSTests.debug.xcconfig"; path = "Target Support Files/Pods-Tenley-tvOSTests/Pods-Tenley-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
 		2D02E47B1E0B4A5D006451C7 /* Tenley-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Tenley-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D02E4901E0B4A5D006451C7 /* Tenley-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Tenley-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		34B4660033864AF79A603C30 /* VisbyCF-ExtraBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "VisbyCF-ExtraBold.ttf"; path = "../src/assets/fonts/VisbyCF-ExtraBold.ttf"; sourceTree = "<group>"; };
+		3825C7E3428D40A9BEE631B9 /* Poppins-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-Medium.ttf"; path = "../src/assets/fonts/Poppins-Medium.ttf"; sourceTree = "<group>"; };
 		3E392248975174996BF12BB5 /* libPods-Tenley-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Tenley-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		5780F6998785406FA58CD991 /* Poppins-Italic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-Italic.ttf"; path = "../src/assets/fonts/Poppins-Italic.ttf"; sourceTree = "<group>"; };
+		6644089DAA9A460EB634BBEC /* Poppins-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-Bold.ttf"; path = "../src/assets/fonts/Poppins-Bold.ttf"; sourceTree = "<group>"; };
 		6CB8CB5DAFBD3701A933378D /* Pods-Tenley-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Tenley-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-Tenley-tvOSTests/Pods-Tenley-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
 		6D01E0060A4288D8D3B1BCC6 /* Pods-Tenley-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Tenley-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-Tenley-tvOS/Pods-Tenley-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
 		6F2E26E5D2D4E54290F43187 /* libPods-Tenley-TenleyTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Tenley-TenleyTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		6F44305939754182AAEAC8E4 /* VisbyCF-DemiBold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "VisbyCF-DemiBold.ttf"; path = "../src/assets/fonts/VisbyCF-DemiBold.ttf"; sourceTree = "<group>"; };
 		A2E79C7816409B5F75E07DB2 /* libPods-Tenley.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Tenley.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		AE77FE11CAAA7870F9E1C2AE /* Pods-Tenley-TenleyTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Tenley-TenleyTests.release.xcconfig"; path = "Target Support Files/Pods-Tenley-TenleyTests/Pods-Tenley-TenleyTests.release.xcconfig"; sourceTree = "<group>"; };
+		CF23A9CC928B4BC68BF4F106 /* Poppins-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-Regular.ttf"; path = "../src/assets/fonts/Poppins-Regular.ttf"; sourceTree = "<group>"; };
 		D150957FCCCCFB5F0474AF01 /* Pods-Tenley.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Tenley.release.xcconfig"; path = "Target Support Files/Pods-Tenley/Pods-Tenley.release.xcconfig"; sourceTree = "<group>"; };
 		DFABA30D723A11901F5126CE /* Pods-Tenley-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Tenley-tvOS.release.xcconfig"; path = "Target Support Files/Pods-Tenley-tvOS/Pods-Tenley-tvOS.release.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
@@ -165,6 +179,7 @@
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				F849BF7E90DC557758B9824A /* Pods */,
+				ADE614BEAF4244AC847EFDA7 /* Resources */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -182,6 +197,20 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		ADE614BEAF4244AC847EFDA7 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				6644089DAA9A460EB634BBEC /* Poppins-Bold.ttf */,
+				5780F6998785406FA58CD991 /* Poppins-Italic.ttf */,
+				3825C7E3428D40A9BEE631B9 /* Poppins-Medium.ttf */,
+				CF23A9CC928B4BC68BF4F106 /* Poppins-Regular.ttf */,
+				6F44305939754182AAEAC8E4 /* VisbyCF-DemiBold.ttf */,
+				34B4660033864AF79A603C30 /* VisbyCF-ExtraBold.ttf */,
+				09440DDE5E9F4CB4A5AF5593 /* VisbyCF-Medium.ttf */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
 		F849BF7E90DC557758B9824A /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -194,7 +223,6 @@
 				2C53DF6CFC19193578A3A2CA /* Pods-Tenley-tvOSTests.debug.xcconfig */,
 				6CB8CB5DAFBD3701A933378D /* Pods-Tenley-tvOSTests.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -292,7 +320,9 @@
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
 					13B07F861A680F5B00A75B9A = {
+						DevelopmentTeam = 7RWA9C3RKS;
 						LastSwiftMigration = 1120;
+						ProvisioningStyle = Manual;
 					};
 					2D02E47A1E0B4A5D006451C7 = {
 						CreatedOnToolsVersion = 8.2.1;
@@ -340,6 +370,13 @@
 			files = (
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
+				E2FA5181765F435D86456A4E /* Poppins-Bold.ttf in Resources */,
+				0EA86A3AE0194AA3A0881DB4 /* Poppins-Italic.ttf in Resources */,
+				D326828DED4F405497849522 /* Poppins-Medium.ttf in Resources */,
+				D6868F90A90D4842A0140922 /* Poppins-Regular.ttf in Resources */,
+				081A96AF190F4E899015E432 /* VisbyCF-DemiBold.ttf in Resources */,
+				B45EB03AF41648F0BFE6EA0B /* VisbyCF-ExtraBold.ttf in Resources */,
+				FAD1D83582FA4B94A439440F /* VisbyCF-Medium.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -629,7 +666,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 7RWA9C3RKS;
 				ENABLE_BITCODE = NO;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
@@ -642,8 +682,9 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.redfoundry.tenley;
 				PRODUCT_NAME = Tenley;
+				PROVISIONING_PROFILE_SPECIFIER = "Tenley Ad Hoc";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -656,7 +697,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 7RWA9C3RKS;
 				INFOPLIST_FILE = Tenley/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
@@ -664,8 +708,9 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.redfoundry.tenley;
 				PRODUCT_NAME = Tenley;
+				PROVISIONING_PROFILE_SPECIFIER = "Tenley Ad Hoc";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};

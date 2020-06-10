@@ -1,11 +1,18 @@
 import 'react-native-gesture-handler';
-import * as React from 'react';
+import React, {useEffect} from 'react';
 import Navigation from './navigation';
+import {GlobalProvider} from './GlobalContext';
+import SplashScreen from 'react-native-splash-screen';
 
 export default function App() {
+  // useEffect(() => {
+  //   SplashScreen.hide();
+  // }, []);
   return (
     <>
-      <Navigation />
+      <GlobalProvider>
+        <Navigation />
+      </GlobalProvider>
     </>
   );
 }
