@@ -5,9 +5,9 @@ import {GlobalProvider} from './GlobalContext';
 import SplashScreen from 'react-native-splash-screen';
 
 export default function App() {
-  // useEffect(() => {
-  //   SplashScreen.hide();
-  // }, []);
+  useEffect(() => {
+    SplashScreen.hide();
+  }, []);
   return (
     <>
       <GlobalProvider>
