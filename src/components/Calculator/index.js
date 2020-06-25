@@ -1,6 +1,5 @@
 import React, {useContext} from 'react';
 import {View, Text, Button} from 'react-native';
-import * as Keychain from 'react-native-keychain';
 import Slider from './Slider';
 
 const Calculator = ({navigation}) => {

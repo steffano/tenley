@@ -7,16 +7,11 @@ import {
   StyleSheet,
 } from 'react-native';
 import {GlobalContext} from '../../../GlobalContext';
-import * as Keychain from 'react-native-keychain';
 import {Header} from '../../../components/Header';
 import {colors} from '../../../utilities/styles';
 
 const Message = () => {
   const [globalData, setGlobalData] = useContext(GlobalContext);
-
-  Keychain.getGenericPassword().then(res => {
-    console.log('#######', res);
-  });
 
   const [section, setSection] = useState('Messages');
 

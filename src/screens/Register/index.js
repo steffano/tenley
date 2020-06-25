@@ -13,7 +13,7 @@ import {Form, TextInput} from '../../components/Form';
 import {Button} from '../../components/Button';
 import {Auth} from 'aws-amplify';
 import isEmpty from 'lodash/isEmpty';
-import * as Keychain from 'react-native-keychain';
+// import * as Keychain from 'react-native-keychain';
 import {GreenModal} from '../../components/Modal';
 import {RFValue} from 'react-native-responsive-fontsize';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
@@ -80,10 +80,10 @@ const Register = ({navigation}) => {
   };
 
   const storeUser = async CognitoUser => {
-    await Keychain.setGenericPassword(
-      'CognitoUser',
-      JSON.stringify(CognitoUser),
-    );
+    // await Keychain.setGenericPassword(
+    //   'CognitoUser',
+    //   JSON.stringify(CognitoUser),
+    // );
     console.log(CognitoUser);
     navigation.navigate('Verify');
   };

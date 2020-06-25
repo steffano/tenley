@@ -8,16 +8,12 @@ import {
   TouchableOpacity,
 } from 'react-native';
 // import {GlobalContext} from '../../GlobalContext';
-import * as Keychain from 'react-native-keychain';
+
 import {colors} from '../../../utilities/styles';
 import {Header} from '../../../components/Header';
 
 const Activity = ({navigation}) => {
   // const [globalData, setGlobalData] = useContext(GlobalContext);
-
-  Keychain.getGenericPassword().then(res => {
-    console.log('#######', res);
-  });
 
   const [section, setSection] = useState('Payments');
 

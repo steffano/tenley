@@ -1,7 +1,6 @@
 // import React, {useContext} from 'react';
 // import {View, Text, Button} from 'react-native';
 // import {GlobalContext} from '../../GlobalContext';
-// import * as Keychain from 'react-native-keychain';
 
 // const Accounts = () => {
 //   const [globalData, setGlobalData] = useContext(GlobalContext);

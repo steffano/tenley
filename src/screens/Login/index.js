@@ -4,7 +4,7 @@ import {GlobalContext} from '../../GlobalContext';
 import {Form, TextInput} from '../../components/Form';
 import {Button} from '../../components/Button';
 import isEmpty from 'lodash/isEmpty';
-import * as Keychain from 'react-native-keychain';
+// import * as Keychain from 'react-native-keychain';
 import {colors} from '../../utilities/styles';
 
 import {Auth} from 'aws-amplify';
@@ -41,10 +41,10 @@ const Login = ({navigation}) => {
   };
 
   const storeUser = async CognitoUser => {
-    await Keychain.setGenericPassword(
-      'CognitoUser',
-      JSON.stringify(CognitoUser),
-    );
+    // await Keychain.setGenericPassword(
+    //   'CognitoUser',
+    //   JSON.stringify(CognitoUser),
+    // );
     console.log(CognitoUser);
     setGlobalData({loggedIn: true});
   };
