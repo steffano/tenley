@@ -1,7 +1,7 @@
 import React, {useContext, useState} from 'react';
-import {SafeAreaView, Text, View, StyleSheet, ScrollView} from 'react-native';
+import {SafeAreaView, Text, View, StyleSheet} from 'react-native';
 import {GlobalContext} from '../../GlobalContext';
-import {colors} from '../../utilities/styles';
+import {colors, Typography, Spacing} from '../../utilities/styles';
 import {
   maskPhone,
   unmaskPhone,
@@ -12,10 +12,7 @@ import {
 import {Form, TextInput} from '../../components/Form';
 import {Button} from '../../components/Button';
 import {Auth} from 'aws-amplify';
-import isEmpty from 'lodash/isEmpty';
-// import * as Keychain from 'react-native-keychain';
 import {GreenModal} from '../../components/Modal';
-import {RFValue} from 'react-native-responsive-fontsize';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 const Register = ({navigation}) => {
@@ -52,7 +49,7 @@ const Register = ({navigation}) => {
     {
       key: '2',
       body:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip.\n',
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. \n Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip.\n',
     },
     {
       key: '3',
@@ -74,7 +71,7 @@ const Register = ({navigation}) => {
       }
     } catch (error) {
       console.log('error signing up:', error.code);
-      setErrorMessage(error.code);
+      setErrorMessage(error.message);
       setLoading(false);
     }
   };
@@ -85,6 +82,7 @@ const Register = ({navigation}) => {
     //   JSON.stringify(CognitoUser),
     // );
     console.log(CognitoUser);
+    setGlobalData({phone: phone});
     navigation.navigate('Verify');
   };
 
@@ -120,13 +118,11 @@ const Register = ({navigation}) => {
   };
 
   return (
-    <SafeAreaView style={{flex: 1}}>
+    <SafeAreaView style={styles.container}>
       <KeyboardAwareScrollView
-        style={{flex: 1}}
+        contentInsetAdjustmentBehavior="automatic"
         contentContainerStyle={{
           flexGrow: 1,
-          // justifyContent: 'space-between',
-          // flexDirection: 'column',
         }}>
         <Form header="Create Your Account">
           <TextInput
@@ -203,22 +199,9 @@ const Register = ({navigation}) => {
             textContentType="oneTimeCode"
             message="Passwords must match"
           />
-          <Text
-            style={{
-              paddingHorizontal: 10,
-              fontFamily: 'Poppins-Regular',
-              color: colors.darkRed,
-            }}>
-            {errorMessage}
-          </Text>
+          <Text style={Typography.errorText}>{errorMessage}</Text>
         </Form>
-        <View
-          style={{
-            flex: 1,
-            width: '90%',
-            alignSelf: 'center',
-            justifyContent: 'flex-end',
-          }}>
+        <View style={styles.bottomButtonsContainer}>
           <Button
             disabled={loading}
             title="Create Account"
@@ -236,55 +219,36 @@ const Register = ({navigation}) => {
         onClose={() => setShowModal(false)}
         visible={showModal}
         key={1}
-        style={{height: '90%'}}>
+        style={{height: '85%'}}>
         <View
-          style={{
-            flex: 1,
-          }}>
+          style={{flex: 1, alignContent: 'center', justifyContent: 'center'}}>
           <Text style={styles.headerText}>Important Disclosures</Text>
-          <Text style={styles.bodyText}>{disclosureTitle}</Text>
-          <View
-            style={{
-              marginTop: RFValue(12),
-              justifyContent: 'center',
-              paddingHorizontal: 5,
-            }}>
-            {disclosureList.map((item, index) => {
-              return (
-                <View key={item.key} style={{flexDirection: 'row'}}>
-                  <Text
-                    style={{
-                      color: colors.tenleyGreen,
-                      fontFamily: 'Poppins-Bold',
-                      fontSize: RFValue(15),
-                    }}>
-                    {item.key}.{' '}
-                  </Text>
-
-                  <Text style={styles.bodyText}>{item.body}</Text>
-                </View>
-              );
-            })}
-          </View>
           <Text
-            style={{
-              marginTop: 5,
-              textDecorationLine: 'underline',
-              fontFamily: 'Poppins-Medium',
-              fontSize: RFValue(12),
-              color: colors.darkGreen,
-              marginHorizontal: 10,
-            }}>
-            See more details
+            style={[
+              styles.bodyText,
+              {marginBottom: 25, paddingHorizontal: 15},
+            ]}>
+            {disclosureTitle}
           </Text>
-          <View
-            style={{
-              position: 'absolute',
-              bottom: 0,
-              width: '100%',
-              alignSelf: 'center',
-              letterSpacing: 1.25,
-            }}>
+
+          {disclosureList.map((item, index) => {
+            return (
+              <View
+                key={item.key}
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'center',
+                  alignSelf: 'center',
+                  maxWidth: '90%',
+                }}>
+                <Text style={styles.greenNumbers}>{item.key}. </Text>
+                <Text style={styles.bodyText}>{item.body}</Text>
+              </View>
+            );
+          })}
+          <Text style={Typography.textLink}>See more details</Text>
+
+          <View style={styles.bottomButtonsContainer}>
             <Button title="Agree" onPress={() => handleAgree()} />
             <Button
               textOnly
@@ -297,25 +261,30 @@ const Register = ({navigation}) => {
     </SafeAreaView>
   );
 };
-
+s;
 export default Register;
 
 const styles = StyleSheet.create({
+  container: {
+    ...Spacing.defaultContainer,
+  },
+
+  greenNumbers: {
+    ...Typography.boldGreen,
+    alignSelf: 'flex-start',
+    marginRight: 5,
+    marginBottom: 5,
+  },
+  bottomButtonsContainer: {
+    flex: 1,
+    paddingHorizontal: 15,
+    justifyContent: 'flex-end',
+  },
   headerText: {
-    color: colors.darkGreen,
-    fontFamily: 'Poppins-Bold',
-    fontSize: RFValue(15),
-    marginVertical: RFValue(20),
-    textAlign: 'center',
-    letterSpacing: 0.75,
+    ...Typography.headerText,
   },
   bodyText: {
-    color: colors.darkGreen,
-    fontFamily: 'Poppins-Regular',
-    fontSize: RFValue(12.5),
-    textAlign: 'left',
-    letterSpacing: 0.88,
-    marginHorizontal: RFValue(5),
-    marginTop: 2,
+    ...Typography.bodyText,
+    alignSelf: 'flex-start',
   },
 });

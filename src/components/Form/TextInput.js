@@ -1,9 +1,18 @@
 import React, {useState, useEffect} from 'react';
-import {TextInput, StyleSheet, View, Text, Animated} from 'react-native';
+import {
+  TextInput,
+  StyleSheet,
+  View,
+  Text,
+  Animated,
+  Keyboard,
+  TouchableWithoutFeedback,
+} from 'react-native';
 import {RFPercentage, RFValue} from 'react-native-responsive-fontsize';
-
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import FieldWrapper from './FieldWrapper';
 import {colors} from '../../utilities/styles';
+import moment from 'moment';
 
 export default ({
   label,
@@ -12,15 +21,35 @@ export default ({
   highlightOnFocus,
   value,
   invalid,
+  datePicker,
+  setDateValue,
   ...rest
 }) => {
   const [isFocused, setIsFocused] = useState(false);
+  const [showPicker, setShowPicker] = useState(false);
 
-  const handleFocus = () => setIsFocused(true);
-  const handleBlur = () => setIsFocused(false);
+  const handleFocus = () => {
+    setIsFocused(true);
+  };
+  const handleBlur = () => {
+    setIsFocused(false);
+  };
+
+  const handleDatePicker = () => {
+    setIsFocused(true);
+    setShowPicker(true);
+    Keyboard.dismiss();
+  };
+
+  const setDate = date => {
+    let showDate = moment(date).format('MM/DD/YYYY');
+    // let postDate = moment(value).format('YYYY-MM-DD');
+    setIsFocused(false);
+    setShowPicker(false);
+    setDateValue(showDate);
+  };
 
   const animatedLabelValue = new Animated.Value(value === '' ? 0 : 1);
-
   const inputStyle = [styles.textInput];
 
   useEffect(() => {
@@ -59,21 +88,39 @@ export default ({
     }),
   };
   return (
-    <FieldWrapper
-      highlight={highlightOnFocus && isFocused}
-      message={message}
-      messageType={messageType}
-      invalid={invalid}>
-      <Animated.Text style={placeholderToLabel}>{label}</Animated.Text>
-      <TextInput
-        style={inputStyle}
-        {...rest}
-        selectionColor={colors.tenleyGreen}
-        onFocus={handleFocus}
-        onBlur={handleBlur}
-        value={value}
+    <>
+      <FieldWrapper
+        highlight={highlightOnFocus && isFocused}
+        message={message}
+        messageType={messageType}
+        invalid={invalid}>
+        <Animated.Text style={placeholderToLabel}>{label}</Animated.Text>
+        {!datePicker ? (
+          <TextInput
+            style={inputStyle}
+            {...rest}
+            selectionColor={colors.tenleyGreen}
+            onFocus={handleFocus}
+            onBlur={handleBlur}
+            value={value}
+            blurOnSubmit
+          />
+        ) : (
+          <TouchableWithoutFeedback onPress={handleDatePicker}>
+            <Text style={[inputStyle, {paddingTop: 10}]}>{value}</Text>
+          </TouchableWithoutFeedback>
+        )}
+      </FieldWrapper>
+      <DateTimePickerModal
+        isVisible={showPicker}
+        mode="date"
+        onConfirm={date => setDate(date)}
+        onCancel={() => {
+          setShowPicker(false);
+          handleBlur();
+        }}
       />
-    </FieldWrapper>
+    </>
   );
 };
 
@@ -85,7 +132,7 @@ const styles = StyleSheet.create({
     letterSpacing: 0.75,
     marginTop: RFValue(22),
     marginHorizontal: 15,
-    minHeight: RFValue(35),
+    height: RFValue(29),
   },
   labelStyle: {
     top: RFValue(8),
@@ -94,7 +141,7 @@ const styles = StyleSheet.create({
     letterSpacing: 1.25,
   },
   placeholderStyle: {
-    top: RFValue(20),
+    top: RFValue(17),
     color: '#aaa',
     fontSize: RFValue(12),
     letterSpacing: 1.75,

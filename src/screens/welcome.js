@@ -9,11 +9,10 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import AppIntroSlider from 'react-native-app-intro-slider';
-import {colors} from '../utilities/styles';
-import {Button} from '../components/Button';
+import {colors, Typography, Spacing} from '../utilities/styles';
+import {tenleyGreen} from '../utilities/colors';
 
 export default function Welcome({navigation}) {
-  const [showSlides, setShowSlides] = useState(true);
   const [slideIndex, setSlideIndex] = useState(0);
 
   const slides = [
@@ -28,7 +27,9 @@ export default function Welcome({navigation}) {
     {
       key: '2',
       text:
-        'With Tenley, you can maximize your \n payments, control how collectors \n contact you, and FLY to debt freedom!',
+        'With Tenley, you can maximize your \n payments, control how collectors \n contact you, and ',
+      text2: 'FLY ',
+      text3: 'to debt freedom!',
       image: require('../assets/mascot/tenley-mascot2.png'),
       backgroundColor: colors.white,
       styles: {marginLeft: 25},
@@ -46,23 +47,23 @@ export default function Welcome({navigation}) {
   const renderSlide = ({item}) => {
     return (
       <View style={[styles.container, {backgroundColor: item.backgroundColor}]}>
-        <View
-          style={{
-            flex: 1,
-            justifyContent: 'center',
-          }}>
+        <View style={styles.container}>
           <Image
             source={item.image}
             resizeMode="contain"
-            style={[
-              {
-                width: '80%',
-                maxHeight: '70%',
-              },
-              item.styles,
-            ]}
+            style={[styles.tenleyImage, item.styles]}
           />
-          <Text style={styles.text}>{item.text}</Text>
+          <Text style={styles.text}>
+            {item.text}
+            <Text
+              style={{
+                color: colors.mediumGreen,
+                fontFamily: 'Poppins-Bold',
+              }}>
+              {item.text2}
+            </Text>
+            <Text>{item.text3}</Text>
+          </Text>
         </View>
       </View>
     );
@@ -79,38 +80,13 @@ export default function Welcome({navigation}) {
     }
   };
 
-  return !showSlides ? (
+  return (
     <>
-      <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-        <Button
-          title="Go to Login"
-          onPress={() => navigation.navigate('Login')}
-        />
-        <Button
-          title="Go to storybook"
-          onPress={() => navigation.navigate('Storybook')}
-        />
-        <Button title="Start slides" onPress={() => setShowSlides(true)} />
-      </View>
-    </>
-  ) : (
-    <>
-      <SafeAreaView
-        style={{
-          flex: 1,
-          height: '100%',
-          justifyContent: 'center',
-          backgroundColor: colors.white,
-        }}>
+      <SafeAreaView style={styles.container}>
         <Image
           source={require('../assets/logo/Transparent-1.png')}
           resizeMode="contain"
-          style={{
-            height: 41,
-            width: 132,
-            alignSelf: 'center',
-            paddingBottom: 100,
-          }}
+          style={styles.logoImage}
         />
         <AppIntroSlider
           renderItem={renderSlide}
@@ -128,7 +104,7 @@ export default function Welcome({navigation}) {
         />
         <TouchableOpacity>
           <Text style={styles.skipButton} onPress={() => onDone()}>
-            SKIP
+            {slideIndex === 2 ? 'CONTINUE' : 'SKIP'}
           </Text>
         </TouchableOpacity>
       </SafeAreaView>
@@ -138,22 +114,16 @@ export default function Welcome({navigation}) {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    // justifyContent: 'center',
-    // alignItems: 'center',
+    ...Spacing.defaultContainer,
   },
   text: {
+    ...Typography.bodyText,
     fontSize: RFValue(14),
-    fontFamily: 'Poppins-Regular',
     textAlign: 'center',
-    color: colors.darkGreen,
-    paddingVertical: RFValue(30),
-    paddingHorizontal: RFValue(20),
-    marginBottom: RFValue(25),
+    padding: Spacing.large,
+    marginBottom: Spacing.extraLarge,
   },
   skipButton: {
-    height: 23,
-    width: 34,
     color: colors.darkGreen,
     fontFamily: 'Poppins-Regular',
     fontSize: RFValue(12),
@@ -162,5 +132,18 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: RFValue(22),
     right: RFValue(20),
+  },
+  tenleyImage: {
+    flex: 1,
+    maxHeight: '70%',
+    maxWidth: '80%',
+    marginBottom: Spacing.large,
+  },
+  logoImage: {
+    flex: 2,
+    maxHeight: 40,
+    maxWidth: 130,
+    alignSelf: 'center',
+    margin: Spacing.large,
   },
 });

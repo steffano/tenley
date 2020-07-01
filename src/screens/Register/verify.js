@@ -4,7 +4,7 @@ import {GlobalContext} from '../../GlobalContext';
 import {Form, TextInput} from '../../components/Form';
 import {Button} from '../../components/Button';
 import {GreenModal} from '../../components/Modal';
-import {colors} from '../../utilities/styles';
+import {colors, Spacing} from '../../utilities/styles';
 import {RFValue, RFPercentage} from 'react-native-responsive-fontsize';
 import {maskPhone, unmaskPhone} from '../../utilities/validation';
 
@@ -16,7 +16,7 @@ import {
 } from 'react-native-confirmation-code-field';
 
 const Verify = ({navigation}) => {
-  const [, setGlobalData] = useContext(GlobalContext);
+  const [globalData] = useContext(GlobalContext);
 
   const [showResend, setShowResend] = useState(false);
   const [phone, setPhone] = useState('');
@@ -39,7 +39,7 @@ const Verify = ({navigation}) => {
   });
 
   return (
-    <SafeAreaView style={{flex: 1}}>
+    <SafeAreaView style={styles.container}>
       <Text style={[styles.headerText, {textAlign: 'center'}]}>
         Authentication
       </Text>
@@ -49,13 +49,11 @@ const Verify = ({navigation}) => {
             flex: 1,
             justifyContent: 'center',
             alignContent: 'center',
-            marginHorizontal: 2,
-            marginBottom: 250,
           }}>
           <Text style={styles.headerText}>Enter your code</Text>
           <Text style={styles.subHeaderText}>
-            We sent a code to 123-456-7890. Check your messages and enter the
-            6-digit pin.
+            We sent a code to {globalData.phone}. Check your messages and enter
+            the 6-digit pin.
           </Text>
           <View
             style={{
@@ -83,31 +81,24 @@ const Verify = ({navigation}) => {
             />
           </View>
         </View>
-        <View
-          style={{
-            position: 'absolute',
-            bottom: 10,
-            width: '100%',
-            alignSelf: 'center',
-          }}>
-          <Button
-            disabled={value.length < 6}
-            title="Verify"
-            onPress={() => handleVerify()}
-          />
-          <Button
-            textOnly
-            title="RESEND CODE"
-            onPress={() => setShowResend(true)}
-          />
-        </View>
       </Form>
-
+      <View style={styles.bottomButtonsContainer}>
+        <Button
+          disabled={value.length < 6}
+          title="Verify"
+          onPress={() => handleVerify()}
+        />
+        <Button
+          textOnly
+          title="RESEND CODE"
+          onPress={() => setShowResend(true)}
+        />
+      </View>
       <GreenModal
         onClose={() => setShowResend(false)}
         visible={showResend}
         key={1}
-        style={{height: RFPercentage(60), width: '90%'}}>
+        style={{height: RFPercentage(55)}}>
         <Text style={[styles.headerText, {fontSize: 18, marginBottom: 20}]}>
           Resend Verification Code
         </Text>
@@ -116,13 +107,13 @@ const Verify = ({navigation}) => {
             flex: 1,
             justifyContent: 'center',
             alignContent: 'center',
-            marginHorizontal: 2,
+            paddingHorizontal: 12,
           }}>
           <Text style={styles.subHeaderText}>
             Please confirm you've entered your correct phone number and resend
             your verification code.
           </Text>
-          <View style={{height: 25}} />
+          {/* <View style={{height: RFValue(20)}} /> */}
 
           <TextInput
             highlightOnFocus
@@ -131,7 +122,7 @@ const Verify = ({navigation}) => {
             onChangeText={text => setPhone(maskPhone(text))}
             value={phone}
           />
-          <View style={{height: 25}} />
+          <View style={{height: RFValue(15)}} />
           <Button
             disabled={phone.length < 9}
             title="Resend Code"
@@ -152,14 +143,13 @@ export default Verify;
 
 const styles = StyleSheet.create({
   container: {
-    marginHorizontal: 20,
-    flex: 1,
+    ...Spacing.defaultContainer,
   },
   headerText: {
-    marginVertical: 20,
+    marginVertical: 15,
     color: colors.darkGreen,
     fontFamily: 'Poppins-Bold',
-    fontSize: RFValue(18),
+    fontSize: RFValue(16),
     letterSpacing: 0.5,
   },
   topRow: {
@@ -168,7 +158,7 @@ const styles = StyleSheet.create({
   subHeaderText: {
     fontFamily: 'Poppins-Regular',
     color: colors.darkGreen,
-    fontSize: RFValue(13),
+    fontSize: RFValue(12),
     marginBottom: 20,
     letterSpacing: 0.88,
   },
@@ -189,6 +179,11 @@ const styles = StyleSheet.create({
     marginTop: 0,
     marginHorizontal: 5,
     color: colors.tenleyGreen,
+  },
+  bottomButtonsContainer: {
+    flex: 1,
+    paddingHorizontal: 15,
+    justifyContent: 'flex-end',
   },
   focusCell: {
     borderColor: colors.lightGray,

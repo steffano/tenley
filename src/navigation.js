@@ -1,5 +1,5 @@
 import React, {useContext} from 'react';
-import {Image} from 'react-native';
+import {Image, View} from 'react-native';
 import Welcome from './screens/welcome';
 import Login from './screens/Login';
 import Register from './screens/Register';
@@ -56,32 +56,33 @@ function Navigation() {
               },
               style: {
                 height: RFPercentage(12),
-                paddingVertical: 20,
-                shadowColor: colors.lightGray,
+                paddingVertical: 15,
+                shadowColor: colors.mediumGray,
                 shadowOpacity: 0.8,
-                shadowRadius: 10,
+                shadowRadius: 3,
                 shadowOffset: {
                   height: 1,
                   width: 1,
                 },
               },
               tabStyle: {
-                maxHeight: 100,
+                // maxHeight: 100,
               },
             }}>
             <Tab.Screen
               name="Accounts"
               component={AccountsStackScreen}
               options={{
-                tabBarIcon: ({tabInfo, focused}) => (
-                  <Image
-                    source={
-                      focused
-                        ? require('./assets/icons/menu/home/fill.png')
-                        : require('./assets/icons/menu/home/line.png')
-                    }
-                    style={{width: 26, height: 26}}
-                  />
+                tabBarIcon: ({focused}) => (
+                  <View>
+                    <Image
+                      source={
+                        focused
+                          ? require('./assets/icons/menu/home/fill.png')
+                          : require('./assets/icons/menu/home/line.png')
+                      }
+                    />
+                  </View>
                 ),
               }}
             />
@@ -89,14 +90,13 @@ function Navigation() {
               name="Activity"
               component={ActivityStackScreen}
               options={{
-                tabBarIcon: ({tabInfo, focused}) => (
+                tabBarIcon: ({focused}) => (
                   <Image
                     source={
                       focused
                         ? require('./assets/icons/menu/activity/fill.png')
                         : require('./assets/icons/menu/activity/line.png')
                     }
-                    style={{width: 26, height: 26}}
                   />
                 ),
               }}
@@ -105,14 +105,13 @@ function Navigation() {
               name="Messages"
               component={MessageStackScreen}
               options={{
-                tabBarIcon: ({tabInfo, focused}) => (
+                tabBarIcon: ({focused}) => (
                   <Image
                     source={
                       focused
                         ? require('./assets/icons/menu/messages/fill.png')
                         : require('./assets/icons/menu/messages/line.png')
                     }
-                    style={{width: 26, height: 26}}
                   />
                 ),
               }}
@@ -121,14 +120,13 @@ function Navigation() {
               name="Profile"
               component={ProfileStackScreen}
               options={{
-                tabBarIcon: ({tabInfo, focused}) => (
+                tabBarIcon: ({focused}) => (
                   <Image
                     source={
                       focused
                         ? require('./assets/icons/menu/profile/fill.png')
                         : require('./assets/icons/menu/profile/line.png')
                     }
-                    style={{width: 26, height: 26}}
                   />
                 ),
               }}

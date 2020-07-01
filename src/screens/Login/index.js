@@ -1,11 +1,11 @@
 import React, {useContext, useState} from 'react';
-import {SafeAreaView, Text, View} from 'react-native';
+import {SafeAreaView, Text, View, StyleSheet} from 'react-native';
 import {GlobalContext} from '../../GlobalContext';
 import {Form, TextInput} from '../../components/Form';
 import {Button} from '../../components/Button';
 import isEmpty from 'lodash/isEmpty';
 // import * as Keychain from 'react-native-keychain';
-import {colors} from '../../utilities/styles';
+import {colors, Typography, Spacing} from '../../utilities/styles';
 
 import {Auth} from 'aws-amplify';
 
@@ -56,7 +56,7 @@ const Login = ({navigation}) => {
   };
 
   return (
-    <SafeAreaView style={{flex: 1}}>
+    <SafeAreaView style={styles.container}>
       <Form header="Log In">
         <TextInput
           label="Email"
@@ -82,27 +82,14 @@ const Login = ({navigation}) => {
           invalid={!pwValid}
           message={'Please enter your password'}
         />
-        <Text
-          style={{
-            paddingHorizontal: 10,
-            fontFamily: 'Poppins-Regular',
-            color: colors.darkRed,
-          }}>
-          {errorMessage}
-        </Text>
+        <Text style={Typography.errorText}>{errorMessage}</Text>
         <Button textOnly title="USE FACE ID" />
       </Form>
-      <View
-        style={{
-          flex: 1,
-          width: '90%',
-          alignSelf: 'center',
-          justifyContent: 'flex-end',
-        }}>
+      <View style={styles.bottomButtonsContainer}>
         {/* <Button
-            title="Log In"
-            onPress={() => setGlobalData({loggedIn: true})}
-          /> */}
+          title="Log In"
+          onPress={() => setGlobalData({loggedIn: true})}
+        /> */}
         <Button title="Log In" onPress={() => login()} />
         <Button
           textOnly
@@ -115,3 +102,29 @@ const Login = ({navigation}) => {
 };
 
 export default Login;
+
+const styles = StyleSheet.create({
+  container: {
+    ...Spacing.defaultContainer,
+  },
+
+  greenNumbers: {
+    ...Typography.boldGreen,
+    alignSelf: 'flex-start',
+    lineHeight: 20,
+    marginRight: 5,
+  },
+  bottomButtonsContainer: {
+    flex: 1,
+    paddingHorizontal: 15,
+    justifyContent: 'flex-end',
+  },
+  headerText: {
+    ...Typography.headerText,
+  },
+  bodyText: {
+    ...Typography.bodyText,
+    alignSelf: 'flex-start',
+    lineHeight: 18,
+  },
+});

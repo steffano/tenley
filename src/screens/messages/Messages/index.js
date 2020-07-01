@@ -52,7 +52,11 @@ const Message = () => {
             </TouchableOpacity>
           </View>
         </View>
-        <Text style={{fontFamily: 'VisbyCF-Medium'}}>Message</Text>
+        <View style={{flex: 1, justifyContent: 'center'}}>
+          <Text style={{fontFamily: 'VisbyCF-Medium', textAlign: 'center'}}>
+            {section}
+          </Text>
+        </View>
       </SafeAreaView>
     </>
   );

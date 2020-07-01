@@ -2,6 +2,8 @@ import React from 'react';
 import {
   StyleSheet,
   View,
+  Image,
+  SafeAreaView,
   TouchableHighlight,
   TouchableWithoutFeedback,
   Text,
@@ -11,25 +13,33 @@ import PropTypes from 'prop-types';
 import {Button} from '../components/Button';
 import {colors} from '../utilities/styles';
 
-export const GreenModal = ({onClose, visible, children, style}) => {
+export const GreenModal = ({onClose, visible, children, style, closeOnX}) => {
   return (
-    <>
+    <SafeAreaView>
       <Modal animationType="fade" visible={visible} transparent>
         <TouchableWithoutFeedback onPress={onClose}>
           <View style={styles.backgroundPress}>
             <View style={styles.centeredView}>
               <View style={[style, styles.modalView]}>
+                {closeOnX && (
+                  <Image
+                    source={require('../assets/icons/close.png')}
+                    resizeMode="contain"
+                    style={{
+                      position: 'absolute',
+                      top: 20,
+                      right: 20,
+                      zIndex: 100,
+                    }}
+                  />
+                )}
                 {children}
-
-                {/* <TouchableHighlight onPress={onClose}>
-                  <Text>Hide Modal</Text>
-                </TouchableHighlight> */}
               </View>
             </View>
           </View>
         </TouchableWithoutFeedback>
       </Modal>
-    </>
+    </SafeAreaView>
   );
 };
 
@@ -38,17 +48,18 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 22,
   },
   backgroundPress: {
     backgroundColor: colors.transparentGreen,
     flex: 1,
   },
   modalView: {
-    margin: 20,
+    // flex: 1,
+    width: '90%',
     backgroundColor: 'white',
     borderRadius: 10,
-    padding: 10,
+    padding: 5,
+    justifyContent: 'center',
     alignItems: 'center',
     shadowColor: '#000',
     shadowOffset: {
@@ -63,8 +74,10 @@ const styles = StyleSheet.create({
 Modal.propTypes = {
   visible: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
+  closeOnX: PropTypes.bool,
 };
 Modal.defaultProps = {
   visible: false,
   onClose: () => {},
+  closeOnX: false,
 };

@@ -1,11 +1,11 @@
 import React, {useState, useEffect} from 'react';
 import {TextInput, StyleSheet, View, Text, Animated} from 'react-native';
 import {RFPercentage, RFValue} from 'react-native-responsive-fontsize';
-import Slider from '@react-native-community/slider';
+import Slider from 'react-native-slider';
 import {colors} from '../../utilities/styles';
 
-export default ({min, max, title, isCurrency}) => {
-  const [calcValue, setCalcValue] = useState(3000);
+export default ({min, max, title, total, isCurrency, onSlide}) => {
+  const [calcValue, setCalcValue] = useState(total);
   // const min = 2000;
   // const max = 15700;
   // const title = 'Total Debt Balance';
@@ -15,10 +15,7 @@ export default ({min, max, title, isCurrency}) => {
         style={{
           width: '100%',
           minHeight: 100,
-          // backgroundColor: 'red',
           alignContent: 'center',
-          marginVertical: 10,
-          paddingVertical: 10,
         }}>
         <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
           <Text style={styles.text}>{title}</Text>
@@ -29,7 +26,7 @@ export default ({min, max, title, isCurrency}) => {
             </Text>
 
             <Text style={styles.text}>
-              {calcValue.toLocaleString(navigator.language, {
+              {total.toLocaleString(navigator.language, {
                 maximumFractionDigits: 0,
               })}
             </Text>
@@ -41,8 +38,11 @@ export default ({min, max, title, isCurrency}) => {
           maximumValue={max}
           minimumTrackTintColor={colors.tenleyGreen}
           maximumTrackTintColor={colors.lightGray}
-          value={calcValue}
-          onValueChange={val => setCalcValue(val)}
+          value={total}
+          onValueChange={onSlide}
+          step={isCurrency ? 10 : null}
+          thumbStyle={styles.thumb}
+          trackStyle={styles.track}
         />
         <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
           <Text style={[styles.text, {fontSize: 11}]}>
@@ -67,12 +67,13 @@ const styles = StyleSheet.create({
   text: {
     fontFamily: 'Poppins-Regular',
     color: colors.darkGreen,
-    fontSize: 14,
+    fontSize: RFValue(12),
     letterSpacing: 0.9,
+    alignSelf: 'center',
   },
   valueBox: {
     height: 41,
-    width: 112,
+    width: RFPercentage(15),
     borderRadius: 5,
     backgroundColor: colors.lightestGray,
     alignItems: 'center',
@@ -81,5 +82,17 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     paddingHorizontal: 12,
     paddingVertical: 5,
+  },
+  thumb: {
+    height: 25,
+    width: 25,
+    borderRadius: 100,
+    backgroundColor: colors.tenleyGreen,
+    borderWidth: 4,
+    borderColor: colors.white,
+  },
+  track: {
+    height: 8,
+    borderRadius: 20,
   },
 });

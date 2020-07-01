@@ -25,6 +25,9 @@ import {TouchableOpacity, Image} from 'react-native';
 import {createStackNavigator} from '@react-navigation/stack';
 import Accounts from '../Accounts';
 import AccountDetails from '../AccountDetails';
+import AutoAdd from '../AutoAdd';
+import ManualAdd from '../ManualAdd';
+import Verification from '../AutoAdd/Verification';
 import Negotiation from '../Negotiation';
 
 const AccountsStack = createStackNavigator();
@@ -32,8 +35,9 @@ const AccountsStack = createStackNavigator();
 const getScreenOptions = () => {
   return {
     headerStyle: {
-      backgroundColor: 'transparent',
+      shadowColor: 'transparent',
     },
+    headerMode: 'screen',
     headerBackTitleVisible: false,
     headerBackImage: () => (
       <Image
@@ -61,6 +65,21 @@ export function AccountsStackScreen() {
       <AccountsStack.Screen
         name="Account Details"
         component={AccountDetails}
+        options={getScreenOptions()}
+      />
+      <AccountsStack.Screen
+        name="Auto Add Accounts"
+        component={AutoAdd}
+        options={getScreenOptions()}
+      />
+      <AccountsStack.Screen
+        name="Verification"
+        component={Verification}
+        options={getScreenOptions()}
+      />
+      <AccountsStack.Screen
+        name="Manually Add Accounts"
+        component={ManualAdd}
         options={getScreenOptions()}
       />
       <AccountsStack.Screen name="Negotiation" component={Negotiation} />

@@ -1,7 +1,7 @@
 import React from 'react';
 import {View, StyleSheet, Text} from 'react-native';
 import {RFValue} from 'react-native-responsive-fontsize';
-import {colors} from '../../utilities/styles';
+import {colors, Typography} from '../../utilities/styles';
 
 export default ({children, message, messageType, highlight, invalid}) => {
   const messageStyles = [styles.messageText];
@@ -46,11 +46,7 @@ const styles = StyleSheet.create({
     marginVertical: 5,
   },
   messageText: {
-    fontSize: RFValue(10),
-    color: colors.darkRed,
-    letterSpacing: 1.25,
-    fontFamily: 'Poppins-Medium',
-    paddingHorizontal: 15,
+    ...Typography.errorText,
     paddingBottom: 2,
   },
 });

@@ -12,6 +12,8 @@ export default function App() {
     SplashScreen.hide();
   }, []);
 
+  console.disableYellowBox = true;
+
   const config = {
     AWS_COGNITO_CLIENT_ID: '41cd7ejhvmvgeusle0olmfcs4l',
     AWS_COGNITO_USER_POOL: 'us-west-2_Rw5tnnUFI',

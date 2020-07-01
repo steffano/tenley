@@ -1,5 +1,6 @@
 import React from 'react';
 import {StyleSheet, Image} from 'react-native';
+import {RFValue, RFPercentage} from 'react-native-responsive-fontsize';
 
 export const colors = {
   lightestGray: '#F9F8F6',
@@ -19,8 +20,9 @@ export const colors = {
 export const getScreenOptions = () => {
   return {
     headerStyle: {
-      backgroundColor: 'transparent',
+      shadowColor: 'transparent',
     },
+    headerMode: 'screen',
     headerBackTitleVisible: false,
     headerBackImage: () => (
       <Image
@@ -36,3 +38,9 @@ export const getScreenOptions = () => {
     },
   };
 };
+
+import * as Colors from './colors';
+import * as Spacing from './spacing';
+import * as Typography from './typography';
+
+export {Typography, Spacing, Colors};

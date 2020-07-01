@@ -40,22 +40,21 @@ export const Button = ({
 const styles = StyleSheet.create({
   container: {
     backgroundColor: colors.mediumGreen,
-    paddingVertical: RFValue(17),
+    justifyContent: 'center',
     borderRadius: 6,
     borderWidth: 1,
     borderColor: colors.mediumGreen,
     marginVertical: 5,
-    paddingHorizontal: RFValue(10),
-    // minWidth: '100%',
+    height: RFValue(55),
   },
   secondaryContainer: {
     backgroundColor: colors.orange,
-    paddingVertical: RFValue(17),
     borderRadius: 6,
     borderWidth: 1,
     borderColor: colors.orange,
     marginVertical: 5,
     paddingHorizontal: 10,
+    height: RFValue(55),
   },
   disabledContainer: {
     backgroundColor: colors.lightGreen,
@@ -68,9 +67,8 @@ const styles = StyleSheet.create({
   },
   textOnlyContainer: {
     backgroundColor: 'transparent',
-    paddingVertical: RFValue(10),
-    marginVertical: RFValue(10),
     borderColor: 'transparent',
+    height: RFValue(45),
   },
   text: {
     color: 'white',
