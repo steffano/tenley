@@ -15,9 +15,9 @@ export default function App() {
   console.disableYellowBox = true;
 
   const config = {
-    AWS_COGNITO_CLIENT_ID: '41cd7ejhvmvgeusle0olmfcs4l',
-    AWS_COGNITO_USER_POOL: 'us-west-2_Rw5tnnUFI',
-    AWS_COGNITO_REGION: 'us-west-2_Rw5tnnUFI',
+    AWS_COGNITO_CLIENT_ID: 'hl07clre26rq0jfmr69tjpq4i',
+    AWS_COGNITO_USER_POOL: 'us-west-2_J0YuuaHOF',
+    AWS_COGNITO_REGION: 'us-west-2_J0YuuaHOF',
   };
 
   Amplify.configure({

@@ -45,8 +45,21 @@ const Login = ({navigation}) => {
     //   'CognitoUser',
     //   JSON.stringify(CognitoUser),
     // );
-    console.log(CognitoUser);
-    setGlobalData({loggedIn: true});
+    // console.log(CognitoUser);
+    // setGlobalData({loggedIn: true});
+    Auth.currentAuthenticatedUser({
+      bypassCache: true, // Optional, By default is false. If set to true, this call will send a request to Cognito to get the latest user data
+    })
+      .then(user => {
+        console.log('currentAuthdUsr', user);
+        setGlobalData({
+          user: user.attributes,
+          session: user.signInUserSession,
+          loggedIn: true,
+          userStatus: 'active',
+        });
+      })
+      .catch(err => console.log(err));
   };
 
   const validateForm = () => {

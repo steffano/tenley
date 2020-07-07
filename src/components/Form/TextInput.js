@@ -23,6 +23,8 @@ export default ({
   invalid,
   datePicker,
   setDateValue,
+  hasChildren,
+  children,
   ...rest
 }) => {
   const [isFocused, setIsFocused] = useState(false);
@@ -39,6 +41,10 @@ export default ({
     setIsFocused(true);
     setShowPicker(true);
     Keyboard.dismiss();
+  };
+
+  const handleChildren = () => {
+    setIsFocused(true);
   };
 
   const setDate = date => {
@@ -95,8 +101,18 @@ export default ({
         messageType={messageType}
         invalid={invalid}>
         <Animated.Text style={placeholderToLabel}>{label}</Animated.Text>
-        {!datePicker ? (
+
+        {hasChildren ? (
+          <TouchableWithoutFeedback>
+            <View onPress={handleChildren}>{children}</View>
+          </TouchableWithoutFeedback>
+        ) : datePicker ? (
+          <TouchableWithoutFeedback onPress={handleDatePicker}>
+            <Text style={[inputStyle, {paddingTop: 5}]}>{value}</Text>
+          </TouchableWithoutFeedback>
+        ) : (
           <TextInput
+            returnKeyType="done"
             style={inputStyle}
             {...rest}
             selectionColor={colors.tenleyGreen}
@@ -105,13 +121,10 @@ export default ({
             value={value}
             blurOnSubmit
           />
-        ) : (
-          <TouchableWithoutFeedback onPress={handleDatePicker}>
-            <Text style={[inputStyle, {paddingTop: 10}]}>{value}</Text>
-          </TouchableWithoutFeedback>
         )}
       </FieldWrapper>
       <DateTimePickerModal
+        maximumDate={new Date()}
         isVisible={showPicker}
         mode="date"
         onConfirm={date => setDate(date)}

@@ -137,12 +137,13 @@ const ActiveUser = ({navigation}) => {
               </>
             )}
           </View>
+
           <View
             style={{
-              backgroundColor: colors.darkGreen,
+              backgroundColor: colors.lightGray,
               flex: 1,
               minWidth: 200,
-              minHeight: 200,
+              minHeight: 75,
               marginHorizontal: 15,
               marginVertical: 10,
               borderRadius: 5,
@@ -151,10 +152,23 @@ const ActiveUser = ({navigation}) => {
 
           <View
             style={{
-              backgroundColor: colors.darkGreen,
+              borderColor: colors.lightGray,
+              borderWidth: 2,
               flex: 1,
               minWidth: 200,
-              minHeight: 200,
+              minHeight: 125,
+              marginHorizontal: 15,
+              marginVertical: 10,
+              borderRadius: 5,
+            }}
+          />
+          <View
+            style={{
+              borderColor: colors.lightGray,
+              borderWidth: 2,
+              flex: 1,
+              minWidth: 200,
+              minHeight: 125,
               marginHorizontal: 15,
               marginVertical: 10,
               borderRadius: 5,

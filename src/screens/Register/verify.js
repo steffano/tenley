@@ -6,7 +6,7 @@ import {Button} from '../../components/Button';
 import {GreenModal} from '../../components/Modal';
 import {colors, Spacing} from '../../utilities/styles';
 import {RFValue, RFPercentage} from 'react-native-responsive-fontsize';
-import {maskPhone, unmaskPhone} from '../../utilities/validation';
+import {maskPhone, unmask} from '../../utilities/validation';
 
 import {
   CodeField,
@@ -16,17 +16,22 @@ import {
 } from 'react-native-confirmation-code-field';
 
 const Verify = ({navigation}) => {
-  const [globalData] = useContext(GlobalContext);
-
+  const [globalData, setGlobalData] = useContext(GlobalContext);
+  const user = globalData.user;
   const [showResend, setShowResend] = useState(false);
-  const [phone, setPhone] = useState('');
+  const [phone, setPhone] = useState(maskPhone(user.phone_number.slice(2)));
 
   const handleVerify = () => {
     navigation.navigate('FaceId');
   };
 
+  console.log(globalData, 'LLLLLLL');
+
   const handleResend = () => {
-    alert('resent');
+    setGlobalData({
+      ...globalData,
+      user: {...user, phone_number: '+1' + unmask(phone)},
+    });
     setShowResend(false);
   };
 
@@ -52,8 +57,8 @@ const Verify = ({navigation}) => {
           }}>
           <Text style={styles.headerText}>Enter your code</Text>
           <Text style={styles.subHeaderText}>
-            We sent a code to {globalData.phone}. Check your messages and enter
-            the 6-digit pin.
+            We sent a code to {maskPhone(user.phone_number.slice(2))}. Check
+            your messages and enter the 6-digit pin.
           </Text>
           <View
             style={{

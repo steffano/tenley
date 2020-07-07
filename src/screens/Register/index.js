@@ -4,7 +4,7 @@ import {GlobalContext} from '../../GlobalContext';
 import {colors, Typography, Spacing} from '../../utilities/styles';
 import {
   maskPhone,
-  unmaskPhone,
+  unmask,
   emailRegex,
   phoneRegex,
   passRegex,
@@ -60,14 +60,16 @@ const Register = ({navigation}) => {
   const signup = async () => {
     try {
       const user = await Auth.signUp({
-        fn,
-        ln,
         username: email,
-        phone: unmaskPhone(phone),
         password,
+        attributes: {
+          given_name: fn,
+          family_name: ln,
+          phone_number: '+1' + unmask(phone),
+        },
       });
       if (user) {
-        storeUser(user);
+        storeUser();
       }
     } catch (error) {
       console.log('error signing up:', error.code);
@@ -76,13 +78,14 @@ const Register = ({navigation}) => {
     }
   };
 
-  const storeUser = async CognitoUser => {
-    // await Keychain.setGenericPassword(
-    //   'CognitoUser',
-    //   JSON.stringify(CognitoUser),
-    // );
-    console.log(CognitoUser);
-    setGlobalData({phone: phone});
+  const storeUser = async () => {
+    const user = await Auth.signIn({username: email, password});
+    console.log('#####', user);
+    setGlobalData({
+      user: user.attributes,
+      session: user.signInUserSession,
+      // loggedIn: true,
+    });
     navigation.navigate('Verify');
   };
 
@@ -103,14 +106,14 @@ const Register = ({navigation}) => {
   const validateForm = () => {
     setFnValid(fn !== '');
     setLnValid(ln !== '');
-    setPhoneValid(phoneRegex.test(unmaskPhone(phone)));
+    setPhoneValid(phoneRegex.test(unmask(phone)));
     setEmailValid(emailRegex.test(email));
     setPwValid(passRegex.test(password));
     setPw2Valid(confirmPassword === password);
     return (
       fn !== '' &&
       ln !== '' &&
-      phoneRegex.test(unmaskPhone(phone)) &&
+      phoneRegex.test(unmask(phone)) &&
       emailRegex.test(email) &&
       confirmPassword === password &&
       passRegex.test(password)
@@ -261,7 +264,7 @@ const Register = ({navigation}) => {
     </SafeAreaView>
   );
 };
-s;
+
 export default Register;
 
 const styles = StyleSheet.create({

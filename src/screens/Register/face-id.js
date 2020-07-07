@@ -30,12 +30,24 @@ const FaceId = () => {
         <View style={styles.bottomButtonsContainer}>
           <Button
             title="Enable Face ID"
-            onPress={() => setGlobalData({loggedIn: true})}
+            onPress={() =>
+              setGlobalData({
+                ...globalData,
+                loggedIn: true,
+                userStatus: 'new',
+              })
+            }
           />
           <Button
             textOnly
             title="SKIP"
-            onPress={() => setGlobalData({loggedIn: true})}
+            onPress={() =>
+              setGlobalData({
+                ...globalData,
+                loggedIn: true,
+                userStatus: 'new',
+              })
+            }
           />
         </View>
       </SafeAreaView>

@@ -4,11 +4,30 @@ import {RFPercentage, RFValue} from 'react-native-responsive-fontsize';
 import Slider from 'react-native-slider';
 import {colors} from '../../utilities/styles';
 
-export default ({min, max, title, total, isCurrency, onSlide}) => {
-  const [calcValue, setCalcValue] = useState(total);
+export default ({min, max, title, total, isCurrency, onSlide, onType}) => {
+  const [calcValue, setCalcValue] = useState(
+    total.toLocaleString(navigator.language, {
+      maximumFractionDigits: 0,
+    }),
+  );
+  const [showCalcValue, setShowCalcValue] = useState(false);
+
   // const min = 2000;
   // const max = 15700;
   // const title = 'Total Debt Balance';
+
+  // console.log(total, calcValue, 'total#######');
+
+  const handleDone = () => {
+    const val = parseInt(calcValue);
+    if (val <= max && val >= min) {
+      onSlide(parseInt(calcValue));
+      setShowCalcValue(false);
+    } else {
+      setShowCalcValue(false);
+    }
+  };
+
   return (
     <>
       <View
@@ -25,12 +44,40 @@ export default ({min, max, title, total, isCurrency, onSlide}) => {
               {isCurrency && '$'}
             </Text>
 
+            <TextInput
+              selectionColor={colors.tenleyGreen}
+              onFocus={() => {
+                setShowCalcValue(true);
+                setCalcValue('');
+              }}
+              returnKeyType="done"
+              style={styles.text}
+              keyboardType={'numeric'}
+              value={
+                showCalcValue
+                  ? calcValue
+                  : total.toLocaleString(navigator.language, {
+                      maximumFractionDigits: 0,
+                    })
+              }
+              onChangeText={text => {
+                setCalcValue(text);
+              }}
+              onSubmitEditing={handleDone}
+            />
+          </View>
+
+          {/* <View style={styles.valueBox}>
+            <Text style={[styles.text, {color: colors.tenleyGreen}]}>
+              {isCurrency && '$'}
+            </Text>
+
             <Text style={styles.text}>
               {total.toLocaleString(navigator.language, {
                 maximumFractionDigits: 0,
               })}
             </Text>
-          </View>
+          </View> */}
         </View>
         <Slider
           style={{width: '100%', height: 40}}

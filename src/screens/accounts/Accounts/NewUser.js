@@ -65,15 +65,18 @@ const NewUser = ({navigation}) => {
         onClose={() => setShowModal(false)}
         visible={showModal}
         key={1}
-        style={{maxHeight: '65%'}}>
-        <View style={{flex: 1, alignContent: 'center', paddingHorizontal: 15}}>
+        style={{height: '55%'}}>
+        <View style={{flex: 1, alignContent: 'center'}}>
           <Text style={styles.header}>Auto Add Details</Text>
-          <Text style={[styles.blockText]}>
+          <View style={{height: 40}} />
+          <Text style={[styles.blockText, {paddingHorizontal: 10}]}>
             To help you on your journey to becoming debt free. Tenley will
             perform a pull of your credit reports. Tenley will only use this
             data to show you your total debt amounts, each accounts’ details,
             and allow you to being payments or negotiations on your accounts.
           </Text>
+          <View style={{height: 40}} />
+
           <Text style={Typography.textLink}>See more details</Text>
 
           <View style={styles.bottomButtonsContainer}>
@@ -129,5 +132,6 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 15,
     justifyContent: 'flex-end',
+    marginBottom: 10,
   },
 });

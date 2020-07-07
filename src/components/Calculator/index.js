@@ -1,6 +1,7 @@
 import React, {useContext, useState} from 'react';
-import {View, Text, Button} from 'react-native';
+import {View, Text, Button, StyleSheet} from 'react-native';
 import Slider from './Slider';
+import {RFValue, RFPercentage} from 'react-native-responsive-fontsize';
 import {colors} from '../../utilities/styles';
 
 const Calculator = ({
@@ -15,8 +16,15 @@ const Calculator = ({
   const [months, setMonths] = useState(totalDebt / payment);
 
   const updateDebtBalance = val => {
-    setDebtBalance(val);
-    setPayment(Math.ceil(val / months / 10) * 10);
+    if (isNaN(val)) {
+      console.log('yo');
+      // const num = parseInt(val.replace(/[^\d\.\-]/g, ''));
+      // setDebtBalance(Number(num));
+      // setPayment(Math.ceil(Number(num) / months / 10) * 10);
+    } else {
+      setDebtBalance(val);
+      setPayment(Math.ceil(val / months / 10) * 10);
+    }
   };
 
   const updatePayment = val => {
@@ -33,6 +41,25 @@ const Calculator = ({
     <>
       <View
         style={{
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          paddingHorizontal: 15,
+          paddingVertical: 15,
+        }}>
+        <Text style={styles.text}>Total Debt</Text>
+
+        <View style={styles.valueBox}>
+          <Text style={[styles.text, {color: colors.tenleyGreen}]}>$</Text>
+
+          <Text style={styles.text}>
+            {totalDebt.toLocaleString(navigator.language, {
+              maximumFractionDigits: 0,
+            })}
+          </Text>
+        </View>
+      </View>
+      <View
+        style={{
           width: '100%',
           backgroundColor: 'white',
           alignContent: 'center',
@@ -44,7 +71,7 @@ const Calculator = ({
           max={totalDebt}
           total={debtBalance}
           onSlide={updateDebtBalance}
-          title={'Total Debt Balance'}
+          title={'Settle For'}
           isCurrency
         />
 
@@ -73,3 +100,39 @@ const Calculator = ({
 };
 
 export default Calculator;
+
+const styles = StyleSheet.create({
+  text: {
+    fontFamily: 'Poppins-Bold',
+    color: colors.darkGreen,
+    fontSize: RFValue(12),
+    letterSpacing: 0.9,
+    alignSelf: 'center',
+  },
+  valueBox: {
+    height: 41,
+    width: RFPercentage(15),
+    borderRadius: 5,
+    // borderWidth: 1,
+    // borderColor: colors.tenleyGreen,
+    backgroundColor: colors.lightestGray,
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    fontFamily: 'Poppins-Regular',
+    flexDirection: 'row',
+    paddingHorizontal: 12,
+    paddingVertical: 5,
+  },
+  thumb: {
+    height: 25,
+    width: 25,
+    borderRadius: 100,
+    backgroundColor: colors.tenleyGreen,
+    borderWidth: 4,
+    borderColor: colors.white,
+  },
+  track: {
+    height: 8,
+    borderRadius: 20,
+  },
+});

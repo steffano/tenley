@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 // import {GlobalContext} from '../../GlobalContext';
+import ActiveUser from '../../accounts/Accounts/ActiveUser';
 
 import {colors} from '../../../utilities/styles';
 import {Header} from '../../../components/Header';
@@ -19,7 +20,8 @@ const Activity = ({navigation}) => {
 
   return (
     <>
-      <SafeAreaView style={{flex: 1}}>
+      <ActiveUser />
+      {/* <SafeAreaView style={{flex: 1}}>
         <View style={styles.headerBar}>
           <Text style={styles.title}>Activity</Text>
 
@@ -65,7 +67,7 @@ const Activity = ({navigation}) => {
             title="Payment Log"
           />
         </View>
-      </SafeAreaView>
+      </SafeAreaView> */}
     </>
   );
 };

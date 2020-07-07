@@ -27,6 +27,7 @@ import Accounts from '../Accounts';
 import AccountDetails from '../AccountDetails';
 import AutoAdd from '../AutoAdd';
 import ManualAdd from '../ManualAdd';
+import ImportLoading from '../Accounts/ImportLoading';
 import Verification from '../AutoAdd/Verification';
 import Negotiation from '../Negotiation';
 
@@ -81,6 +82,11 @@ export function AccountsStackScreen() {
         name="Manually Add Accounts"
         component={ManualAdd}
         options={getScreenOptions()}
+      />
+      <AccountsStack.Screen
+        options={{headerShown: false}}
+        name="Load Accounts"
+        component={ImportLoading}
       />
       <AccountsStack.Screen name="Negotiation" component={Negotiation} />
     </AccountsStack.Navigator>
