@@ -3,6 +3,7 @@ import {TextInput, StyleSheet, View, Text, Animated} from 'react-native';
 import {RFPercentage, RFValue} from 'react-native-responsive-fontsize';
 import Slider from 'react-native-slider';
 import {colors} from '../../utilities/styles';
+import currency from 'currency.js';
 
 export default ({min, max, title, total, isCurrency, onSlide, onType}) => {
   const [calcValue, setCalcValue] = useState(
@@ -21,12 +22,14 @@ export default ({min, max, title, total, isCurrency, onSlide, onType}) => {
   const handleDone = () => {
     const val = parseInt(calcValue);
     if (val <= max && val >= min) {
-      onSlide(parseInt(calcValue));
+      onSlide(val);
       setShowCalcValue(false);
     } else {
       setShowCalcValue(false);
     }
   };
+
+  const USD = value => currency(value, {symbol: '$', precision: 0}).format();
 
   return (
     <>
@@ -50,8 +53,12 @@ export default ({min, max, title, total, isCurrency, onSlide, onType}) => {
                 setShowCalcValue(true);
                 setCalcValue('');
               }}
+              onBlur={() => handleDone()}
               returnKeyType="done"
-              style={styles.text}
+              style={[
+                styles.text,
+                {width: '100%', height: '100%', textAlign: 'right'},
+              ]}
               keyboardType={'numeric'}
               value={
                 showCalcValue
@@ -66,18 +73,6 @@ export default ({min, max, title, total, isCurrency, onSlide, onType}) => {
               onSubmitEditing={handleDone}
             />
           </View>
-
-          {/* <View style={styles.valueBox}>
-            <Text style={[styles.text, {color: colors.tenleyGreen}]}>
-              {isCurrency && '$'}
-            </Text>
-
-            <Text style={styles.text}>
-              {total.toLocaleString(navigator.language, {
-                maximumFractionDigits: 0,
-              })}
-            </Text>
-          </View> */}
         </View>
         <Slider
           style={{width: '100%', height: 40}}
@@ -93,16 +88,10 @@ export default ({min, max, title, total, isCurrency, onSlide, onType}) => {
         />
         <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
           <Text style={[styles.text, {fontSize: 11}]}>
-            {isCurrency && '$'}
-            {min.toLocaleString(navigator.language, {
-              maximumFractionDigits: 0,
-            })}
+            {isCurrency ? USD(min) : min}
           </Text>
           <Text style={[styles.text, {fontSize: 11}]}>
-            {isCurrency && '$'}
-            {max.toLocaleString(navigator.language, {
-              maximumFractionDigits: 0,
-            })}
+            {isCurrency ? USD(max) : max}
           </Text>
         </View>
       </View>

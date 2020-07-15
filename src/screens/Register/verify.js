@@ -1,5 +1,12 @@
 import React, {useContext, useState} from 'react';
-import {SafeAreaView, Text, View, StyleSheet} from 'react-native';
+import {
+  SafeAreaView,
+  Text,
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  Image,
+} from 'react-native';
 import {GlobalContext} from '../../GlobalContext';
 import {Form, TextInput} from '../../components/Form';
 import {Button} from '../../components/Button';
@@ -7,6 +14,7 @@ import {GreenModal} from '../../components/Modal';
 import {colors, Spacing} from '../../utilities/styles';
 import {RFValue, RFPercentage} from 'react-native-responsive-fontsize';
 import {maskPhone, unmask} from '../../utilities/validation';
+import Modal from 'react-native-modal';
 
 import {
   CodeField,
@@ -24,8 +32,6 @@ const Verify = ({navigation}) => {
   const handleVerify = () => {
     navigation.navigate('FaceId');
   };
-
-  console.log(globalData, 'LLLLLLL');
 
   const handleResend = () => {
     setGlobalData({
@@ -99,47 +105,73 @@ const Verify = ({navigation}) => {
           onPress={() => setShowResend(true)}
         />
       </View>
-      <GreenModal
+      {/* <GreenModal
         onClose={() => setShowResend(false)}
         visible={showResend}
         key={1}
-        style={{height: RFPercentage(55)}}>
-        <Text style={[styles.headerText, {fontSize: 18, marginBottom: 20}]}>
-          Resend Verification Code
-        </Text>
-        <View
-          style={{
-            flex: 1,
-            justifyContent: 'center',
-            alignContent: 'center',
-            paddingHorizontal: 12,
-          }}>
-          <Text style={styles.subHeaderText}>
-            Please confirm you've entered your correct phone number and resend
-            your verification code.
-          </Text>
-          {/* <View style={{height: RFValue(20)}} /> */}
+        style={{height: RFPercentage(55)}}> */}
+      <Modal
+        isVisible={showResend}
+        backdropColor={colors.transparentGreen}
+        backdropOpacity={100}>
+        <View style={styles.modalWrap}>
+          <View style={{padding: 10}}>
+            <View style={{alignItems: 'flex-end'}}>
+              <TouchableOpacity onPress={() => setShowResend(false)}>
+                <Image
+                  source={require('../../assets/icons/close.png')}
+                  resizeMode="contain"
+                  style={{
+                    height: 15,
+                    width: 15,
+                    marginRight: 20,
+                    marginTop: 20,
+                  }}
+                />
+              </TouchableOpacity>
+            </View>
+            <Text
+              style={[
+                styles.headerText,
+                {textAlign: 'center', fontSize: 18, marginBottom: 20},
+              ]}>
+              Resend Verification Code
+            </Text>
+            <View
+              style={{
+                justifyContent: 'center',
+                alignContent: 'center',
+                paddingHorizontal: 12,
+              }}>
+              <Text style={[styles.subHeaderText]}>
+                Please confirm you've entered your correct phone number and
+                resend your verification code.
+              </Text>
+              <View style={{height: RFValue(20)}} />
 
-          <TextInput
-            highlightOnFocus
-            label="Phone Number"
-            keyboardType="numeric"
-            onChangeText={text => setPhone(maskPhone(text))}
-            value={phone}
-          />
-          <View style={{height: RFValue(15)}} />
-          <Button
-            disabled={phone.length < 9}
-            title="Resend Code"
-            onPress={() => handleResend()}
-          />
-          <Button
-            textOnly
-            title="CANCEL"
-            onPress={() => setShowResend(false)}
-          />
+              <TextInput
+                highlightOnFocus
+                label="Phone Number"
+                keyboardType="numeric"
+                onChangeText={text => setPhone(maskPhone(text))}
+                value={phone}
+              />
+              <View style={{height: RFValue(15)}} />
+              <Button
+                disabled={phone.length < 9}
+                title="Resend Code"
+                onPress={() => handleResend()}
+              />
+              <Button
+                textOnly
+                title="CANCEL"
+                onPress={() => setShowResend(false)}
+              />
+            </View>
+          </View>
         </View>
-      </GreenModal>
+      </Modal>
+      {/* </GreenModal> */}
     </SafeAreaView>
   );
 };
@@ -149,6 +181,12 @@ export default Verify;
 const styles = StyleSheet.create({
   container: {
     ...Spacing.defaultContainer,
+  },
+  modalWrap: {
+    alignContent: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'white',
+    borderRadius: 5,
   },
   headerText: {
     marginVertical: 15,

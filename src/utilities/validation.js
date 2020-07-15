@@ -19,6 +19,15 @@ export const maskSSn = value => {
   return value;
 };
 
+export const maskCurrency = value => {
+  let x = value
+    .replace(/(?!\.)\D/g, '')
+    .replace(/(?<=\..*)\./g, '')
+    .replace(/(?<=\.\d\d).*/g, '')
+    .replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  return value !== '' ? '$' + x : '';
+};
+
 export const unmask = value => {
   value = value.replace(/\D/g, '');
   return value;

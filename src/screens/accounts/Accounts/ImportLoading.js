@@ -8,21 +8,149 @@ import {
   ScrollView,
   TouchableOpacity,
 } from 'react-native';
-import Calculator from '../../../components/Calculator';
-import {Button} from '../../../components/Button';
-import {GreenModal} from '../../../components/Modal';
 import {RFPercentage, RFValue} from 'react-native-responsive-fontsize';
 import {colors, Spacing, Typography} from '../../../utilities/styles';
 import * as Progress from 'react-native-progress';
-import {Auth} from 'aws-amplify';
+import apis from '../../../apis';
+import {GlobalContext} from '../../../GlobalContext';
 
 const ImportLoading = ({navigation}) => {
+  // const startCounter = () => {
   setTimeout(() => {
+    switchScreen();
+  }, 10000);
+  // };
+
+  const switchScreen = () => {
     navigation.reset({
       index: 0,
       routes: [{name: 'Accounts'}],
     });
-  }, 10000);
+  };
+
+  const demoAccounts = [
+    {
+      accountID: 40,
+      userID: '3e688c4e-f2b9-4d0d-996a-628a3abbd419',
+      debtType: 'UNSECURED',
+      status: 'OPEN',
+      currentCreditorName: 'Texas Eagle Financial',
+      currentCreditorAccountNumber: '5678',
+      originalCreditorName: "People's Gas",
+      originalCreditorAccountNumber: '1234',
+      amountOwed: '$400.53',
+      createDate: '2020-07-07T19:55:41.000Z',
+      updateDate: null,
+      openDate: '2012-07-02T00:00:00.000Z',
+      closeDate: null,
+      settlements: [],
+      messages: [],
+    },
+    {
+      accountID: 41,
+      userID: '3e688c4e-f2b9-4d0d-996a-628a3abbd419',
+      debtType: 'UNSECURED',
+      status: 'OPEN',
+      currentCreditorName: 'Shady Acres Financial, LLC',
+      currentCreditorAccountNumber: '5678',
+      originalCreditorName: 'CitiBank',
+      originalCreditorAccountNumber: '1782',
+      amountOwed: '$7,000.91',
+      createDate: '2020-07-07T19:54:22.000Z',
+      updateDate: null,
+      openDate: '2012-07-02T00:00:00.000Z',
+      closeDate: null,
+      settlements: [
+        {
+          settlementID: 12,
+          accountID: 40,
+          status: 'OFFERED',
+          offer: '$5000',
+          numMonths: 24,
+          counteroffer: null,
+          createDate: '2020-06-30T00:00:00.000Z',
+          updateDate: '2020-07-01T00:00:00.000Z',
+        },
+      ],
+      messages: [],
+    },
+    {
+      accountID: 42,
+      userID: '3e688c4e-f2b9-4d0d-996a-628a3abbd419',
+      debtType: 'UNSECURED',
+      status: 'OPEN',
+      currentCreditorName: 'Shady Acres Financial, LLC',
+      currentCreditorAccountNumber: '5678',
+      originalCreditorName: 'PNC Bank',
+      originalCreditorAccountNumber: '1782',
+      amountOwed: '$5,000.00',
+      createDate: '2020-07-07T19:54:22.000Z',
+      updateDate: null,
+      openDate: '2012-07-02T00:00:00.000Z',
+      closeDate: null,
+      settlements: [],
+      messages: [],
+      payments: [
+        {
+          paymentID: 51,
+          paymentAmount: '$600',
+          status: 'PENDING',
+        },
+      ],
+    },
+    {
+      accountID: 43,
+      userID: '3e688c4e-f2b9-4d0d-996a-628a3abbd419',
+      debtType: 'UNSECURED',
+      status: 'OPEN',
+      currentCreditorName: 'Shady Acres Financial, LLC',
+      currentCreditorAccountNumber: '5678',
+      originalCreditorName: 'CitiBank',
+      originalCreditorAccountNumber: '1782',
+      amountOwed: '$5,000.21',
+      createDate: '2020-07-07T19:54:22.000Z',
+      updateDate: null,
+      openDate: '2012-07-02T00:00:00.000Z',
+      closeDate: null,
+      settlements: [],
+      messages: [],
+      payments: [
+        {
+          paymentID: 51,
+          paymentAmount: '$600',
+          status: 'FAILED',
+        },
+      ],
+    },
+  ];
+
+  const [globalData, setGlobalData] = useContext(GlobalContext);
+  console.log(globalData, 'smh');
+  const session = globalData.session;
+  const jwt = session.accessToken.jwtToken;
+
+  useEffect(() => {
+    const getAccounts = async () => {
+      const accts = await apis.getAccounts(jwt);
+      if (accts.data.with.length > 0) {
+        setGlobalData({
+          ...globalData,
+          accounts: accts.data.with,
+          ceaseAndDesist: false,
+        });
+      } else {
+        setGlobalData({
+          ...globalData,
+          accounts: demoAccounts,
+          ceaseAndDesist: false,
+        });
+      }
+      console.log('this', accts.data);
+    };
+    // setTimeout(() => {
+    getAccounts();
+    // }, 3000);
+  }, []);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -57,8 +185,8 @@ const ImportLoading = ({navigation}) => {
         </View>
         <View style={{alignContent: 'center', alignItems: 'center'}}>
           <Text style={[styles.text, {fontSize: 14}]}>
-            Hang tight! Tenley is importing your {'\n'}accounts. You’ll see them
-            here shortly!
+            Hang tight! Tenley is importing your {'\n'}details. You’ll see your
+            account information here shortly!
           </Text>
           <Progress.Bar
             indeterminate

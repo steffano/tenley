@@ -20,8 +20,8 @@ const Activity = ({navigation}) => {
 
   return (
     <>
-      <ActiveUser />
-      {/* <SafeAreaView style={{flex: 1}}>
+      {/* <ActiveUser /> */}
+      <SafeAreaView style={{flex: 1}}>
         <View style={styles.headerBar}>
           <Text style={styles.title}>Activity</Text>
 
@@ -67,7 +67,7 @@ const Activity = ({navigation}) => {
             title="Payment Log"
           />
         </View>
-      </SafeAreaView> */}
+      </SafeAreaView>
     </>
   );
 };

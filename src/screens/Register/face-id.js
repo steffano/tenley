@@ -34,7 +34,6 @@ const FaceId = () => {
               setGlobalData({
                 ...globalData,
                 loggedIn: true,
-                userStatus: 'new',
               })
             }
           />
@@ -45,7 +44,6 @@ const FaceId = () => {
               setGlobalData({
                 ...globalData,
                 loggedIn: true,
-                userStatus: 'new',
               })
             }
           />

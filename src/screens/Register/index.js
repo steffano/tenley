@@ -14,6 +14,8 @@ import {Button} from '../../components/Button';
 import {Auth} from 'aws-amplify';
 import {GreenModal} from '../../components/Modal';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import Modal from 'react-native-modal';
+import Disclosures from '../../components/Modals/disclosures';
 
 const Register = ({navigation}) => {
   const [, setGlobalData] = useContext(GlobalContext);
@@ -84,6 +86,7 @@ const Register = ({navigation}) => {
     setGlobalData({
       user: user.attributes,
       session: user.signInUserSession,
+      accounts: [],
       // loggedIn: true,
     });
     navigation.navigate('Verify');
@@ -163,6 +166,7 @@ const Register = ({navigation}) => {
             message={'Please enter a valid email address'}
           />
           <TextInput
+            tooltip
             label="Phone Number"
             keyboardType="phone-pad"
             onChangeText={text => {
@@ -181,7 +185,7 @@ const Register = ({navigation}) => {
               setPwValid(true);
             }}
             value={password}
-            secureTextEntry
+            eyeball
             highlightOnFocus
             invalid={!pwValid}
             textContentType="oneTimeCode"
@@ -196,7 +200,7 @@ const Register = ({navigation}) => {
               setPw2Valid(true);
             }}
             value={confirmPassword}
-            secureTextEntry
+            eyeball
             highlightOnFocus
             invalid={!pw2Valid}
             textContentType="oneTimeCode"
@@ -218,49 +222,16 @@ const Register = ({navigation}) => {
         </View>
       </KeyboardAwareScrollView>
 
-      <GreenModal
-        onClose={() => setShowModal(false)}
-        visible={showModal}
-        key={1}
-        style={{height: '85%'}}>
-        <View
-          style={{flex: 1, alignContent: 'center', justifyContent: 'center'}}>
-          <Text style={styles.headerText}>Important Disclosures</Text>
-          <Text
-            style={[
-              styles.bodyText,
-              {marginBottom: 25, paddingHorizontal: 15},
-            ]}>
-            {disclosureTitle}
-          </Text>
-
-          {disclosureList.map((item, index) => {
-            return (
-              <View
-                key={item.key}
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'center',
-                  alignSelf: 'center',
-                  maxWidth: '90%',
-                }}>
-                <Text style={styles.greenNumbers}>{item.key}. </Text>
-                <Text style={styles.bodyText}>{item.body}</Text>
-              </View>
-            );
-          })}
-          <Text style={Typography.textLink}>See more details</Text>
-
-          <View style={styles.bottomButtonsContainer}>
-            <Button title="Agree" onPress={() => handleAgree()} />
-            <Button
-              textOnly
-              title="DECLINE"
-              onPress={() => setShowModal(false)}
-            />
-          </View>
-        </View>
-      </GreenModal>
+      <Modal
+        isVisible={showModal}
+        backdropColor={colors.transparentGreen}
+        backdropOpacity={100}
+        onBackdropPress={() => setShowModal(false)}>
+        <Disclosures
+          onAccept={() => handleAgree()}
+          onDecline={() => setShowModal(false)}
+        />
+      </Modal>
     </SafeAreaView>
   );
 };

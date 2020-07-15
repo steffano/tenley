@@ -16,6 +16,7 @@ import {RFPercentage, RFValue} from 'react-native-responsive-fontsize';
 import {colors, Spacing, Typography} from '../../../utilities/styles';
 import {Auth} from 'aws-amplify';
 import ActiveUser from './ActiveUser';
+import Modal from 'react-native-modal';
 
 const NewUser = ({navigation}) => {
   const [showModal, setShowModal] = useState(false);
@@ -61,12 +62,23 @@ const NewUser = ({navigation}) => {
         />
       </View>
 
-      <GreenModal
+      {/* <GreenModal
         onClose={() => setShowModal(false)}
         visible={showModal}
         key={1}
-        style={{height: '55%'}}>
-        <View style={{flex: 1, alignContent: 'center'}}>
+        style={{height: '55%'}}> */}
+      <Modal
+        onBackdropPress={() => setShowModal(false)}
+        isVisible={showModal}
+        backdropColor={colors.transparentGreen}
+        backdropOpacity={100}>
+        <View
+          style={{
+            backgroundColor: 'white',
+            alignContent: 'center',
+            padding: 20,
+            borderRadius: 5,
+          }}>
           <Text style={styles.header}>Auto Add Details</Text>
           <View style={{height: 40}} />
           <Text style={[styles.blockText, {paddingHorizontal: 10}]}>
@@ -75,11 +87,12 @@ const NewUser = ({navigation}) => {
             data to show you your total debt amounts, each accounts’ details,
             and allow you to being payments or negotiations on your accounts.
           </Text>
-          <View style={{height: 40}} />
+          <View style={{height: 20}} />
 
           <Text style={Typography.textLink}>See more details</Text>
+          <View style={{height: 20}} />
 
-          <View style={styles.bottomButtonsContainer}>
+          <View>
             <Button
               title="Continue"
               onPress={() => {
@@ -89,7 +102,8 @@ const NewUser = ({navigation}) => {
             />
           </View>
         </View>
-      </GreenModal>
+      </Modal>
+      {/* </GreenModal> */}
     </SafeAreaView>
   );
 };

@@ -1,20 +1,40 @@
-import React, {useContext} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {GlobalContext} from '../../../GlobalContext';
 
 import {Auth} from 'aws-amplify';
 import ActiveUser from './ActiveUser';
 import NewUser from './NewUser';
 import ImportLoading from './ImportLoading';
+import apis from '../../../apis/';
 
 const Accounts = ({navigation}) => {
-  const [globalData] = useContext(GlobalContext);
-  console.log(globalData.userStatus);
+  const [globalData, setGlobalData] = useContext(GlobalContext);
+  console.log(globalData);
+
+  const {user, accounts, session} = globalData;
+
+  // const [data, setData] = useState([]);
+  // const jwt = session.accessToken.jwtToken;
+
+  // useEffect(() => {
+  //   const getAccounts = async () => {
+  //     const accts = await apis.getAccounts(jwt);
+  //     if (accts.data.with.length > 0) {
+  //       setData(accts.data.with);
+  //       setGlobalData({...globalData, accounts: accts.data.with});
+  //     }
+  //     console.log('this', accts.data);
+  //   };
+  //   getAccounts();
+  // }, []);
+
   // const userStatus = globalData.userStatus;
-  return (
-    // <ActiveUser />
+  return accounts.length > 0 ? (
+    <ActiveUser navigation={navigation} accounts={accounts} />
+  ) : (
     <NewUser navigation={navigation} />
-    // <ImportLoading />
   );
+  // <ImportLoading />
 };
 
 export default Accounts;

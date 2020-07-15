@@ -24,8 +24,24 @@ const api = create({
   headers: {Accept: 'application/json'},
 });
 
-export const addAccount = (postBody, jwt) => {
-  api
-    .post('/accounts', postBody, {headers: {Authorization: `Bearer ${jwt}`}})
-    .then(response => console.log(response.data));
+const addAccount = (postBody, jwt) => {
+  return api.post('/accounts', postBody, {
+    headers: {Authorization: `Bearer ${jwt}`},
+  });
+  // .then(response => console.log(response.data));
 };
+
+const getAccounts = async jwt => {
+  // console.log(jwt, 'jwt');
+  api.setHeader('Authorization', `Bearer ${jwt}`);
+  return api.get('/accounts');
+};
+
+export default {
+  getAccounts,
+  addAccount,
+};
+
+// export const getAccounts = jwt =>
+//   api.setHeader('Authorization', `Bearer ${jwt}`);
+// api.get('/accounts');

@@ -5,8 +5,10 @@ import {Spacing, Typography} from '../../../utilities/styles';
 import {Form, TextInput} from '../../../components/Form';
 import {Button} from '../../../components/Button';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import currency from 'currency.js';
+import {maskCurrency} from '../../../utilities/validation';
 
-import {addAccount} from '../../../apis/';
+import apis from '../../../apis/';
 // import {GlobalContext} from '../../GlobalContext';
 
 const ManualAdd = ({navigation}) => {
@@ -29,25 +31,31 @@ const ManualAdd = ({navigation}) => {
   const [amountValid, setAmountValid] = useState(true);
   const [acctNum1Valid, setAcctNum1Valid] = useState(true);
 
-  const postBody = {
-    debtType: 'UNSECURED',
-    originalCreditorName: 'CitiBank',
-    originalCreditorAccountNumber: '1234',
-    amountOwed: '$75,000',
-    openDate: '2012-07-02',
-    currentCreditorName: 'Shady Acres Financial, LLC',
-    currentCreditorAccountNumber: '5678',
-  };
-
   // const postBody = {
   //   debtType: 'UNSECURED',
-  //   originalCreditorName: acctName,
-  //   originalCreditorAccountNumber: acctNum2,
-  //   amountOwed: amountOwed,
+  //   originalCreditorName: 'CitiBank',
+  //   originalCreditorAccountNumber: '1234',
+  //   amountOwed: '$75,000',
   //   openDate: '2012-07-02',
   //   currentCreditorName: 'Shady Acres Financial, LLC',
-  //   currentCreditorAccountNumber: acctNum1,
+  //   currentCreditorAccountNumber: '5678',
   // };
+
+  const toUSD = value => currency(value, {symbol: '$', precision: 2}).format();
+  const postBody = {
+    debtType: 'UNSECURED',
+    originalCreditorName: acctName,
+    originalCreditorAccountNumber: acctNum2,
+    amountOwed: toUSD(amountOwed),
+    openDate: '2012-07-02',
+    currentCreditorName: 'Shady Acres Financial, LLC',
+    currentCreditorAccountNumber: acctNum1,
+  };
+
+  const val = currency('$20920.23');
+
+  // "$1,234.56"
+  console.log(val.value, toUSD(1234.56));
 
   const validateForm = () => {
     return (
@@ -60,13 +68,31 @@ const ManualAdd = ({navigation}) => {
     );
   };
 
-  const handleComplete = () => {
-    addAccount(postBody, jwt);
-    navigation.reset({
-      index: 0,
-      routes: [{name: 'Accounts'}],
-    });
+  const handleComplete = async () => {
+    try {
+      const added = await apis.addAccount(postBody, jwt);
+      if (added) {
+        navigation.navigate('Load Accounts');
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+    // console.log(postBody, 'salndsalknd');
   };
+
+  // const handleComplete = async () => {
+  //   apis.addAccount(postBody, jwt);
+  //   navigation.navigate('Load Accounts');
+  //   // navigation.reset({
+  //   //   index: 0,
+  //   //   routes: [{name: 'Accounts'}],
+  //   // });
+  //   // );
+  // };
+
+  // // const handleComplete = () => {
+  // //   console.log(postBody, '!!!');
+  // // };
 
   return (
     <>
@@ -128,8 +154,8 @@ const ManualAdd = ({navigation}) => {
             />
             <TextInput
               label="Amount Owed"
-              onChangeText={text => {
-                setAmountOwed(text);
+              onChangeText={value => {
+                setAmountOwed(maskCurrency(value));
                 setAmountValid(true);
               }}
               value={amountOwed}
@@ -151,7 +177,7 @@ const ManualAdd = ({navigation}) => {
           </Form>
           <View style={styles.bottomButtonsContainer}>
             <Button
-              disabled={!validateForm()}
+              // disabled={!validateForm()}
               title="Complete Manual Add"
               onPress={() => handleComplete()}
             />

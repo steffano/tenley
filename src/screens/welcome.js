@@ -11,6 +11,7 @@ import {
 import AppIntroSlider from 'react-native-app-intro-slider';
 import {colors, Typography, Spacing} from '../utilities/styles';
 import {tenleyGreen} from '../utilities/colors';
+import currency from 'currency.js';
 
 export default function Welcome({navigation}) {
   const [slideIndex, setSlideIndex] = useState(0);
@@ -79,6 +80,14 @@ export default function Welcome({navigation}) {
       }
     }
   };
+
+  // const val = currency('$20920.23');
+  // const USD = value => currency(value, {symbol: '$', precision: 2}).format();
+
+  // // "$1,234.56"
+  // console.log(val.value, USD(1234.56));
+
+  // const nf = 10101;
 
   return (
     <>

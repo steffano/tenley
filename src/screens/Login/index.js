@@ -6,16 +6,19 @@ import {Button} from '../../components/Button';
 import isEmpty from 'lodash/isEmpty';
 // import * as Keychain from 'react-native-keychain';
 import {colors, Typography, Spacing} from '../../utilities/styles';
+import apis from '../../apis';
 
 import {Auth} from 'aws-amplify';
 
 const Login = ({navigation}) => {
-  const [, setGlobalData] = useContext(GlobalContext);
+  const [globalData, setGlobalData] = useContext(GlobalContext);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [emailValid, setEmailValid] = useState(true);
   const [pwValid, setPwValid] = useState(true);
   const [errorMessage, setErrorMessage] = useState('');
+
+  console.log(globalData, 'from login');
 
   const login = async () => {
     setErrorMessage('');
@@ -26,7 +29,7 @@ const Login = ({navigation}) => {
           password,
         });
         if (user) {
-          storeUser(user);
+          fetchData(user);
         }
       } catch (error) {
         if (error.code === 'UserNotConfirmedException') {
@@ -40,26 +43,16 @@ const Login = ({navigation}) => {
     }
   };
 
-  const storeUser = async CognitoUser => {
-    // await Keychain.setGenericPassword(
-    //   'CognitoUser',
-    //   JSON.stringify(CognitoUser),
-    // );
-    // console.log(CognitoUser);
-    // setGlobalData({loggedIn: true});
-    Auth.currentAuthenticatedUser({
-      bypassCache: true, // Optional, By default is false. If set to true, this call will send a request to Cognito to get the latest user data
-    })
-      .then(user => {
-        console.log('currentAuthdUsr', user);
-        setGlobalData({
-          user: user.attributes,
-          session: user.signInUserSession,
-          loggedIn: true,
-          userStatus: 'active',
-        });
-      })
-      .catch(err => console.log(err));
+  const fetchData = async user => {
+    const session = user.signInUserSession;
+    const jwt = session.accessToken.jwtToken;
+    const accts = await apis.getAccounts(jwt);
+    setGlobalData({
+      user: user.attributes,
+      session,
+      accounts: accts.data.with,
+      loggedIn: true,
+    });
   };
 
   const validateForm = () => {
@@ -90,7 +83,7 @@ const Login = ({navigation}) => {
             setPwValid(true);
           }}
           value={password}
-          secureTextEntry
+          eyeball
           highlightOnFocus
           invalid={!pwValid}
           message={'Please enter your password'}
@@ -99,10 +92,6 @@ const Login = ({navigation}) => {
         <Button textOnly title="USE FACE ID" />
       </Form>
       <View style={styles.bottomButtonsContainer}>
-        {/* <Button
-          title="Log In"
-          onPress={() => setGlobalData({loggedIn: true})}
-        /> */}
         <Button title="Log In" onPress={() => login()} />
         <Button
           textOnly
