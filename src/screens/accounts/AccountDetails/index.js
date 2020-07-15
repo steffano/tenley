@@ -4,11 +4,17 @@ import {colors, Spacing, Typography} from '../../../utilities/styles';
 import {Button} from '../../../components/Button';
 import Bullet from '../../../components/Bullet';
 import {RFValue} from 'react-native-responsive-fontsize';
+import currency from 'currency.js';
 
 // import {GlobalContext} from '../../GlobalContext';
 
-const AccountDetails = () => {
+const AccountDetails = ({route, navigation}) => {
   // const [globalData, setGlobalData] = useContext(GlobalContext);
+
+  const account = route.params.account;
+  console.log(account);
+
+  const toUSD = value => currency(value, {symbol: '$', precision: 2}).format();
 
   return (
     <>
@@ -17,29 +23,43 @@ const AccountDetails = () => {
           <View style={styles.row}>
             <View style={styles.row}>
               <Text style={styles.accountTitle}>
-                {/* {account.originalCreditorName} */}
-                Account
+                {account.originalCreditorName}
+                {/* Account */}
               </Text>
               <Bullet color="black" small />
               <Text style={styles.accountTitle}>
-                {/* {account.originalCreditorAccountNumber.slice(-4)} */}
-                0000
+                {account.originalCreditorAccountNumber.slice(-4)}
+                {/* 0000 */}
               </Text>
             </View>
             <View>
               <Text style={styles.balanceText}>
-                {/* {toUSD(account.amountOwed)} */}
-                $9,999.00
+                {toUSD(account.amountOwed)}
               </Text>
             </View>
           </View>
-          <Text style={styles.rowText}>{'\n'}Account Number</Text>
+          <View style={styles.row}>
+            <Text style={styles.rowText}>{'\n'}Account Number</Text>
+            <Text style={styles.rowText}>
+              {'\n'}
+              {account.currentCreditorAccountNumber}
+            </Text>
+          </View>
           <View style={styles.rowSeparator} />
-          <Text style={styles.rowText}>Date Opened</Text>
+          <View style={styles.row}>
+            <Text style={styles.rowText}>Date Opened</Text>
+            <Text style={styles.rowText}>{account.openDate}</Text>
+          </View>
           <View style={styles.rowSeparator} />
-          <Text style={styles.rowText}>Date Closed</Text>
+          <View style={styles.row}>
+            <Text style={styles.rowText}>Date Closed</Text>
+            <Text style={styles.rowText}>{account.closeDate}</Text>
+          </View>
           <View style={styles.rowSeparator} />
-          <Text style={styles.rowText}>Status</Text>
+          <View style={styles.row}>
+            <Text style={styles.rowText}>Status</Text>
+            <Text style={styles.rowText}>{account.status}</Text>
+          </View>
         </View>
 
         <View style={styles.contentBlock}>
