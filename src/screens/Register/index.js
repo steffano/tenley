@@ -39,26 +39,6 @@ const Register = ({navigation}) => {
 
   const [errorMessage, setErrorMessage] = useState('');
 
-  const disclosureTitle =
-    'By agreeing to these disclosures you agree to allow Tenley to access your bank account data to help you lower your debt quickly.';
-
-  const disclosureList = [
-    {
-      key: '1',
-      body:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\n',
-    },
-    {
-      key: '2',
-      body:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. \n Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip.\n',
-    },
-    {
-      key: '3',
-      body:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.\n',
-    },
-  ];
   const signup = async () => {
     try {
       const user = await Auth.signUp({

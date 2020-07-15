@@ -61,7 +61,8 @@ const AccountTile = ({navigation, account, settlements, payments}) => {
             </View>
 
             <View>
-              <TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => navigation.navigate('Account Details')}>
                 {!payments && (
                   <Text style={styles.linkText}>
                     {'\n'}

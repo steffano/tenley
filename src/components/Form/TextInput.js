@@ -172,22 +172,6 @@ export default ({
                 }
               />
             </TouchableOpacity>
-            {/* {!obscured && (
-              <View
-                style={{
-                  position: 'absolute',
-                  height: 78,
-                  width: 200,
-                  bottom: -50,
-                  right: 0,
-                }}>
-                <Image
-                  style={{height: '100%', width: '100%'}}
-                  resizeMode="contain"
-                  source={require('../../assets/tooltip.png')}
-                />
-              </View>
-            )} */}
           </>
         )}
         <Modal

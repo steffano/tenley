@@ -6,7 +6,7 @@ import {Form, TextInput} from '../../../components/Form';
 import {Button} from '../../../components/Button';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import currency from 'currency.js';
-import {maskCurrency} from '../../../utilities/validation';
+// import {maskCurrency} from '../../../utilities/validation';
 
 import apis from '../../../apis/';
 // import {GlobalContext} from '../../GlobalContext';
@@ -68,17 +68,17 @@ const ManualAdd = ({navigation}) => {
     );
   };
 
-  const handleComplete = async () => {
-    try {
-      const added = await apis.addAccount(postBody, jwt);
-      if (added) {
-        navigation.navigate('Load Accounts');
-      }
-    } catch (error) {
-      console.log(error.message);
-    }
-    // console.log(postBody, 'salndsalknd');
-  };
+  // const handleComplete = async () => {
+  //   try {
+  //     const added = await apis.addAccount(postBody, jwt);
+  //     if (added) {
+  //       navigation.navigate('Load Accounts');
+  //     }
+  //   } catch (error) {
+  //     console.log(error.message);
+  //   }
+  //   // console.log(postBody, 'salndsalknd');
+  // };
 
   // const handleComplete = async () => {
   //   apis.addAccount(postBody, jwt);
@@ -90,9 +90,9 @@ const ManualAdd = ({navigation}) => {
   //   // );
   // };
 
-  // // const handleComplete = () => {
-  // //   console.log(postBody, '!!!');
-  // // };
+  const handleComplete = () => {
+    console.log(postBody, '!!!');
+  };
 
   return (
     <>
@@ -153,9 +153,10 @@ const ManualAdd = ({navigation}) => {
               message={'Please enter your phone number'}
             />
             <TextInput
+              onSubmitEditing={() => setAmountOwed(toUSD(amountOwed))}
               label="Amount Owed"
               onChangeText={value => {
-                setAmountOwed(maskCurrency(value));
+                setAmountOwed(value);
                 setAmountValid(true);
               }}
               value={amountOwed}

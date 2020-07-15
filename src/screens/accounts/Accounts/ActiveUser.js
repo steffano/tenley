@@ -404,6 +404,7 @@ const ActiveUser = ({navigation, accounts}) => {
                   account={account}
                   // settlements={account.settlements[0]}
                   payments={account.payments}
+                  navigation={navigation}
                 />
               )
             );

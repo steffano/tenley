@@ -18,8 +18,6 @@ const Login = ({navigation}) => {
   const [pwValid, setPwValid] = useState(true);
   const [errorMessage, setErrorMessage] = useState('');
 
-  console.log(globalData, 'from login');
-
   const login = async () => {
     setErrorMessage('');
     if (validateForm()) {
