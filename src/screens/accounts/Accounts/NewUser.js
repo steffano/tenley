@@ -11,7 +11,6 @@ import {
 } from 'react-native';
 import Calculator from '../../../components/Calculator';
 import {Button} from '../../../components/Button';
-import {GreenModal} from '../../../components/Modal';
 import {RFPercentage, RFValue} from 'react-native-responsive-fontsize';
 import {colors, Spacing, Typography} from '../../../utilities/styles';
 import {Auth} from 'aws-amplify';
@@ -62,11 +61,6 @@ const NewUser = ({navigation}) => {
         />
       </View>
 
-      {/* <GreenModal
-        onClose={() => setShowModal(false)}
-        visible={showModal}
-        key={1}
-        style={{height: '55%'}}> */}
       <Modal
         onBackdropPress={() => setShowModal(false)}
         isVisible={showModal}
@@ -76,19 +70,24 @@ const NewUser = ({navigation}) => {
           style={{
             backgroundColor: 'white',
             alignContent: 'center',
-            padding: 20,
+            padding: 15,
             borderRadius: 5,
           }}>
-          <Text style={styles.header}>Auto Add Details</Text>
-          <View style={{height: 40}} />
-          <Text style={[styles.blockText, {paddingHorizontal: 10}]}>
+          <Text style={[styles.header, {fontSize: RFValue(14)}]}>
+            Auto Add Details
+          </Text>
+          <View style={{height: 20}} />
+          <Text
+            style={[
+              styles.blockText,
+              {fontSize: RFValue(12), paddingHorizontal: 10},
+            ]}>
             To help you on your journey to becoming debt free. Tenley will
             perform a pull of your credit reports. Tenley will only use this
             data to show you your total debt amounts, each accounts’ details,
             and allow you to being payments or negotiations on your accounts.
           </Text>
-          <View style={{height: 20}} />
-
+          <View style={{height: 10}} />
           <Text style={Typography.textLink}>See more details</Text>
           <View style={{height: 20}} />
 
@@ -103,7 +102,6 @@ const NewUser = ({navigation}) => {
           </View>
         </View>
       </Modal>
-      {/* </GreenModal> */}
     </SafeAreaView>
   );
 };
@@ -126,9 +124,10 @@ const styles = StyleSheet.create({
   },
   blockText: {
     ...Typography.subheaderText,
-    fontSize: RFValue(13),
+    fontSize: RFValue(12.5),
     textAlign: 'left',
     marginBottom: RFValue(10),
+    letterSpacing: 0.8,
   },
   contentBlock: {
     height: RFValue(170),

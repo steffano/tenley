@@ -13,7 +13,6 @@ import {
 } from 'react-native';
 import Calculator from '../../../components/Calculator';
 import {Button} from '../../../components/Button';
-import {GreenModal} from '../../../components/Modal';
 import {RFPercentage, RFValue} from 'react-native-responsive-fontsize';
 import {colors, Spacing, Typography} from '../../../utilities/styles';
 import {Auth} from 'aws-amplify';
@@ -26,124 +25,13 @@ import currency from 'currency.js';
 import Modal from 'react-native-modal';
 import CeaseAndDesist from '../../../components/Modals/cease-and-desist';
 import AddAccountPrompt from '../../../components/Modals/add-account-prompt';
-import AverageGraph from '../../../components/Modals/average-graph';
 import SelectAccount from '../../../components/Modals/select-account';
+import SettlementConfirmation from '../../../components/Modals/settlement-confirmation';
+import apis from '../../../apis';
 
-const ActiveUser = ({navigation, accounts}) => {
-  // const accounts = [
-  //   {
-  //     accountID: 40,
-  //     userID: '3e688c4e-f2b9-4d0d-996a-628a3abbd419',
-  //     debtType: 'UNSECURED',
-  //     status: 'OPEN',
-  //     currentCreditorName: 'Texas Eagle Financial',
-  //     currentCreditorAccountNumber: '5678',
-  //     originalCreditorName: "People's Gas",
-  //     originalCreditorAccountNumber: '1234',
-  //     amountOwed: '$400',
-  //     createDate: '2020-07-07T19:55:41.000Z',
-  //     updateDate: null,
-  //     openDate: '2012-07-02T00:00:00.000Z',
-  //     closeDate: null,
-  //     settlements: [],
-  //     messages: [],
-  //   },
-  //   {
-  //     accountID: 41,
-  //     userID: '3e688c4e-f2b9-4d0d-996a-628a3abbd419',
-  //     debtType: 'UNSECURED',
-  //     status: 'OPEN',
-  //     currentCreditorName: 'Shady Acres Financial, LLC',
-  //     currentCreditorAccountNumber: '5678',
-  //     originalCreditorName: 'CitiBank',
-  //     originalCreditorAccountNumber: '1782',
-  //     amountOwed: '$75,000',
-  //     createDate: '2020-07-07T19:54:22.000Z',
-  //     updateDate: null,
-  //     openDate: '2012-07-02T00:00:00.000Z',
-  //     closeDate: null,
-  //     settlements: [
-  //       {
-  //         settlementID: 12,
-  //         accountID: 40,
-  //         status: 'OFFERED',
-  //         offer: '$5000',
-  //         numMonths: 24,
-  //         counteroffer: null,
-  //         createDate: '2020-06-30T00:00:00.000Z',
-  //         updateDate: '2020-07-01T00:00:00.000Z',
-  //       },
-  //     ],
-  //     messages: [],
-  //   },
-  //   {
-  //     accountID: 42,
-  //     userID: '3e688c4e-f2b9-4d0d-996a-628a3abbd419',
-  //     debtType: 'UNSECURED',
-  //     status: 'OPEN',
-  //     currentCreditorName: 'Shady Acres Financial, LLC',
-  //     currentCreditorAccountNumber: '5678',
-  //     originalCreditorName: 'PNC Bank',
-  //     originalCreditorAccountNumber: '1782',
-  //     amountOwed: '$5,000',
-  //     createDate: '2020-07-07T19:54:22.000Z',
-  //     updateDate: null,
-  //     openDate: '2012-07-02T00:00:00.000Z',
-  //     closeDate: null,
-  //     settlements: [],
-  //     messages: [],
-  //     payments: [
-  //       {
-  //         paymentID: 51,
-  //         paymentAmount: '$600',
-  //         status: 'PENDING',
-  //       },
-  //     ],
-  //   },
-  //   {
-  //     accountID: 43,
-  //     userID: '3e688c4e-f2b9-4d0d-996a-628a3abbd419',
-  //     debtType: 'UNSECURED',
-  //     status: 'OPEN',
-  //     currentCreditorName: 'Shady Acres Financial, LLC',
-  //     currentCreditorAccountNumber: '5678',
-  //     originalCreditorName: 'CitiBank',
-  //     originalCreditorAccountNumber: '1782',
-  //     amountOwed: '$75,000',
-  //     createDate: '2020-07-07T19:54:22.000Z',
-  //     updateDate: null,
-  //     openDate: '2012-07-02T00:00:00.000Z',
-  //     closeDate: null,
-  //     settlements: [],
-  //     messages: [],
-  //     payments: [
-  //       {
-  //         paymentID: 51,
-  //         paymentAmount: '$600',
-  //         status: 'FAILED',
-  //       },
-  //     ],
-  //   },
-  // ];
+const ActiveUser = ({navigation, route, accounts}) => {
   const [globalData, setGlobalData] = useContext(GlobalContext);
   const {user, session} = globalData;
-
-  const [showCalculator, setShowCalculator] = useState(false);
-  const totalDebt = 10000;
-  const [debtBalance, setDebtBalance] = useState(totalDebt);
-  const bucksTotal = debtBalance - 100;
-
-  const savingsPercentage = Math.floor(
-    ((totalDebt - bucksTotal) / totalDebt) * 100,
-  );
-
-  const [showSelectAccount, setShowSelectAccount] = useState(false);
-  const [showGraph, setShowGraph] = useState(false);
-  const [showAddAccount, setShowAddAccount] = useState(false);
-
-  const [expandBalance, setExpandBalance] = useState(false);
-
-  const [showCeaseDesist, setShowCeaseDesist] = useState(false);
 
   const toNum = n => {
     return currency(n).value;
@@ -152,9 +40,30 @@ const ActiveUser = ({navigation, accounts}) => {
   const n = map(a, toNum);
   const combinedDebt = sum(n);
 
-  console.log(a, n, combinedDebt);
+  const [showCalculator, setShowCalculator] = useState(false);
+  const totalDebt = combinedDebt;
+  const [debtBalance, setDebtBalance] = useState(combinedDebt * 0.6);
+  const [payment, setPayment] = useState(debtBalance * 0.1);
+  const [months, setMonths] = useState(debtBalance / payment);
 
-  const toUSD = value => currency(value, {symbol: '$', precision: 2}).format();
+  const bucksTotal = debtBalance - 100;
+
+  const savingsPercentage = Math.floor(
+    ((totalDebt - bucksTotal) / totalDebt) * 100,
+  );
+
+  const [showSelectAccount, setShowSelectAccount] = useState(false);
+  const [showAddAccount, setShowAddAccount] = useState(false);
+  const [showSettlementConfirmation, setShowSettlementConfirmation] = useState(
+    false,
+  );
+  const [expandBalance, setExpandBalance] = useState(false);
+
+  const [showCeaseDesist, setShowCeaseDesist] = useState(false);
+
+  console.log('params', route);
+
+  const toUSD = value => currency(value, {symbol: '$', precision: 0}).format();
 
   console.log(user, 'USER');
 
@@ -177,13 +86,42 @@ const ActiveUser = ({navigation, accounts}) => {
     }
   };
 
+  const declineCeaseAndDesist = async () => {
+    setShowCeaseDesist(false);
+    setGlobalData({
+      ...globalData,
+      user: {...user, declinedCeaseAndDesist: true},
+    });
+  };
+
+  // const ceaseAndDesist = () => {
+  //   if (!cdDecline) {
+  //     const checkOptIn = async () => {
+  //       const optIn = get(user, 'custom:cd_optIn');
+  //       if (!optIn) {
+  //         setTimeout(() => {
+  //           setShowCeaseDesist(true);
+  //         }, 500);
+  //       } else {
+  //         console.log('already opted in');
+  //       }
+  //     };
+  //     checkOptIn();
+  //   } else {
+  //     console.log('already declined this session');
+  //   }
+  // };
+  const optIn = get(user, 'custom:cd_optIn');
+
   const ceaseAndDesist = () => {
+    const cdDecline = get(user, 'declinedCeaseAndDesist', false);
+
     const checkOptIn = async () => {
-      const optIn = get(user, 'custom:cd_optIn');
-      if (!optIn) {
+      if (!optIn && !cdDecline) {
         setTimeout(() => {
           setShowCeaseDesist(true);
-        }, 400);
+        }, 500);
+        console.log(cdDecline, 'HOW');
       } else {
         console.log('already opted in');
       }
@@ -191,14 +129,20 @@ const ActiveUser = ({navigation, accounts}) => {
     checkOptIn();
   };
 
+  const jwt = session.accessToken.jwtToken;
+
   const updateUser = async () => {
     const u = await Auth.currentAuthenticatedUser();
+    const a = await apis.getAccounts(jwt);
     setGlobalData({...globalData, user: u.attributes});
   };
 
-  useEffect(() => {
-    ceaseAndDesist();
-  }, []);
+  // useEffect(() => {
+  //   navigation.addListener('focus', () => {
+  //     ceaseAndDesist();
+  //     console.log(showCeaseDesist, 'decline?');
+  //   });
+  // }, []);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -233,7 +177,10 @@ const ActiveUser = ({navigation, accounts}) => {
                   onPress={() => setShowCalculator(true)}>
                   <Text style={styles.subheader}>
                     What if I lowered my total debt to{' '}
-                    <Text style={styles.underlineText}>$10,000</Text>?
+                    <Text style={styles.underlineText}>
+                      {toUSD(combinedDebt * 0.6)}
+                    </Text>
+                    ?
                   </Text>
                 </TouchableWithoutFeedback>
               </View>
@@ -241,21 +188,15 @@ const ActiveUser = ({navigation, accounts}) => {
               <>
                 <View style={styles.whiteWrap}>
                   <Calculator
+                    showTotalDebt
                     totalDebt={totalDebt}
                     debtBalance={debtBalance}
-                    setDebtBalance={setDebtBalance}>
-                    <View style={{flexDirection: 'row'}}>
-                      <View style={styles.infoBlock} />
-                      <TouchableWithoutFeedback
-                        onPress={() => setShowGraph(true)}>
-                        <Text style={styles.tinyText}>
-                          The average Tenley user is able to negotiate their
-                          debt down by 15%.{' '}
-                          <Text style={styles.linkText}>VIEW GRAPH</Text>
-                        </Text>
-                      </TouchableWithoutFeedback>
-                    </View>
-                  </Calculator>
+                    setDebtBalance={setDebtBalance}
+                    payment={payment}
+                    setPayment={setPayment}
+                    months={months}
+                    setMonths={setMonths}
+                  />
 
                   <View style={styles.middleBlock}>
                     <Image
@@ -326,23 +267,31 @@ const ActiveUser = ({navigation, accounts}) => {
                   justifyContent: 'space-between',
                   alignItems: 'center',
                 }}>
-                <View>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                  }}>
                   <Text
                     style={{
                       fontFamily: 'Poppins-Regular',
-                      fontSize: 15,
-                      letterSpacing: 1.25,
+                      fontSize: RFValue(12),
+                      letterSpacing: RFValue(1),
                     }}>
                     Your total balance{' '}
-                    <Image
-                      source={require('../../../assets/icons/info/gray.png')}
-                      resizeMode="contain"
-                      style={{maxWidth: 20, maxHeight: 20}}
-                    />
                   </Text>
+                  <Image
+                    source={require('../../../assets/icons/info/gray.png')}
+                    resizeMode="contain"
+                    style={{
+                      maxWidth: 20,
+                      maxHeight: 20,
+                    }}
+                  />
                 </View>
-                <View>
-                  <Text style={{fontFamily: 'Poppins-Bold', fontSize: 22}}>
+                <View style={{alignContent: 'center'}}>
+                  <Text
+                    style={{fontFamily: 'Poppins-Bold', fontSize: RFValue(17)}}>
                     {toUSD(combinedDebt)}
                   </Text>
                 </View>
@@ -379,14 +328,13 @@ const ActiveUser = ({navigation, accounts}) => {
                 <Text
                   style={{
                     fontFamily: 'Poppins-Regular',
-                    fontSize: 13,
+                    fontSize: RFValue(10),
                     letterSpacing: 1.25,
                   }}>
                   ACCOUNTS
                 </Text>
               </View>
               <TouchableOpacity onPress={() => setShowAddAccount(true)}>
-                {/* <Text style={{fontFamily: 'Poppins-Bold', fontSize: 22}} /> */}
                 <Image
                   source={require('../../../assets/icons/add.png')}
                   resizeMode="contain"
@@ -402,8 +350,6 @@ const ActiveUser = ({navigation, accounts}) => {
                 <AccountTile
                   key={key}
                   account={account}
-                  // settlements={account.settlements[0]}
-                  payments={account.payments}
                   navigation={navigation}
                 />
               )
@@ -430,6 +376,7 @@ const ActiveUser = ({navigation, accounts}) => {
               source={require('../../../assets/icons/help-bubble.png')}
               resizeMode="contain"
               style={{
+                // position: 'absolute',
                 width: RFValue(50),
                 height: RFValue(50),
                 alignSelf: 'flex-end',
@@ -446,17 +393,11 @@ const ActiveUser = ({navigation, accounts}) => {
         <SelectAccount onClose={() => setShowSelectAccount(false)} />
       </Modal>
       <Modal
-        isVisible={showGraph}
-        backdropColor={colors.transparentGreen}
-        onBackdropPress={() => setShowGraph(false)}>
-        <AverageGraph onClose={() => setShowGraph(false)} />
-      </Modal>
-      <Modal
         isVisible={showCeaseDesist}
         backdropColor={colors.transparentGreen}
-        onBackdropPress={() => setShowCeaseDesist(false)}>
+        onBackdropPress={() => declineCeaseAndDesist()}>
         <CeaseAndDesist
-          onDecline={() => setShowCeaseDesist(false)}
+          onDecline={() => declineCeaseAndDesist()}
           onAccept={() => acceptCeaseAndDesist()}
         />
       </Modal>
@@ -466,6 +407,19 @@ const ActiveUser = ({navigation, accounts}) => {
         onBackdropPress={() => setShowAddAccount(false)}>
         <AddAccountPrompt
           onClose={() => setShowAddAccount(false)}
+          navigation={navigation}
+        />
+      </Modal>
+      <Modal
+        isVisible={showSettlementConfirmation}
+        backdropColor={colors.transparentGreen}
+        onBackdropPress={() => {
+          setShowSettlementConfirmation(false);
+        }}>
+        <SettlementConfirmation
+          onClose={() => {
+            setShowSettlementConfirmation(false);
+          }}
           navigation={navigation}
         />
       </Modal>

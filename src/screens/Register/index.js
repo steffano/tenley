@@ -12,7 +12,6 @@ import {
 import {Form, TextInput} from '../../components/Form';
 import {Button} from '../../components/Button';
 import {Auth} from 'aws-amplify';
-import {GreenModal} from '../../components/Modal';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import Modal from 'react-native-modal';
 import Disclosures from '../../components/Modals/disclosures';

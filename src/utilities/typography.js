@@ -54,6 +54,7 @@ export const screenHeader = {
   color: Colors.baseText,
   fontSize: largeFontSize,
   fontWeight: 'bold',
+  letterSpacing: 0.75,
 };
 
 export const errorText = {
@@ -93,7 +94,8 @@ export const textLink = {
   marginTop: Spacing.smallest,
   textDecorationLine: 'underline',
   fontFamily: 'Poppins-Medium',
-  fontSize: smallFontSize,
+  fontSize: smallestFontSize,
   color: Colors.darkGreen,
   marginHorizontal: Spacing.small,
+  letterSpacing: 1.25,
 };

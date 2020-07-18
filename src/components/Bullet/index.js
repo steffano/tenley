@@ -10,7 +10,6 @@ const Bullet = ({color, small}) => {
           height: small ? 10 : 20,
           alignItems: 'center',
           justifyContent: 'center',
-          //   backgroundColor: 'red',
         }}>
         <View
           style={{

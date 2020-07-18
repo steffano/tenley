@@ -2,22 +2,27 @@ import React, {useContext, useState} from 'react';
 import {
   SafeAreaView,
   Text,
+  ScrollView,
   TouchableOpacity,
   View,
   StyleSheet,
 } from 'react-native';
 import {GlobalContext} from '../../../GlobalContext';
+import {AccountButton} from '../../../components/AccountButton';
 import {Header} from '../../../components/Header';
-import {colors} from '../../../utilities/styles';
+import {colors, Spacing} from '../../../utilities/styles';
 
 const Message = () => {
   const [globalData, setGlobalData] = useContext(GlobalContext);
 
   const [section, setSection] = useState('Messages');
 
+  const {accounts} = globalData;
+  console.log('msg', accounts);
+
   return (
     <>
-      <SafeAreaView style={{flex: 1}}>
+      <SafeAreaView style={styles.container}>
         {/* <Header header={'Messages'} /> */}
         <View style={styles.headerBar}>
           <View
@@ -52,10 +57,47 @@ const Message = () => {
             </TouchableOpacity>
           </View>
         </View>
-        <View style={{flex: 1, justifyContent: 'center'}}>
-          <Text style={{fontFamily: 'VisbyCF-Medium', textAlign: 'center'}}>
-            {section}
-          </Text>
+        <View style={[styles.container, {justifyContent: 'flex-start'}]}>
+          <ScrollView>
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                marginHorizontal: 15,
+                marginVertical: 25,
+              }}>
+              <View
+                style={{
+                  height: 45,
+                  width: '85%',
+                  borderWidth: 1,
+                  borderRadius: 3,
+                  borderColor: colors.lightGray,
+                  marginRight: 15,
+                }}
+              />
+
+              <View
+                style={{
+                  height: 45,
+                  width: 45,
+                  borderRadius: 3,
+                  backgroundColor: colors.mediumGreen,
+                }}
+              />
+            </View>
+            {accounts.map((account, key) => {
+              return (
+                account && (
+                  <AccountButton
+                    accountName={account.originalCreditorName}
+                    lastFour={account.originalCreditorAccountNumber.slice(-4)}
+                  />
+                )
+              );
+            })}
+            {/* </Text> */}
+          </ScrollView>
         </View>
       </SafeAreaView>
     </>
@@ -65,6 +107,9 @@ const Message = () => {
 export default Message;
 
 const styles = StyleSheet.create({
+  container: {
+    ...Spacing.defaultContainer,
+  },
   headerBar: {
     height: 50,
     flexDirection: 'row',

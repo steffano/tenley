@@ -24,7 +24,7 @@ const ImportLoading = ({navigation}) => {
   const switchScreen = () => {
     navigation.reset({
       index: 0,
-      routes: [{name: 'Accounts'}],
+      routes: [{name: 'Accounts', params: 'fromImportLoading'}],
     });
   };
 
@@ -35,9 +35,9 @@ const ImportLoading = ({navigation}) => {
       debtType: 'UNSECURED',
       status: 'OPEN',
       currentCreditorName: 'Texas Eagle Financial',
-      currentCreditorAccountNumber: '5678',
+      currentCreditorAccountNumber: '1111231115678',
       originalCreditorName: "People's Gas",
-      originalCreditorAccountNumber: '1234',
+      originalCreditorAccountNumber: '1112311159078',
       amountOwed: '$400.53',
       createDate: '2020-07-07T19:55:41.000Z',
       updateDate: null,
@@ -52,9 +52,9 @@ const ImportLoading = ({navigation}) => {
       debtType: 'UNSECURED',
       status: 'OPEN',
       currentCreditorName: 'Shady Acres Financial, LLC',
-      currentCreditorAccountNumber: '5678',
+      currentCreditorAccountNumber: '9090828273735678',
       originalCreditorName: 'CitiBank',
-      originalCreditorAccountNumber: '1782',
+      originalCreditorAccountNumber: '9090828273735678811',
       amountOwed: '$7,000.91',
       createDate: '2020-07-07T19:54:22.000Z',
       updateDate: null,
@@ -80,9 +80,9 @@ const ImportLoading = ({navigation}) => {
       debtType: 'UNSECURED',
       status: 'OPEN',
       currentCreditorName: 'Shady Acres Financial, LLC',
-      currentCreditorAccountNumber: '5678',
+      currentCreditorAccountNumber: '8888999911115678',
       originalCreditorName: 'PNC Bank',
-      originalCreditorAccountNumber: '1782',
+      originalCreditorAccountNumber: '8888999911115677768',
       amountOwed: '$5,000.00',
       createDate: '2020-07-07T19:54:22.000Z',
       updateDate: null,
@@ -104,9 +104,9 @@ const ImportLoading = ({navigation}) => {
       debtType: 'UNSECURED',
       status: 'OPEN',
       currentCreditorName: 'Shady Acres Financial, LLC',
-      currentCreditorAccountNumber: '5678',
+      currentCreditorAccountNumber: '56789101112134',
       originalCreditorName: 'CitiBank',
-      originalCreditorAccountNumber: '1782',
+      originalCreditorAccountNumber: '56789101112134',
       amountOwed: '$5,000.21',
       createDate: '2020-07-07T19:54:22.000Z',
       updateDate: null,
@@ -132,19 +132,12 @@ const ImportLoading = ({navigation}) => {
   useEffect(() => {
     const getAccounts = async () => {
       const accts = await apis.getAccounts(jwt);
-      if (accts.data.with.length > 0) {
-        setGlobalData({
-          ...globalData,
-          accounts: accts.data.with,
-          ceaseAndDesist: false,
-        });
-      } else {
-        setGlobalData({
-          ...globalData,
-          accounts: demoAccounts,
-          ceaseAndDesist: false,
-        });
-      }
+      // if (accts.data.with.length > 0) {
+      setGlobalData({
+        ...globalData,
+        accounts: accts.data.with,
+        ceaseAndDesist: false,
+      });
       console.log('this', accts.data);
     };
     // setTimeout(() => {

@@ -1,12 +1,15 @@
 import React, {useContext, useState, useRef} from 'react';
 import {GlobalContext} from '../../../GlobalContext';
-import {SafeAreaView, Text, StyleSheet, View} from 'react-native';
-import {Spacing, Typography} from '../../../utilities/styles';
+import {SafeAreaView, Text, StyleSheet, View, Image} from 'react-native';
+import {Spacing, Typography, colors} from '../../../utilities/styles';
 import {Form, TextInput} from '../../../components/Form';
 import {Button} from '../../../components/Button';
+import {maskSSn, unmask} from '../../../utilities/validation';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import currency from 'currency.js';
+import {RFValue} from 'react-native-responsive-fontsize';
 // import {maskCurrency} from '../../../utilities/validation';
+import {Auth} from 'aws-amplify';
 
 import apis from '../../../apis/';
 // import {GlobalContext} from '../../GlobalContext';
@@ -15,10 +18,10 @@ const ManualAdd = ({navigation}) => {
   const [globalData, setGlobalData] = useContext(GlobalContext);
 
   const [amountOwed, setAmountOwed] = useState('');
-  const [acctNum1, setAcctNum1] = useState('');
   const [acctName, setAcctName] = useState('');
-  const [acctNum2, setAcctNum2] = useState('');
-
+  const [acctNum, setAcctNum] = useState('');
+  const [ssn, setSsn] = useState('');
+  const [date, setDate] = useState('');
   const {user, session} = globalData;
   const [fn, setFn] = useState(user.given_name);
   const [ln, setLn] = useState(user.family_name);
@@ -26,35 +29,24 @@ const ManualAdd = ({navigation}) => {
 
   const [fnValid, setFnValid] = useState(true);
   const [lnValid, setLnValid] = useState(true);
-  const [acctNum2Valid, setAcctNum2Valid] = useState(true);
+  const [acctNumValid, setAcctNumValid] = useState(true);
   const [acctNameValid, setAcctNameValid] = useState(true);
   const [amountValid, setAmountValid] = useState(true);
-  const [acctNum1Valid, setAcctNum1Valid] = useState(true);
-
-  // const postBody = {
-  //   debtType: 'UNSECURED',
-  //   originalCreditorName: 'CitiBank',
-  //   originalCreditorAccountNumber: '1234',
-  //   amountOwed: '$75,000',
-  //   openDate: '2012-07-02',
-  //   currentCreditorName: 'Shady Acres Financial, LLC',
-  //   currentCreditorAccountNumber: '5678',
-  // };
+  const [ssnValid, setSsnValid] = useState(true);
+  const [dateValid, setDateValid] = useState(true);
 
   const toUSD = value => currency(value, {symbol: '$', precision: 2}).format();
   const postBody = {
     debtType: 'UNSECURED',
     originalCreditorName: acctName,
-    originalCreditorAccountNumber: acctNum2,
+    originalCreditorAccountNumber: acctNum,
     amountOwed: toUSD(amountOwed),
     openDate: '2012-07-02',
     currentCreditorName: 'Shady Acres Financial, LLC',
-    currentCreditorAccountNumber: acctNum1,
+    currentCreditorAccountNumber: null,
   };
 
   const val = currency('$20920.23');
-
-  // "$1,234.56"
   console.log(val.value, toUSD(1234.56));
 
   const validateForm = () => {
@@ -62,36 +54,31 @@ const ManualAdd = ({navigation}) => {
       fn !== '' &&
       ln !== '' &&
       acctName !== '' &&
-      acctNum2 !== '' &&
+      acctNum !== '' &&
       amountOwed !== '' &&
-      acctNum1 !== ''
+      ssn !== '' &&
+      date !== ''
     );
   };
 
-  // const handleComplete = async () => {
-  //   try {
-  //     const added = await apis.addAccount(postBody, jwt);
-  //     if (added) {
-  //       navigation.navigate('Load Accounts');
-  //     }
-  //   } catch (error) {
-  //     console.log(error.message);
-  //   }
-  //   // console.log(postBody, 'salndsalknd');
-  // };
-
-  // const handleComplete = async () => {
-  //   apis.addAccount(postBody, jwt);
-  //   navigation.navigate('Load Accounts');
-  //   // navigation.reset({
-  //   //   index: 0,
-  //   //   routes: [{name: 'Accounts'}],
-  //   // });
-  //   // );
-  // };
-
-  const handleComplete = () => {
-    console.log(postBody, '!!!');
+  const handleComplete = async () => {
+    const u = await Auth.currentAuthenticatedUser();
+    try {
+      await Auth.updateUserAttributes(u, {
+        'custom:ssn': unmask(ssn),
+        birthdate: date,
+      });
+    } catch (err) {
+      console.log(err);
+    }
+    try {
+      const added = await apis.addAccount(postBody, jwt);
+      if (added) {
+        navigation.navigate('Load Accounts');
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
   };
 
   return (
@@ -107,6 +94,22 @@ const ManualAdd = ({navigation}) => {
             add the account to your Tenley profile. We’ll only use this info to
             fill in the details of your profile.{' '}
           </Text>
+
+          <View style={{flexDirection: 'row', alignItems: 'center'}}>
+            <Image
+              style={{
+                width: RFValue(15),
+                height: RFValue(15),
+                marginLeft: 25,
+              }}
+              source={require('../../../assets/icons/file-upload.png')}
+            />
+            <Button
+              textOnly
+              title="Upload your statement"
+              style={{alignSelf: 'flex-start', marginHorizontal: 10}}
+            />
+          </View>
           <Form>
             <TextInput
               label="Legal First Name"
@@ -131,7 +134,32 @@ const ManualAdd = ({navigation}) => {
               message={'Please enter your last name'}
             />
             <TextInput
-              label="Current Creditor Account Name"
+              label="Social Security Number"
+              keyboardType="numeric"
+              onChangeText={text => {
+                setSsn(maskSSn(text));
+                setSsnValid(true);
+              }}
+              value={ssn}
+              highlightOnFocus
+              invalid={!ssnValid}
+              message={'Please enter your social security number'}
+            />
+            <TextInput
+              datePicker
+              setDateValue={value => setDate(value)}
+              onPress={text => {
+                setDate(text);
+                setDateValid(true);
+              }}
+              label="Date of Birth"
+              value={date}
+              highlightOnFocus
+              invalid={!dateValid}
+              message={'Please enter your birthdate'}
+            />
+            <TextInput
+              label="Creditor Name"
               onChangeText={text => {
                 setAcctName(text);
                 setAcctNameValid(true);
@@ -139,18 +167,17 @@ const ManualAdd = ({navigation}) => {
               value={acctName}
               highlightOnFocus
               invalid={!acctNameValid}
-              message={'Please enter the Current Creditor Account Name'}
+              message={'Please enter the Creditor Name'}
             />
             <TextInput
-              label="Current Creditor Account Number"
+              label="Creditor Account Number"
               onChangeText={text => {
-                setAcctNum2(text);
-                setAcctNum2Valid(true);
+                setAcctNum(text);
+                setAcctNumValid(true);
               }}
-              value={acctNum2}
+              value={acctNum}
               highlightOnFocus
-              invalid={!acctNum2Valid}
-              message={'Please enter your phone number'}
+              invalid={!acctNumValid}
             />
             <TextInput
               onSubmitEditing={() => setAmountOwed(toUSD(amountOwed))}
@@ -162,23 +189,11 @@ const ManualAdd = ({navigation}) => {
               value={amountOwed}
               highlightOnFocus
               invalid={!amountValid}
-              message={'Please enter your phone number'}
-            />
-            <TextInput
-              label="Original Creditor Account Number"
-              onChangeText={text => {
-                setAcctNum1(text);
-                setAcctNum1Valid(true);
-              }}
-              value={acctNum1}
-              highlightOnFocus
-              invalid={!acctNum1Valid}
-              message={'Please enter your phone number'}
             />
           </Form>
           <View style={styles.bottomButtonsContainer}>
             <Button
-              // disabled={!validateForm()}
+              disabled={!validateForm()}
               title="Complete Manual Add"
               onPress={() => handleComplete()}
             />

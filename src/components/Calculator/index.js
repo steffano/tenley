@@ -1,19 +1,32 @@
 import React, {useContext, useState} from 'react';
-import {View, Text, Button, StyleSheet} from 'react-native';
+import {
+  View,
+  Text,
+  Button,
+  StyleSheet,
+  TouchableWithoutFeedback,
+} from 'react-native';
 import Slider from './Slider';
 import {RFValue, RFPercentage} from 'react-native-responsive-fontsize';
 import {colors} from '../../utilities/styles';
+import Modal from 'react-native-modal';
+import AverageGraph from '../Modals/average-graph';
 
 const Calculator = ({
   navigation,
   totalDebt,
   debtBalance,
   setDebtBalance,
-  children,
+  showTotalDebt,
+  payment,
+  setPayment,
+  months,
+  setMonths,
 }) => {
   // const [debtBalance, setDebtBalance] = useState(totalDebt);
-  const [payment, setPayment] = useState(totalDebt * 0.5);
-  const [months, setMonths] = useState(totalDebt / payment);
+  // const [payment, setPayment] = useState(totalDebt * 0.5);
+  // const [months, setMonths] = useState(totalDebt / payment);
+  const [showGraph, setShowGraph] = useState(false);
 
   const updateDebtBalance = val => {
     if (isNaN(val)) {
@@ -33,31 +46,35 @@ const Calculator = ({
   };
 
   const updateMonths = val => {
-    setMonths(val);
+    setMonths(Math.ceil(val));
     setPayment(Math.ceil(debtBalance / val / 10) * 10);
   };
 
   return (
     <>
-      <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          paddingHorizontal: 15,
-          paddingVertical: 15,
-        }}>
-        <Text style={styles.text}>Total Debt</Text>
+      {showTotalDebt && (
+        <>
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              paddingHorizontal: 15,
+              paddingVertical: 15,
+            }}>
+            <Text style={styles.text}>Total Debt</Text>
 
-        <View style={styles.valueBox}>
-          <Text style={[styles.text, {color: colors.tenleyGreen}]}>$</Text>
+            <View style={styles.valueBox}>
+              <Text style={[styles.text, {color: colors.tenleyGreen}]}>$</Text>
 
-          <Text style={styles.text}>
-            {totalDebt.toLocaleString(navigator.language, {
-              maximumFractionDigits: 0,
-            })}
-          </Text>
-        </View>
-      </View>
+              <Text style={styles.text}>
+                {totalDebt.toLocaleString(navigator.language, {
+                  maximumFractionDigits: 0,
+                })}
+              </Text>
+            </View>
+          </View>
+        </>
+      )}
       <View
         style={{
           width: '100%',
@@ -67,16 +84,24 @@ const Calculator = ({
           padding: 15,
         }}>
         <Slider
-          min={totalDebt * 0.4}
+          min={Math.ceil(totalDebt * 0.4)}
           max={totalDebt}
           total={debtBalance}
           onSlide={updateDebtBalance}
-          title={'Settle For'}
+          title={showTotalDebt ? 'Settle For' : 'Your Offer'}
           isCurrency
         />
 
-        {children}
-        <View style={{height: 40}} />
+        <View style={{flexDirection: 'row'}}>
+          <View style={styles.infoBlock} />
+          <TouchableWithoutFeedback onPress={() => setShowGraph(true)}>
+            <Text style={styles.tinyText}>
+              The average Tenley user is able to negotiate their debt down by
+              15%. <Text style={styles.linkText}>VIEW GRAPH</Text>
+            </Text>
+          </TouchableWithoutFeedback>
+        </View>
+        <View style={{height: 30}} />
         <Slider
           min={Math.ceil(debtBalance / 36 / 10) * 10}
           max={debtBalance}
@@ -85,7 +110,7 @@ const Calculator = ({
           isCurrency
           title={'Monthly Payment'}
         />
-        <View style={{height: 40}} />
+        <View style={{height: 30}} />
 
         <Slider
           min={1}
@@ -95,6 +120,12 @@ const Calculator = ({
           title={'Months to Payoff'}
         />
       </View>
+      <Modal
+        isVisible={showGraph}
+        backdropColor={colors.transparentGreen}
+        onBackdropPress={() => setShowGraph(false)}>
+        <AverageGraph onClose={() => setShowGraph(false)} />
+      </Modal>
     </>
   );
 };
@@ -134,5 +165,30 @@ const styles = StyleSheet.create({
   track: {
     height: 8,
     borderRadius: 20,
+  },
+  tinyText: {
+    color: colors.darkGreen,
+    fontFamily: 'Poppins-Regular',
+    fontSize: RFValue(8),
+    letterSpacing: 0.8,
+    paddingHorizontal: 10,
+    paddingTop: 10,
+  },
+  tenleyImage: {
+    width: RFValue(100),
+    height: RFValue(100),
+    alignSelf: 'flex-end',
+  },
+  infoBlock: {
+    marginTop: 15,
+    height: 10,
+    width: 10,
+    borderRadius: 100,
+    backgroundColor: colors.mediumGreen,
+  },
+  linkText: {
+    fontFamily: 'Poppins-Bold',
+    textDecorationLine: 'underline',
+    color: colors.mediumGreen,
   },
 });

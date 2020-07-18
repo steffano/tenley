@@ -6,14 +6,19 @@ import ProgressGauge from '../ProgressGauge';
 import Bullet from '../Bullet';
 import currency from 'currency.js';
 
-const AccountTile = ({navigation, account, settlements, payments}) => {
+const AccountTile = ({navigation, account}) => {
   const statusBlockStyle = [styles.statusBlock];
   const statusBlockText = [styles.offeredText];
 
   const containerStyle = [styles.accountContainer];
 
-  if (settlements) {
-    if (settlements.status === 'OFFERED') {
+  const settlements = account.settlements;
+  const currentSettlement = settlements[0];
+  // console.log(settlements.status);
+
+  if (settlements.length !== 0) {
+    console.log(settlements, '####');
+    if (currentSettlement.status === 'OFFERED') {
       statusBlockStyle.push(styles.offered);
     }
     if (settlements.status === 'ACCEPTED') {
@@ -24,27 +29,31 @@ const AccountTile = ({navigation, account, settlements, payments}) => {
     }
   }
 
+  const payments = account.payments;
+
   if (payments) {
     if (payments[0].status === 'FAILED') {
       containerStyle.push(styles.failedPayment);
     }
   }
 
-  const toUSD = value => currency(value, {symbol: '$', precision: 2}).format();
+  const toUSD = value => currency(value, {symbol: '$', precision: 0}).format();
 
   return (
     <>
       <View style={containerStyle}>
         <View style={styles.detailWrap}>
           <View style={styles.row}>
-            <View style={styles.row}>
-              <Text style={styles.accountTitle}>
+            <View style={[styles.row, {alignItems: 'flex-start'}]}>
+              <Text style={[styles.accountTitle, {maxWidth: 150}]}>
                 {account.originalCreditorName}
               </Text>
-              <Bullet color="black" small />
-              <Text style={styles.accountTitle}>
-                {account.originalCreditorAccountNumber.slice(-4)}
-              </Text>
+              <View style={[styles.row, {alignItems: 'center'}]}>
+                <Bullet color="black" small />
+                <Text style={styles.accountTitle}>
+                  {account.originalCreditorAccountNumber.slice(-4)}
+                </Text>
+              </View>
             </View>
             <View>
               <Text style={styles.balanceText}>
@@ -55,8 +64,10 @@ const AccountTile = ({navigation, account, settlements, payments}) => {
 
           <View style={styles.row}>
             <View style={statusBlockStyle}>
-              {settlements && (
-                <Text style={statusBlockText}>OFFER SUBMITTED</Text>
+              {settlements.length !== 0 && (
+                <Text style={statusBlockText}>
+                  {currentSettlement.offer} OFFER SUBMITTED
+                </Text>
               )}
             </View>
 
@@ -161,6 +172,7 @@ const styles = StyleSheet.create({
   },
   detailWrap: {
     padding: 15,
+    alignContent: 'center',
   },
   bold: {
     fontFamily: 'Poppins-Bold',
@@ -190,26 +202,45 @@ const styles = StyleSheet.create({
     borderRadius: 3,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: colors.mediumGreen,
+    backgroundColor: colors.lightGreen,
     height: 30,
-    width: 150,
+    // width: 150,
     letterSpacing: 0.5,
+    paddingHorizontal: 10,
   },
   offeredText: {
     fontFamily: 'Poppins-Regular',
     textAlign: 'center',
-    color: colors.lightGreen,
+    color: '#00623B',
+    letterSpacing: 0.75,
+    fontSize: RFValue(10),
   },
   accountTitle: {
     fontFamily: 'Poppins-Regular',
-    fontSize: 15,
+    fontSize: RFValue(12),
     letterSpacing: 1.25,
+    color: colors.darkGreen,
   },
-  balanceText: {fontFamily: 'Poppins-Bold', fontSize: 22},
+  balanceText: {
+    fontFamily: 'Poppins-Bold',
+    color: colors.darkGreen,
+    fontSize: RFValue(17),
+  },
   linkText: {
+    fontSize: RFValue(10),
     alignSelf: 'flex-end',
     fontFamily: 'Poppins-Bold',
     letterSpacing: 1.5,
     color: colors.mediumGreen,
+  },
+  statusBlock: {
+    // alignSelf: 'flex-end',
+    // borderRadius: 3,
+    // justifyContent: 'center',
+    // alignItems: 'center',
+    // backgroundColor: colors.mediumGreen,
+    // height: 30,
+    // width: 150,
+    // letterSpacing: 0.5,
   },
 });

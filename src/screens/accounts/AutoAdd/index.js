@@ -8,10 +8,11 @@ import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {Auth} from 'aws-amplify';
 import LocationSearch from '../../../components/LocationSearch';
 import {GlobalContext} from '../../../GlobalContext';
+import apis from '../../../apis/';
 
 const AutoAdd = ({navigation}) => {
   const [globalData, setGlobalData] = useContext(GlobalContext);
-  const user = globalData.user;
+  const {user, session} = globalData;
   const [fn, setFn] = useState(user.given_name);
   const [ln, setLn] = useState(user.family_name);
   const [ssn, setSsn] = useState('');
@@ -29,6 +30,8 @@ const AutoAdd = ({navigation}) => {
   const [placeName, setPlaceName] = useState('');
   const [placeGooglePlaceId, setPlaceGooglePlaceId] = useState('');
 
+  const jwt = session.accessToken.jwtToken;
+
   const handleSubmit = async () => {
     const u = await Auth.currentAuthenticatedUser();
     if (validateForm()) {
@@ -37,7 +40,13 @@ const AutoAdd = ({navigation}) => {
           'custom:ssn': unmask(ssn),
           birthdate: date,
           address,
-        })
+        });
+      } catch (err) {
+        console.log(err);
+      }
+      try {
+        const added = await apis
+          .importAccounts(jwt)
           .then(res => {
             console.log('res', res);
           })
@@ -45,20 +54,16 @@ const AutoAdd = ({navigation}) => {
           .catch(err => {
             console.log(err);
           });
-      } catch (err) {
-        console.log(err);
+        if (added) {
+          navigation.navigate('Load Accounts');
+        }
+      } catch (error) {
+        console.log(error.message);
       }
     }
   };
 
-  console.log(user, 'llllllll');
-
   const validateForm = () => {
-    // setFnValid(fn !== '');
-    // setLnValid(ln !== '');
-    // setSsnValid(ssn !== '');
-    // setDateValid(date !== '');
-    // setAddressValid(address !== '');
     return (
       fn !== '' && ln !== '' && ssn !== '' && date !== '' && address !== ''
     );
@@ -163,7 +168,7 @@ const AutoAdd = ({navigation}) => {
           <View style={styles.bottomButtonsContainer}>
             <Button
               disabled={!validateForm()}
-              title="Continue"
+              title="Complete Auto Add"
               onPress={() => handleSubmit()}
             />
           </View>

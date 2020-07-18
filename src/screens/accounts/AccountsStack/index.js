@@ -88,7 +88,11 @@ export function AccountsStackScreen() {
         name="Load Accounts"
         component={ImportLoading}
       />
-      <AccountsStack.Screen name="Negotiation" component={Negotiation} />
+      <AccountsStack.Screen
+        name="Settlement Negotiation"
+        component={Negotiation}
+        options={getScreenOptions()}
+      />
     </AccountsStack.Navigator>
   );
 }

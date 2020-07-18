@@ -100,6 +100,11 @@ export default ({
       ],
     }),
   };
+
+  const now = moment();
+
+  const maxBday = now.subtract(18, 'years')._d;
+
   return (
     <>
       <FieldWrapper
@@ -197,7 +202,7 @@ export default ({
         </Modal>
       </FieldWrapper>
       <DateTimePickerModal
-        maximumDate={new Date()}
+        maximumDate={maxBday}
         isVisible={showPicker}
         mode="date"
         onConfirm={date => setDate(date)}

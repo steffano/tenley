@@ -20,7 +20,7 @@ export default ({min, max, title, total, isCurrency, onSlide, onType}) => {
   // console.log(total, calcValue, 'total#######');
 
   const handleDone = () => {
-    const val = parseInt(calcValue);
+    const val = currency(calcValue).value;
     if (val <= max && val >= min) {
       onSlide(val);
       setShowCalcValue(false);
@@ -28,6 +28,8 @@ export default ({min, max, title, total, isCurrency, onSlide, onType}) => {
       setShowCalcValue(false);
     }
   };
+
+  const sliderStep = max > 2500 ? 100 : 10;
 
   const USD = value => currency(value, {symbol: '$', precision: 0}).format();
 
@@ -82,7 +84,7 @@ export default ({min, max, title, total, isCurrency, onSlide, onType}) => {
           maximumTrackTintColor={colors.lightGray}
           value={total}
           onValueChange={onSlide}
-          step={isCurrency ? 10 : null}
+          step={isCurrency ? sliderStep : null}
           thumbStyle={styles.thumb}
           trackStyle={styles.track}
         />

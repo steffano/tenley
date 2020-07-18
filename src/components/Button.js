@@ -45,7 +45,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.mediumGreen,
     marginVertical: 5,
-    height: RFValue(55),
+    maxHeight: RFValue(55),
+    minHeight: RFValue(50),
   },
   secondaryContainer: {
     backgroundColor: colors.orange,
@@ -54,7 +55,8 @@ const styles = StyleSheet.create({
     borderColor: colors.orange,
     marginVertical: 5,
     paddingHorizontal: 10,
-    height: RFValue(55),
+    maxHeight: RFValue(55),
+    minHeight: RFValue(50),
   },
   disabledContainer: {
     backgroundColor: colors.lightGreen,
@@ -73,7 +75,7 @@ const styles = StyleSheet.create({
   text: {
     color: 'white',
     alignSelf: 'center',
-    fontSize: RFValue(16),
+    fontSize: RFValue(14),
     letterSpacing: 1.25,
     fontFamily: 'Poppins-Bold',
   },

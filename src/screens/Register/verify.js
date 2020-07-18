@@ -10,7 +10,6 @@ import {
 import {GlobalContext} from '../../GlobalContext';
 import {Form, TextInput} from '../../components/Form';
 import {Button} from '../../components/Button';
-import {GreenModal} from '../../components/Modal';
 import {colors, Spacing} from '../../utilities/styles';
 import {RFValue, RFPercentage} from 'react-native-responsive-fontsize';
 import {maskPhone, unmask} from '../../utilities/validation';
@@ -105,11 +104,6 @@ const Verify = ({navigation}) => {
           onPress={() => setShowResend(true)}
         />
       </View>
-      {/* <GreenModal
-        onClose={() => setShowResend(false)}
-        visible={showResend}
-        key={1}
-        style={{height: RFPercentage(55)}}> */}
       <Modal
         isVisible={showResend}
         backdropColor={colors.transparentGreen}
@@ -171,7 +165,6 @@ const Verify = ({navigation}) => {
           </View>
         </View>
       </Modal>
-      {/* </GreenModal> */}
     </SafeAreaView>
   );
 };

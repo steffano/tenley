@@ -37,9 +37,25 @@ const getAccounts = async jwt => {
   return api.get('/accounts');
 };
 
+const importAccounts = async jwt => {
+  return api
+    .post('/accounts/import', {
+      headers: {Authorization: `Bearer ${jwt}`},
+    })
+    .then(response => console.log(response.data));
+};
+
+const postSettlement = async (postBody, jwt, id) => {
+  return api.post(`/accounts/${id}/settlement`, postBody, {
+    headers: {Authorization: `Bearer ${jwt}`},
+  });
+};
+
 export default {
   getAccounts,
   addAccount,
+  postSettlement,
+  importAccounts,
 };
 
 // export const getAccounts = jwt =>

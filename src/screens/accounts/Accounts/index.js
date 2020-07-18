@@ -9,8 +9,6 @@ import apis from '../../../apis/';
 
 const Accounts = ({navigation}) => {
   const [globalData, setGlobalData] = useContext(GlobalContext);
-  console.log(globalData);
-
   const {user, accounts, session} = globalData;
 
   // const [data, setData] = useState([]);
