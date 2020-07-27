@@ -92,7 +92,7 @@ const Verify = ({navigation}) => {
           </View>
         </View>
       </Form>
-      <View style={styles.bottomButtonsContainer}>
+      <View style={Spacing.bottomButtonsContainer}>
         <Button
           disabled={value.length < 6}
           title="Verify"

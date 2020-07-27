@@ -187,7 +187,7 @@ const Register = ({navigation}) => {
           />
           <Text style={Typography.errorText}>{errorMessage}</Text>
         </Form>
-        <View style={styles.bottomButtonsContainer}>
+        <View style={Spacing.bottomButtonsContainer}>
           <Button
             disabled={loading}
             title="Create Account"

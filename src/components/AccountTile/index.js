@@ -6,7 +6,7 @@ import ProgressGauge from '../ProgressGauge';
 import Bullet from '../Bullet';
 import currency from 'currency.js';
 
-const AccountTile = ({navigation, account}) => {
+const AccountTile = ({navigation, account, hideButton}) => {
   const statusBlockStyle = [styles.statusBlock];
   const statusBlockText = [styles.offeredText];
 
@@ -14,10 +14,9 @@ const AccountTile = ({navigation, account}) => {
 
   const settlements = account.settlements;
   const currentSettlement = settlements[0];
-  // console.log(settlements.status);
 
   if (settlements.length !== 0) {
-    console.log(settlements, '####');
+    // console.log(settlements, '####');
     if (currentSettlement.status === 'OFFERED') {
       statusBlockStyle.push(styles.offered);
     }

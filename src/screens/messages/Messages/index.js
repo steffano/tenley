@@ -6,16 +6,21 @@ import {
   TouchableOpacity,
   View,
   StyleSheet,
+  Button,
 } from 'react-native';
 import {GlobalContext} from '../../../GlobalContext';
 import {AccountButton} from '../../../components/AccountButton';
 import {Header} from '../../../components/Header';
 import {colors, Spacing} from '../../../utilities/styles';
+import {SearchFilter} from '../../../components/SearchFilter';
+import {RFValue} from 'react-native-responsive-fontsize';
 
-const Message = () => {
+const Message = ({navigation}) => {
   const [globalData, setGlobalData] = useContext(GlobalContext);
 
   const [section, setSection] = useState('Messages');
+
+  const [showNotification, setShowNotification] = useState(true);
 
   const {accounts} = globalData;
   console.log('msg', accounts);
@@ -59,39 +64,20 @@ const Message = () => {
         </View>
         <View style={[styles.container, {justifyContent: 'flex-start'}]}>
           <ScrollView>
-            <View
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                marginHorizontal: 15,
-                marginVertical: 25,
-              }}>
-              <View
-                style={{
-                  height: 45,
-                  width: '85%',
-                  borderWidth: 1,
-                  borderRadius: 3,
-                  borderColor: colors.lightGray,
-                  marginRight: 15,
-                }}
-              />
-
-              <View
-                style={{
-                  height: 45,
-                  width: 45,
-                  borderRadius: 3,
-                  backgroundColor: colors.mediumGreen,
-                }}
-              />
-            </View>
+            <SearchFilter />
             {accounts.map((account, key) => {
               return (
                 account && (
                   <AccountButton
+                    notification={key === 0}
+                    key={key}
                     accountName={account.originalCreditorName}
                     lastFour={account.originalCreditorAccountNumber.slice(-4)}
+                    onPress={() =>
+                      navigation.navigate('Inbox', {
+                        account,
+                      })
+                    }
                   />
                 )
               );
@@ -150,7 +136,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 5,
     color: colors.darkGreen,
     fontFamily: 'Poppins-Regular',
-    fontSize: 14,
+    fontSize: RFValue(14),
     letterSpacing: 0.88,
     lineHeight: 22,
     textAlign: 'center',

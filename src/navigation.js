@@ -10,15 +10,18 @@ import {createStackNavigator} from '@react-navigation/stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {GlobalContext} from './GlobalContext';
 import {colors} from './utilities/styles';
-import {RFPercentage} from 'react-native-responsive-fontsize';
+import {RFPercentage, RFValue} from 'react-native-responsive-fontsize';
 import {AccountsStackScreen} from './screens/accounts/AccountsStack';
 import {ActivityStackScreen} from './screens/activity/ActivityStack';
 import {ProfileStackScreen} from './screens/profile/ProfileStack';
 import {MessageStackScreen} from './screens/messages/MessagesStack';
+// import Payments from './screens/payments/PaymentStack.js';
 // import StoryBook from '../storybook';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
+
+const iconStyle = {height: 20, width: 20};
 
 function Navigation() {
   const [globalData] = useContext(GlobalContext);
@@ -52,11 +55,12 @@ function Navigation() {
                 flex: 1,
                 alignItems: 'center',
                 justifyContent: 'center',
-                paddingTop: 10,
+                marginTop: RFValue(7),
               },
               style: {
-                height: RFPercentage(12),
-                paddingVertical: 15,
+                // backgroundColor: 'red',
+                height: RFPercentage(11),
+                paddingTop: RFValue(15),
                 shadowColor: colors.mediumGray,
                 shadowOpacity: 0.8,
                 shadowRadius: 3,
@@ -66,7 +70,9 @@ function Navigation() {
                 },
               },
               tabStyle: {
-                // maxHeight: 100,
+                // backgroundColor: 'blue',
+                height: RFValue(50),
+                justifyContent: 'center',
               },
             }}>
             <Tab.Screen

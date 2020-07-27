@@ -1,5 +1,6 @@
 import 'react-native-gesture-handler';
 import React, {useEffect} from 'react';
+import {AsyncStorage} from 'react-native';
 import Navigation from './navigation';
 import Amplify from 'aws-amplify';
 // import Config from 'react-native-config';

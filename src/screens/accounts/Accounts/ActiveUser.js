@@ -17,8 +17,10 @@ import {RFPercentage, RFValue} from 'react-native-responsive-fontsize';
 import {colors, Spacing, Typography} from '../../../utilities/styles';
 import {Auth} from 'aws-amplify';
 import AccountTile from '../../../components/AccountTile';
+import {useFocusEffect} from '@react-navigation/native';
 import useApi from '../../../useApi';
 import sum from 'lodash/sum';
+import find from 'lodash/find';
 import map from 'lodash/map';
 import get from 'lodash/get';
 import currency from 'currency.js';
@@ -31,7 +33,7 @@ import apis from '../../../apis';
 
 const ActiveUser = ({navigation, route, accounts}) => {
   const [globalData, setGlobalData] = useContext(GlobalContext);
-  const {user, session} = globalData;
+  const {user} = globalData;
 
   const toNum = n => {
     return currency(n).value;
@@ -61,11 +63,20 @@ const ActiveUser = ({navigation, route, accounts}) => {
 
   const [showCeaseDesist, setShowCeaseDesist] = useState(false);
 
-  console.log('params', route);
+  const nextAccount = find(accounts, function(o) {
+    return o.settlements.length === 0;
+  });
 
+  console.log('route', route);
+  console.log('user', user);
+  console.log('accounts', accounts);
+  console.log(
+    'c&d opt in',
+    get(user, 'custom:cd_optIn'),
+    'decline',
+    get(user, 'declinedCeaseAndDesist', false),
+  );
   const toUSD = value => currency(value, {symbol: '$', precision: 0}).format();
-
-  console.log(user, 'USER');
 
   const acceptCeaseAndDesist = async () => {
     setShowCeaseDesist(false);
@@ -74,9 +85,6 @@ const ActiveUser = ({navigation, route, accounts}) => {
       await Auth.updateUserAttributes(u, {
         'custom:cd_optIn': 'true',
       })
-        .then(res => {
-          console.log('res', res);
-        })
         .then(updateUser())
         .catch(err => {
           console.log(err);
@@ -94,55 +102,37 @@ const ActiveUser = ({navigation, route, accounts}) => {
     });
   };
 
-  // const ceaseAndDesist = () => {
-  //   if (!cdDecline) {
-  //     const checkOptIn = async () => {
-  //       const optIn = get(user, 'custom:cd_optIn');
-  //       if (!optIn) {
-  //         setTimeout(() => {
-  //           setShowCeaseDesist(true);
-  //         }, 500);
-  //       } else {
-  //         console.log('already opted in');
-  //       }
-  //     };
-  //     checkOptIn();
-  //   } else {
-  //     console.log('already declined this session');
-  //   }
-  // };
   const optIn = get(user, 'custom:cd_optIn');
+  const optOut = get(user, 'declinedCeaseAndDesist');
+
+  const notAcknowledged = !optIn && !optOut;
 
   const ceaseAndDesist = () => {
-    const cdDecline = get(user, 'declinedCeaseAndDesist', false);
-
     const checkOptIn = async () => {
-      if (!optIn && !cdDecline) {
+      if (notAcknowledged) {
         setTimeout(() => {
           setShowCeaseDesist(true);
-        }, 500);
-        console.log(cdDecline, 'HOW');
+        }, 1000);
       } else {
-        console.log('already opted in');
+        console.log('acknoledged c&d this session');
       }
     };
     checkOptIn();
   };
 
-  const jwt = session.accessToken.jwtToken;
-
   const updateUser = async () => {
     const u = await Auth.currentAuthenticatedUser();
-    const a = await apis.getAccounts(jwt);
     setGlobalData({...globalData, user: u.attributes});
   };
 
-  // useEffect(() => {
-  //   navigation.addListener('focus', () => {
-  //     ceaseAndDesist();
-  //     console.log(showCeaseDesist, 'decline?');
-  //   });
-  // }, []);
+  useFocusEffect(() => {
+    ceaseAndDesist();
+    if (globalData.settlement) {
+      setTimeout(() => {
+        setShowSettlementConfirmation(true);
+      }, 1000);
+    }
+  }, []);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -249,7 +239,6 @@ const ActiveUser = ({navigation, route, accounts}) => {
               </>
             )}
           </View>
-
           <TouchableOpacity onPress={() => setExpandBalance(!expandBalance)}>
             <View
               style={{
@@ -415,12 +404,33 @@ const ActiveUser = ({navigation, route, accounts}) => {
         backdropColor={colors.transparentGreen}
         onBackdropPress={() => {
           setShowSettlementConfirmation(false);
+          setGlobalData({
+            ...globalData,
+            settlement: null,
+          });
         }}>
         <SettlementConfirmation
+          settlement={globalData.settlement}
+          nextAccount={nextAccount}
+          accounts={accounts}
+          navigation={navigation}
+          onAccept={() => {
+            setShowSettlementConfirmation(false);
+            navigation.navigate('Account Details', {
+              account: nextAccount,
+            });
+            setGlobalData({
+              ...globalData,
+              settlement: null,
+            });
+          }}
           onClose={() => {
             setShowSettlementConfirmation(false);
+            setGlobalData({
+              ...globalData,
+              settlement: null,
+            });
           }}
-          navigation={navigation}
         />
       </Modal>
     </SafeAreaView>

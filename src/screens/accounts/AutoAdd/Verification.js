@@ -69,7 +69,7 @@ const Verification = ({navigation}) => {
           </Text>
         </TouchableOpacity>
 
-        <View style={styles.bottomButtonsContainer}>
+        <View style={Spacing.bottomButtonsContainer}>
           <Button
             disabled={selected === 0}
             title="Submit"

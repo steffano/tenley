@@ -165,7 +165,7 @@ const AutoAdd = ({navigation}) => {
               />
             </TextInput>
           </Form>
-          <View style={styles.bottomButtonsContainer}>
+          <View style={Spacing.bottomButtonsContainer}>
             <Button
               disabled={!validateForm()}
               title="Complete Auto Add"

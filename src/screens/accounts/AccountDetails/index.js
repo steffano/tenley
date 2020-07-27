@@ -13,6 +13,7 @@ import Bullet from '../../../components/Bullet';
 import {RFValue, RFPercentage} from 'react-native-responsive-fontsize';
 import currency from 'currency.js';
 import moment from 'moment';
+import get from 'lodash/get';
 
 // import {GlobalContext} from '../../GlobalContext';
 
@@ -183,7 +184,10 @@ const AccountDetails = ({route, navigation}) => {
                   />
                 </Text>
 
-                <Button title="Payment Set Up" />
+                <Button
+                  title="Payment Set Up"
+                  onPress={() => navigation.navigate('PaymentSetup', {account})}
+                />
               </View>
               <View style={styles.contentBlock}>
                 <Text style={styles.blockText}>
@@ -230,7 +234,7 @@ const styles = StyleSheet.create({
   rowText: {
     fontFamily: 'Poppins-Regular',
     color: colors.darkGreen,
-    fontSize: RFValue(9),
+    fontSize: RFValue(10),
     letterSpacing: 0.75,
   },
   rowSeparator: {

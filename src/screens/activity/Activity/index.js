@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 // import {GlobalContext} from '../../GlobalContext';
 import ActiveUser from '../../accounts/Accounts/ActiveUser';
-
+import {RFValue} from 'react-native-responsive-fontsize';
 import {colors} from '../../../utilities/styles';
 import {Header} from '../../../components/Header';
 
@@ -66,6 +66,10 @@ const Activity = ({navigation}) => {
             style={{fontFamily: 'VisbyCF-Medium'}}
             title="Payment Log"
           />
+          <Button
+            title="test"
+            onPress={() => navigation.navigate('PaymentSetup')}
+          />
         </View>
       </SafeAreaView>
     </>
@@ -88,7 +92,7 @@ const styles = StyleSheet.create({
     width: 71,
     color: colors.darkGreen,
     fontFamily: 'Poppins-Bold',
-    fontSize: 16,
+    fontSize: RFValue(16),
     letterSpacing: 0.75,
     lineHeight: 26,
     textAlign: 'center',
@@ -104,7 +108,7 @@ const styles = StyleSheet.create({
   title: {
     color: colors.darkGreen,
     fontFamily: 'Poppins-Bold',
-    fontSize: 16,
+    fontSize: RFValue(16),
     letterSpacing: 0.75,
     lineHeight: 26,
     textAlign: 'center',
@@ -115,7 +119,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 5,
     color: colors.darkGreen,
     fontFamily: 'Poppins-Regular',
-    fontSize: 14,
+    fontSize: RFValue(14),
     letterSpacing: 0.88,
     lineHeight: 22,
     textAlign: 'center',

@@ -89,7 +89,7 @@ const Login = ({navigation}) => {
         <Text style={Typography.errorText}>{errorMessage}</Text>
         <Button textOnly title="USE FACE ID" />
       </Form>
-      <View style={styles.bottomButtonsContainer}>
+      <View style={Spacing.bottomButtonsContainer}>
         <Button title="Log In" onPress={() => login()} />
         <Button
           textOnly

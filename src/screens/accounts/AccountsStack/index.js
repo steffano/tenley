@@ -1,25 +1,3 @@
-// import React, {useContext} from 'react';
-// import {View, Text, Button} from 'react-native';
-// import {GlobalContext} from '../../GlobalContext';
-
-// const Accounts = () => {
-//   const [globalData, setGlobalData] = useContext(GlobalContext);
-
-//   Keychain.getGenericPassword().then(res => {
-//     console.log('#######', res);
-//   });
-
-//   return (
-//     <>
-//       <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-//         <Text style={{fontFamily: 'VisbyCF-Medium'}}>Accounts</Text>
-//       </View>
-//     </>
-//   );
-// };
-
-// export default Accounts;
-
 import React from 'react';
 import {TouchableOpacity, Image} from 'react-native';
 import {createStackNavigator} from '@react-navigation/stack';
@@ -30,7 +8,15 @@ import ManualAdd from '../ManualAdd';
 import ImportLoading from '../Accounts/ImportLoading';
 import Verification from '../AutoAdd/Verification';
 import Negotiation from '../Negotiation';
-
+import {
+  BankLogin,
+  BankSetup,
+  PaymentCalculator,
+  PaymentConfirmation,
+  PaymentSetup,
+  PaymentSummary,
+  SchedulePayment,
+} from '../../payments';
 const AccountsStack = createStackNavigator();
 
 const getScreenOptions = () => {
@@ -53,6 +39,16 @@ const getScreenOptions = () => {
       lineHeight: 26,
     },
   };
+};
+
+const renderScreen = (name, component, withHeader) => {
+  return (
+    <AccountsStack.Screen
+      name={name}
+      component={component}
+      options={withHeader ? {tabBarVisible: false} : {headerShown: false}}
+    />
+  );
 };
 
 export function AccountsStackScreen() {
@@ -93,6 +89,21 @@ export function AccountsStackScreen() {
         component={Negotiation}
         options={getScreenOptions()}
       />
+      {renderScreen('PaymentSetup', PaymentSetup)}
+      {renderScreen(
+        'PaymentCalculator',
+
+        PaymentCalculator,
+      )}
+      {renderScreen('PaymentSummary', PaymentSummary)}
+      {renderScreen('PaymentConfirmation', PaymentConfirmation)}
+      {renderScreen('BankLogin', BankLogin)}
+      {renderScreen('BankSetup', BankSetup)}
+      {renderScreen(
+        'SchedulePayment',
+
+        SchedulePayment,
+      )}
     </AccountsStack.Navigator>
   );
 }

@@ -191,7 +191,7 @@ const ManualAdd = ({navigation}) => {
               invalid={!amountValid}
             />
           </Form>
-          <View style={styles.bottomButtonsContainer}>
+          <View style={Spacing.bottomButtonsContainer}>
             <Button
               disabled={!validateForm()}
               title="Complete Manual Add"

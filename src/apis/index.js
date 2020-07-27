@@ -51,11 +51,25 @@ const postSettlement = async (postBody, jwt, id) => {
   });
 };
 
+const oneTimePayment = async (postBody, jwt, id) => {
+  return api.post(`/payments/${id}/payment`, postBody, {
+    headers: {Authorization: `Bearer ${jwt}`},
+  });
+};
+
+const schedulePayments = async (postBody, jwt, id) => {
+  return api.post(`/payments/${id}/schedule`, postBody, {
+    headers: {Authorization: `Bearer ${jwt}`},
+  });
+};
+
 export default {
   getAccounts,
   addAccount,
   postSettlement,
   importAccounts,
+  oneTimePayment,
+  schedulePayments,
 };
 
 // export const getAccounts = jwt =>

@@ -23,7 +23,10 @@
 import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import Message from '../Messages';
+import Inbox from '../Inbox';
+import MessageDetails from '../MessageDetails';
 import {getScreenOptions} from '../../../utilities/styles';
+import AccountsStack from '../../accounts/AccountsStack';
 
 const MessagesStack = createStackNavigator();
 
@@ -35,6 +38,18 @@ export function MessageStackScreen() {
         // options={getScreenOptions()}
         name="Messages Home"
         component={Message}
+      />
+      <MessagesStack.Screen
+        options={{headerShown: false}}
+        // options={getScreenOptions()}
+        name="Inbox"
+        component={Inbox}
+      />
+      <MessagesStack.Screen
+        options={{headerShown: false}}
+        // options={getScreenOptions()}
+        name="Details"
+        component={MessageDetails}
       />
     </MessagesStack.Navigator>
   );

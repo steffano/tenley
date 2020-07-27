@@ -26,6 +26,8 @@ const ImportLoading = ({navigation}) => {
       index: 0,
       routes: [{name: 'Accounts', params: 'fromImportLoading'}],
     });
+
+    // navigation.navigate('Accounts', {test: 'test'});
   };
 
   const demoAccounts = [
@@ -132,7 +134,6 @@ const ImportLoading = ({navigation}) => {
   useEffect(() => {
     const getAccounts = async () => {
       const accts = await apis.getAccounts(jwt);
-      // if (accts.data.with.length > 0) {
       setGlobalData({
         ...globalData,
         accounts: accts.data.with,
@@ -140,9 +141,7 @@ const ImportLoading = ({navigation}) => {
       });
       console.log('this', accts.data);
     };
-    // setTimeout(() => {
     getAccounts();
-    // }, 3000);
   }, []);
 
   return (

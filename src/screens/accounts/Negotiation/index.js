@@ -28,7 +28,7 @@ const Negotiation = ({route, navigation}) => {
   const totalDebt = currency(account.amountOwed).value;
   const [debtBalance, setDebtBalance] = useState(totalDebt * 0.6);
   const [payment, setPayment] = useState(debtBalance * 0.1);
-  const [months, setMonths] = useState(debtBalance / payment);
+  const [months, setMonths] = useState(Math.ceil(debtBalance / payment));
 
   const bucksTotal = debtBalance - 100;
 
@@ -46,12 +46,15 @@ const Negotiation = ({route, navigation}) => {
   const {user, session} = globalData;
   const jwt = session.accessToken.jwtToken;
 
+  console.log(jwt);
+
   const getAccounts = async () => {
     console.log('made it');
     const accts = await apis.getAccounts(jwt);
     setGlobalData({
       ...globalData,
       accounts: accts.data.with,
+      settlement: toUSD(debtBalance),
     });
     switchScreen();
   };
@@ -59,7 +62,7 @@ const Negotiation = ({route, navigation}) => {
   const switchScreen = () => {
     navigation.reset({
       index: 0,
-      routes: [{name: 'Accounts', params: 'fromImportLoading'}],
+      routes: [{name: 'Accounts', params: {message: 'fromImportLoading'}}],
     });
   };
 

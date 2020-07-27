@@ -27,7 +27,7 @@ const FaceId = () => {
             email and password.
           </Text>
         </View>
-        <View style={styles.bottomButtonsContainer}>
+        <View style={Spacing.bottomButtonsContainer}>
           <Button
             title="Enable Face ID"
             onPress={() =>
