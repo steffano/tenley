@@ -2,9 +2,11 @@ import React, {useContext, useState} from 'react';
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import {RFValue, RFPercentage} from 'react-native-responsive-fontsize';
 import {colors} from '../../utilities/styles';
+import sortBy from 'lodash/sortBy';
 import ProgressGauge from '../ProgressGauge';
 import Bullet from '../Bullet';
 import currency from 'currency.js';
+import moment from 'moment';
 
 const AccountTile = ({navigation, account, hideButton}) => {
   const statusBlockStyle = [styles.statusBlock];
@@ -30,13 +32,41 @@ const AccountTile = ({navigation, account, hideButton}) => {
 
   const payments = account.payments;
 
-  if (payments) {
+  if (payments.length > 0) {
     if (payments[0].status === 'FAILED') {
       containerStyle.push(styles.failedPayment);
     }
   }
 
   const toUSD = value => currency(value, {symbol: '$', precision: 0}).format();
+
+  const getWholePercent = (percentFor, percentOf) => {
+    return Math.floor((percentFor / percentOf) * 100);
+  };
+
+  const balance = currency(account.amountOwed).value;
+  const originalBalance = currency(account.originalAmountOwed).value;
+
+  const settlementBalance = 0;
+
+  const paid = originalBalance - balance;
+  const settled = 0;
+
+  const percentPaid = getWholePercent(paid, originalBalance);
+  const percentSaved = getWholePercent(settled, originalBalance);
+
+  const progressPercentages = [
+    // {
+    //   label: 'settlement',
+    //   percentage: percentSaved + '%',
+    //   color: colors.mediumGreen,
+    // },
+    {
+      label: 'payments',
+      percentage: percentPaid + '%',
+      color: colors.tenleyGreen,
+    },
+  ];
 
   return (
     <>
@@ -75,7 +105,7 @@ const AccountTile = ({navigation, account, hideButton}) => {
                 onPress={() =>
                   navigation.navigate('Account Details', {account})
                 }>
-                {!payments && (
+                {payments.length <= 0 && (
                   <Text style={styles.linkText}>
                     {'\n'}
                     VIEW >
@@ -84,26 +114,16 @@ const AccountTile = ({navigation, account, hideButton}) => {
               </TouchableOpacity>
             </View>
           </View>
-          {payments && (
+          {payments.length > 0 && (
             <>
-              <View style={styles.row}>
+              {/* <View style={styles.row}>
                 <Text style={styles.text}>Est. Payoff: 1.21.22</Text>
                 <Text style={styles.text}>Next Payment: 10.21.20</Text>
-              </View>
+              </View> */}
               <View>
                 <ProgressGauge
-                  label="Two visual percentages"
                   backgroundColor="lightgrey"
-                  visualParts={[
-                    {
-                      percentage: '53%',
-                      color: colors.mediumGreen,
-                    },
-                    {
-                      percentage: '13%',
-                      color: colors.tenleyGreen,
-                    },
-                  ]}
+                  visualParts={progressPercentages}
                 />
                 <View
                   style={{flexDirection: 'row', justifyContent: 'flex-start'}}>
@@ -121,6 +141,33 @@ const AccountTile = ({navigation, account, hideButton}) => {
             </>
           )}
         </View>
+
+        {payments.length !== 0 && (
+          <View
+            style={{
+              minWidth: 200,
+              backgroundColor: colors.lightestGray,
+            }}>
+            <TouchableOpacity
+              onPress={() => navigation.navigate('Account Details', {account})}>
+              <View style={styles.detailWrap}>
+                <View style={styles.row}>
+                  <Text style={styles.text}>
+                    Original Balance{' '}
+                    <Text style={styles.bold}>{toUSD(originalBalance)}</Text> |
+                    Paid{' '}
+                    <Text style={styles.bold}>
+                      {toUSD(originalBalance - balance)}
+                    </Text>
+                  </Text>
+                  <Text style={styles.linkText}>VIEW ></Text>
+                </View>
+              </View>
+            </TouchableOpacity>
+          </View>
+        )}
+
+        {/* FAILED PAYMENT
         {payments && (
           <View
             style={{
@@ -132,28 +179,18 @@ const AccountTile = ({navigation, account, hideButton}) => {
             }}>
             <TouchableOpacity>
               <View style={styles.detailWrap}>
-                {payments && payments[0].status !== 'FAILED' ? (
-                  <View style={styles.row}>
-                    <Text style={styles.text}>
-                      Original Balance <Text style={styles.bold}>$6,250</Text> |
-                      Paid <Text style={styles.bold}>$650</Text>
-                    </Text>
-                    <Text style={styles.linkText}>VIEW ></Text>
-                  </View>
-                ) : (
-                  <View style={styles.row}>
-                    <Text style={[styles.text, styles.bold, {color: 'white'}]}>
-                      Payment failed
-                    </Text>
-                    <Text style={[styles.linkText, {color: 'white'}]}>
-                      VIEW >
-                    </Text>
-                  </View>
-                )}
+                <View style={styles.row}>
+                  <Text style={[styles.text, styles.bold, {color: 'white'}]}>
+                    Payment failed
+                  </Text>
+                  <Text style={[styles.linkText, {color: 'white'}]}>
+                    VIEW >
+                  </Text>
+                </View>
               </View>
             </TouchableOpacity>
           </View>
-        )}
+        )} */}
       </View>
     </>
   );
@@ -181,10 +218,9 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     flex: 1,
     minWidth: 200,
-    marginHorizontal: 15,
-    marginVertical: 5,
+    marginHorizontal: RFValue(15),
+    marginVertical: RFValue(10),
     borderRadius: 5,
-    // paddingTop: 15,
   },
   failedPayment: {
     borderColor: colors.darkRed,
@@ -194,7 +230,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignContent: 'center',
     alignItems: 'center',
-    // paddingHorizontal: 20,
   },
   offered: {
     alignSelf: 'flex-end',
@@ -202,10 +237,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: colors.lightGreen,
-    height: 30,
-    // width: 150,
+    height: RFValue(30),
     letterSpacing: 0.5,
-    paddingHorizontal: 10,
+    paddingHorizontal: RFValue(10),
+    marginTop: RFValue(10),
   },
   offeredText: {
     fontFamily: 'Poppins-Regular',

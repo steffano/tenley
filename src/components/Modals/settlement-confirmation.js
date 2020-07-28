@@ -3,7 +3,7 @@ import {View, SafeAreaView, Text, StyleSheet, Image} from 'react-native';
 import {Button} from '../Button';
 import Bullet from '../Bullet';
 import {colors, Spacing, Typography} from '../../utilities/styles';
-import {RFValue} from 'react-native-responsive-fontsize';
+import {RFValue, RFPercentage} from 'react-native-responsive-fontsize';
 import find from 'lodash/find';
 import currency from 'currency.js';
 
@@ -30,17 +30,17 @@ const SettlementConfirmation = ({
         </Text>
         <View style={{height: 20}} />
 
-        <Text style={styles.header}>
-          You have 2 remaining counters{'  '}
+        <View style={[styles.row, {justifyContent: 'flex-start'}]}>
+          <Text style={styles.header}>You have 2 remaining counters{'  '}</Text>
           <Image
             source={require('../../assets/icons/info/gray.png')}
             resizeMode="contain"
             style={{
-              maxWidth: RFValue(20),
-              maxHeight: RFValue(20),
+              maxWidth: RFValue(18),
+              maxHeight: RFValue(18),
             }}
           />
-        </Text>
+        </View>
       </View>
       <View
         style={{
@@ -108,7 +108,7 @@ const styles = StyleSheet.create({
   header: {
     fontFamily: 'Poppins-Bold',
     letterSpacing: 0.9,
-    fontSize: 16,
+    fontSize: RFValue(13),
     color: colors.darkGreen,
   },
   text: {

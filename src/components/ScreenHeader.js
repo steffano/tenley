@@ -17,10 +17,12 @@ export const ScreenHeader = ({navigation, title}) => {
         style={{
           flexDirection: 'row',
           alignItems: 'center',
-          marginTop: RFValue(10),
+          marginTop: RFValue(5),
         }}>
         <View style={{flex: 1}}>
-          <TouchableOpacity onPress={() => navigation.goBack()}>
+          <TouchableOpacity
+            style={{paddingVertical: RFValue(10)}}
+            onPress={() => navigation.goBack()}>
             <Image
               source={require('../assets/icons/back-arrow.png')}
               style={{marginLeft: 20}}

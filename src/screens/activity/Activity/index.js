@@ -12,6 +12,7 @@ import ActiveUser from '../../accounts/Accounts/ActiveUser';
 import {RFValue} from 'react-native-responsive-fontsize';
 import {colors} from '../../../utilities/styles';
 import {Header} from '../../../components/Header';
+import PaymentActivity from '../PaymentsLog';
 
 const Activity = ({navigation}) => {
   // const [globalData, setGlobalData] = useContext(GlobalContext);
@@ -20,17 +21,11 @@ const Activity = ({navigation}) => {
 
   return (
     <>
-      {/* <ActiveUser /> */}
-      <SafeAreaView style={{flex: 1}}>
+      <SafeAreaView style={{flex: 1, backgroundColor: 'white'}}>
         <View style={styles.headerBar}>
           <Text style={styles.title}>Activity</Text>
 
-          <View
-            style={{
-              flex: 1,
-              flexDirection: 'row',
-              justifyContent: 'flex-end',
-            }}>
+          <View style={styles.row}>
             <TouchableOpacity
               style={[
                 styles.headerToggle,
@@ -55,21 +50,13 @@ const Activity = ({navigation}) => {
             </TouchableOpacity>
           </View>
         </View>
-        <View style={{flex: 1, justifyContent: 'center'}}>
-          <Text style={{fontFamily: 'VisbyCF-Medium', textAlign: 'center'}}>
-            {section}
-          </Text>
-          <Button
-            onPress={() =>
-              navigation.navigate('Activity', {screen: 'Payment Log'})
-            }
-            style={{fontFamily: 'VisbyCF-Medium'}}
-            title="Payment Log"
-          />
-          <Button
-            title="test"
-            onPress={() => navigation.navigate('PaymentSetup')}
-          />
+
+        <View style={{flex: 1}}>
+          {section === 'Payments' ? (
+            <PaymentActivity navigation={navigation} />
+          ) : (
+            <Text>bbux</Text>
+          )}
         </View>
       </SafeAreaView>
     </>
@@ -79,6 +66,11 @@ const Activity = ({navigation}) => {
 export default Activity;
 
 const styles = StyleSheet.create({
+  row: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+  },
   headerBar: {
     height: 50,
     flexDirection: 'row',
@@ -92,7 +84,7 @@ const styles = StyleSheet.create({
     width: 71,
     color: colors.darkGreen,
     fontFamily: 'Poppins-Bold',
-    fontSize: RFValue(16),
+    fontSize: RFValue(14),
     letterSpacing: 0.75,
     lineHeight: 26,
     textAlign: 'center',
@@ -119,7 +111,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 5,
     color: colors.darkGreen,
     fontFamily: 'Poppins-Regular',
-    fontSize: RFValue(14),
+    fontSize: RFValue(12),
     letterSpacing: 0.88,
     lineHeight: 22,
     textAlign: 'center',

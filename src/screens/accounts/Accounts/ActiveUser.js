@@ -29,6 +29,7 @@ import CeaseAndDesist from '../../../components/Modals/cease-and-desist';
 import AddAccountPrompt from '../../../components/Modals/add-account-prompt';
 import SelectAccount from '../../../components/Modals/select-account';
 import SettlementConfirmation from '../../../components/Modals/settlement-confirmation';
+import PaymentConfirmation from '../../../components/Modals/payment-confirmation';
 import apis from '../../../apis';
 
 const ActiveUser = ({navigation, route, accounts}) => {
@@ -59,6 +60,7 @@ const ActiveUser = ({navigation, route, accounts}) => {
   const [showSettlementConfirmation, setShowSettlementConfirmation] = useState(
     false,
   );
+  const [showPaymentConfirmation, setShowPaymentConfirmation] = useState(false);
   const [expandBalance, setExpandBalance] = useState(false);
 
   const [showCeaseDesist, setShowCeaseDesist] = useState(false);
@@ -74,12 +76,16 @@ const ActiveUser = ({navigation, route, accounts}) => {
     'c&d opt in',
     get(user, 'custom:cd_optIn'),
     'decline',
-    get(user, 'declinedCeaseAndDesist', false),
+    get(user, 'acknowledgedCeaseAndDesist', false),
   );
   const toUSD = value => currency(value, {symbol: '$', precision: 0}).format();
 
   const acceptCeaseAndDesist = async () => {
     setShowCeaseDesist(false);
+    setGlobalData({
+      ...globalData,
+      user: {...user, acknowledgedCeaseAndDesist: true},
+    });
     const u = await Auth.currentAuthenticatedUser();
     try {
       await Auth.updateUserAttributes(u, {
@@ -98,27 +104,27 @@ const ActiveUser = ({navigation, route, accounts}) => {
     setShowCeaseDesist(false);
     setGlobalData({
       ...globalData,
-      user: {...user, declinedCeaseAndDesist: true},
+      user: {...user, acknowledgedCeaseAndDesist: true},
     });
   };
 
   const optIn = get(user, 'custom:cd_optIn');
-  const optOut = get(user, 'declinedCeaseAndDesist');
+  const optOut = get(user, 'acknowledgedCeaseAndDesist');
 
   const notAcknowledged = !optIn && !optOut;
 
-  const ceaseAndDesist = () => {
-    const checkOptIn = async () => {
-      if (notAcknowledged) {
-        setTimeout(() => {
-          setShowCeaseDesist(true);
-        }, 1000);
-      } else {
-        console.log('acknoledged c&d this session');
-      }
-    };
-    checkOptIn();
-  };
+  // const ceaseAndDesist = () => {
+  //   const checkOptIn = async () => {
+  //     if (notAcknowledged) {
+  //       setTimeout(() => {
+  //         setShowCeaseDesist(true);
+  //       }, 1000);
+  //     } else {
+  //       console.log('acknoledged c&d this session');
+  //     }
+  //   };
+  //   checkOptIn();
+  // };
 
   const updateUser = async () => {
     const u = await Auth.currentAuthenticatedUser();
@@ -126,10 +132,19 @@ const ActiveUser = ({navigation, route, accounts}) => {
   };
 
   useFocusEffect(() => {
-    ceaseAndDesist();
+    if (notAcknowledged) {
+      setTimeout(() => {
+        setShowCeaseDesist(true);
+      }, 1000);
+    }
     if (globalData.settlement) {
       setTimeout(() => {
         setShowSettlementConfirmation(true);
+      }, 1000);
+    }
+    if (globalData.newPayment) {
+      setTimeout(() => {
+        setShowPaymentConfirmation(true);
       }, 1000);
     }
   }, []);
@@ -161,9 +176,9 @@ const ActiveUser = ({navigation, route, accounts}) => {
               />
             </View>
             {!showCalculator ? (
-              <View style={[styles.whiteWrap, {paddingVertical: 5}]}>
+              <View style={styles.whiteWrap}>
                 <TouchableWithoutFeedback
-                  style={{paddingVertical: 15}}
+                  style={{paddingVertical: RFValue(15)}}
                   onPress={() => setShowCalculator(true)}>
                   <Text style={styles.subheader}>
                     What if I lowered my total debt to{' '}
@@ -194,14 +209,11 @@ const ActiveUser = ({navigation, route, accounts}) => {
                       resizeMode="contain"
                       style={styles.bucksIcon}
                     />
-                    <View
-                      style={{
-                        paddingHorizontal: 15,
-                        paddingVertical: 10,
-                        maxWidth: '90%',
-                      }}>
-                      <Text style={styles.text}>Earn 100 Tenley Bucks</Text>
-                      <Text style={[styles.text, {fontSize: 10}]}>
+                    <View style={styles.bucksBlock}>
+                      <Text style={[styles.text, {fontSize: RFValue(14)}]}>
+                        Earn 100 Tenley Bucks
+                      </Text>
+                      <Text style={[styles.text, {fontSize: RFValue(10)}]}>
                         Tenley Bucks you earn can be used to boost your payments
                         towards your debt!
                       </Text>
@@ -240,49 +252,18 @@ const ActiveUser = ({navigation, route, accounts}) => {
             )}
           </View>
           <TouchableOpacity onPress={() => setExpandBalance(!expandBalance)}>
-            <View
-              style={{
-                backgroundColor: colors.lightestGray,
-                flex: 1,
-                minWidth: 200,
-                marginHorizontal: 15,
-                marginVertical: 10,
-                borderRadius: 5,
-                padding: 15,
-              }}>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                }}>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                  }}>
-                  <Text
-                    style={{
-                      fontFamily: 'Poppins-Regular',
-                      fontSize: RFValue(12),
-                      letterSpacing: RFValue(1),
-                    }}>
-                    Your total balance{' '}
-                  </Text>
+            <View style={styles.grayInfoBlock}>
+              <View style={styles.row}>
+                <View style={styles.row}>
+                  <Text style={styles.text}>Your total balance </Text>
                   <Image
                     source={require('../../../assets/icons/info/gray.png')}
                     resizeMode="contain"
-                    style={{
-                      maxWidth: 20,
-                      maxHeight: 20,
-                    }}
+                    style={styles.icon}
                   />
                 </View>
                 <View style={{alignContent: 'center'}}>
-                  <Text
-                    style={{fontFamily: 'Poppins-Bold', fontSize: RFValue(17)}}>
-                    {toUSD(combinedDebt)}
-                  </Text>
+                  <Text style={styles.balanceText}>{toUSD(combinedDebt)}</Text>
                 </View>
               </View>
 
@@ -297,37 +278,18 @@ const ActiveUser = ({navigation, route, accounts}) => {
             </View>
           </TouchableOpacity>
 
-          <View style={{height: 25, width: 10}} />
+          <View style={{height: RFValue(10)}} />
 
-          <View
-            style={{
-              flex: 1,
-              minWidth: 200,
-              marginHorizontal: 25,
-              borderRadius: 5,
-              padding: 10,
-            }}>
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-              }}>
+          <View style={{alignItems: 'center'}}>
+            <View style={[styles.row, {width: RFPercentage(45)}]}>
               <View>
-                <Text
-                  style={{
-                    fontFamily: 'Poppins-Regular',
-                    fontSize: RFValue(10),
-                    letterSpacing: 1.25,
-                  }}>
-                  ACCOUNTS
-                </Text>
+                <Text style={styles.tinyText}>ACCOUNTS</Text>
               </View>
               <TouchableOpacity onPress={() => setShowAddAccount(true)}>
                 <Image
                   source={require('../../../assets/icons/add.png')}
                   resizeMode="contain"
-                  style={{maxWidth: 20, maxHeight: 20}}
+                  style={styles.icon}
                 />
               </TouchableOpacity>
             </View>
@@ -347,15 +309,7 @@ const ActiveUser = ({navigation, route, accounts}) => {
           <View style={{marginVertical: 15, justifyContent: 'flex-end'}}>
             <TouchableOpacity
               onPress={() => navigation.navigate('Manually Add Accounts')}>
-              <Text
-                style={{
-                  color: colors.mediumGreen,
-                  fontFamily: 'Poppins-Medium',
-                  letterSpacing: 1.25,
-                  textDecorationLine: 'underline',
-                  fontSize: RFValue(10),
-                  textAlign: 'center',
-                }}>
+              <Text style={styles.greenLink}>
                 Don't see all your accounts? Add manually
               </Text>
             </TouchableOpacity>
@@ -364,13 +318,7 @@ const ActiveUser = ({navigation, route, accounts}) => {
             <Image
               source={require('../../../assets/icons/help-bubble.png')}
               resizeMode="contain"
-              style={{
-                // position: 'absolute',
-                width: RFValue(50),
-                height: RFValue(50),
-                alignSelf: 'flex-end',
-                margin: 20,
-              }}
+              style={styles.helpIcon}
             />
           </TouchableOpacity>
         </SafeAreaView>
@@ -433,6 +381,27 @@ const ActiveUser = ({navigation, route, accounts}) => {
           }}
         />
       </Modal>
+      <Modal
+        isVisible={showPaymentConfirmation}
+        backdropColor={colors.transparentGreen}
+        onBackdropPress={() => {
+          setShowPaymentConfirmation(false);
+          setGlobalData({
+            ...globalData,
+            settlement: null,
+          });
+        }}>
+        <PaymentConfirmation
+          navigation={navigation}
+          onClose={() => {
+            setShowPaymentConfirmation(false);
+            setGlobalData({
+              ...globalData,
+              newPayment: false,
+            });
+          }}
+        />
+      </Modal>
     </SafeAreaView>
   );
 };
@@ -443,25 +412,24 @@ const styles = StyleSheet.create({
   container: {
     ...Spacing.defaultContainer,
   },
+  row: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  icon: {
+    maxWidth: RFValue(20),
+    maxHeight: RFValue(20),
+  },
+  balanceText: {fontFamily: 'Poppins-Bold', fontSize: RFValue(17)},
   greenWrap: {
     maxWidth: '100%',
     backgroundColor: colors.lightGreen,
     alignItems: 'center',
     flex: 1,
-    padding: 15,
+    padding: RFValue(15),
     borderRadius: 5,
-    marginHorizontal: 15,
-    marginVertical: 15,
-  },
-  greenNumbers: {
-    ...Typography.boldGreen,
-    alignSelf: 'flex-start',
-    marginRight: 10,
-  },
-  bodyText: {
-    ...Typography.bodyText,
-    alignSelf: 'flex-start',
-    paddingTop: 2,
+    margin: RFValue(15),
   },
   whiteWrap: {
     backgroundColor: 'white',
@@ -469,6 +437,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderRadius: 5,
     width: '100%',
+    paddingVertical: RFValue(5),
   },
   middleBlock: {
     borderBottomWidth: 1,
@@ -486,66 +455,74 @@ const styles = StyleSheet.create({
   text: {
     color: colors.darkGreen,
     fontFamily: 'Poppins-Regular',
-    fontSize: 14,
+    fontSize: RFValue(12),
     letterSpacing: 0.8,
-    paddingHorizontal: 15,
   },
   header: {
     fontFamily: 'Poppins-Bold',
     letterSpacing: 0.9,
-    fontSize: 16,
+    fontSize: RFValue(14),
     color: colors.darkGreen,
   },
   subheader: {
     fontFamily: 'Poppins-Regular',
     fontSize: RFValue(10),
     letterSpacing: 0.5,
-    marginVertical: 10,
+    marginVertical: RFValue(7),
     alignSelf: 'center',
     color: colors.darkGreen,
     lineHeight: RFValue(15),
-  },
-  accountButton: {
-    width: '90%',
-    borderWidth: 1,
-    borderColor: colors.lightGray,
-    borderRadius: 5,
-    marginVertical: 10,
   },
   underlineText: {
     fontFamily: 'Poppins-Bold',
     textDecorationLine: 'underline',
   },
   tinyText: {
-    color: colors.darkGreen,
     fontFamily: 'Poppins-Regular',
-    fontSize: RFValue(8),
-    letterSpacing: 0.8,
-    paddingHorizontal: 10,
-    paddingTop: 10,
+    fontSize: RFValue(10),
+    letterSpacing: 1.25,
+    textAlign: 'left',
+    color: colors.darkGreen,
+    marginVertical: RFValue(10),
   },
   tenleyImage: {
     width: RFValue(100),
     height: RFValue(100),
     alignSelf: 'flex-end',
   },
-  infoBlock: {
-    marginTop: 15,
-    height: 10,
-    width: 10,
-    borderRadius: 100,
-    backgroundColor: colors.mediumGreen,
-  },
-  linkText: {
-    fontFamily: 'Poppins-Bold',
-    textDecorationLine: 'underline',
-    color: colors.mediumGreen,
+  grayInfoBlock: {
+    backgroundColor: colors.lightestGray,
+    flex: 1,
+    minWidth: RFValue(200),
+    marginHorizontal: RFValue(15),
+    marginVertical: RFValue(10),
+    borderRadius: RFValue(5),
+    padding: RFValue(15),
   },
   bucksIcon: {
     width: RFValue(30),
     height: RFValue(30),
     alignSelf: 'center',
     marginLeft: 20,
-    // marginTop: 10,
+  },
+  bucksBlock: {
+    paddingHorizontal: RFValue(15),
+    paddingVertical: RFValue(10),
+    maxWidth: '90%',
+  },
+  greenLink: {
+    color: colors.mediumGreen,
+    fontFamily: 'Poppins-Medium',
+    letterSpacing: 1.25,
+    textDecorationLine: 'underline',
+    fontSize: RFValue(10),
+    textAlign: 'center',
+  },
+  helpIcon: {
+    // position: 'absolute',
+    width: RFValue(50),
+    height: RFValue(50),
+    alignSelf: 'flex-end',
+    margin: 20,
   },
 });

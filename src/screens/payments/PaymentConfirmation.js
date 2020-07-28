@@ -28,14 +28,14 @@ const PaymentConfirmation = ({navigation, route}) => {
   const toUSD = value => currency(value, {symbol: '$', precision: 0}).format();
 
   const oneTimePayment = {
-    paymentAmount,
-    tenleyBucksApplied: 10,
+    paymentAmount: toUSD(paymentAmount),
+    tenleyBucksApplied: '10',
     // date: paymentDate,
   };
 
   const recurringPayment = {
     strategy: 'weekly',
-    paymentAmount: '$300',
+    paymentAmount: toUSD(paymentAmount),
     params: {day: 4},
   };
 
@@ -51,7 +51,7 @@ const PaymentConfirmation = ({navigation, route}) => {
           account.accountID,
         );
         if (paymentSuccess) {
-          // getAccounts();
+          getAccounts();
           console.log(paymentSuccess);
         }
       } catch (error) {
@@ -65,23 +65,28 @@ const PaymentConfirmation = ({navigation, route}) => {
           account.accountID,
         );
         if (paymentSuccess) {
-          // getAccounts();
+          getAccounts();
           console.log(paymentSuccess);
         }
       } catch (error) {
-        console.log(error.message);
+        console.log(error);
       }
     }
   };
 
   const getAccounts = async () => {
-    console.log('made it');
-    const accts = await apis.getAccounts(jwt);
-    setGlobalData({
-      ...globalData,
-      accounts: accts.data.with,
-    });
-    // switchScreen();
+    try {
+      const accts = await apis.getAccounts(jwt);
+      setGlobalData({
+        ...globalData,
+        accounts: accts.data.with,
+        newPayment: true,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+
+    switchScreen();
   };
 
   const switchScreen = () => {

@@ -18,7 +18,7 @@ const ImportLoading = ({navigation}) => {
   // const startCounter = () => {
   setTimeout(() => {
     switchScreen();
-  }, 10000);
+  }, 4500);
   // };
 
   const switchScreen = () => {
@@ -26,8 +26,6 @@ const ImportLoading = ({navigation}) => {
       index: 0,
       routes: [{name: 'Accounts', params: 'fromImportLoading'}],
     });
-
-    // navigation.navigate('Accounts', {test: 'test'});
   };
 
   const demoAccounts = [
@@ -147,17 +145,7 @@ const ImportLoading = ({navigation}) => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={[styles.container]}>
-        <View
-          style={{
-            width: RFPercentage(40),
-            borderColor: colors.lightGray,
-            borderWidth: 2,
-            borderRadius: 5,
-            alignSelf: 'center',
-            paddingHorizontal: 15,
-            paddingVertical: 15,
-            marginTop: 40,
-          }}>
+        <View style={styles.speechBubble}>
           <Text style={styles.text}>
             Did you know that the average Tenley user is able to get out of debt
             52% faster by setting up a payment plan?
@@ -176,7 +164,7 @@ const ImportLoading = ({navigation}) => {
           />
         </View>
         <View style={{alignContent: 'center', alignItems: 'center'}}>
-          <Text style={[styles.text, {fontSize: 14}]}>
+          <Text style={[styles.text, {fontSize: RFValue(12)}]}>
             Hang tight! Tenley is importing your {'\n'}details. You’ll see your
             account information here shortly!
           </Text>
@@ -189,26 +177,21 @@ const ImportLoading = ({navigation}) => {
             borderColor="transparent"
             unfilledColor={colors.lightGray}
             borderRadius={100}
-            marginTop={20}
-            marginBottom={30}
+            marginTop={RFValue(20)}
+            marginBottom={RFValue(10)}
           />
-          <TouchableOpacity
-            style={{
-              backgroundColor: colors.tenleyGreen,
-              //   paddingVertical: 15,
-              paddingHorizontal: 15,
-              borderRadius: 100,
-              marginVertical: 20,
-              flexDirection: 'row',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}>
-            <Text style={[styles.text, {color: 'white', fontSize: 12}]}>
+          <TouchableOpacity style={styles.helpButton}>
+            <Text
+              style={[styles.text, {color: 'white', fontSize: RFValue(12)}]}>
               Have any questions? I'm here to help!{' '}
             </Text>
             <Image
               source={require('../../../assets/icons/help-bubble.png')}
-              style={{width: 30, height: 50, alignSelf: 'center'}}
+              style={{
+                width: RFValue(30),
+                height: RFValue(50),
+                alignSelf: 'center',
+              }}
             />
           </TouchableOpacity>
         </View>
@@ -226,9 +209,28 @@ const styles = StyleSheet.create({
   text: {
     color: colors.darkGreen,
     fontFamily: 'Poppins-Regular',
-    fontSize: 12,
+    fontSize: RFValue(11),
     letterSpacing: 0.8,
-    paddingHorizontal: 15,
+    paddingHorizontal: RFValue(15),
     textAlign: 'center',
+  },
+  helpButton: {
+    backgroundColor: colors.tenleyGreen,
+    paddingHorizontal: RFValue(12),
+    borderRadius: 100,
+    marginVertical: 20,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  speechBubble: {
+    width: RFPercentage(40),
+    borderColor: colors.lightGray,
+    borderWidth: 2,
+    borderRadius: 5,
+    alignSelf: 'center',
+    paddingHorizontal: 15,
+    paddingVertical: 15,
+    marginTop: RFValue(35),
   },
 });

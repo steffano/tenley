@@ -141,9 +141,8 @@ export default ({
             style={{
               height: RFValue(16),
               position: 'absolute',
-              right: 20,
-              top: 20,
-              // backgroundColor: 'red',
+              right: RFValue(20),
+              top: RFValue(18),
             }}>
             <Image
               style={{height: '100%', width: 20}}
@@ -163,8 +162,8 @@ export default ({
               style={{
                 height: RFValue(20),
                 position: 'absolute',
-                right: 20,
-                top: 20,
+                right: RFValue(20),
+                top: RFValue(15),
                 // backgroundColor: 'red',
               }}>
               <Image
@@ -188,10 +187,10 @@ export default ({
           <View
             style={{
               position: 'absolute',
-              height: 78,
-              width: 200,
+              height: RFValue(78),
+              width: RFValue(200),
               right: 0,
-              bottom: '48%',
+              bottom: RFPercentage(48),
             }}>
             <Image
               style={{height: '100%', width: '100%'}}

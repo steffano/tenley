@@ -3,9 +3,11 @@ import {SafeAreaView, Text, StyleSheet, View} from 'react-native';
 import {Spacing, Typography} from '../../../utilities/styles';
 import {Form, TextInput} from '../../../components/Form';
 import {Button} from '../../../components/Button';
+import {ScreenHeader} from '../../../components/ScreenHeader';
 import {maskSSn, unmask} from '../../../utilities/validation';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {Auth} from 'aws-amplify';
+import {RFValue} from 'react-native-responsive-fontsize';
 import LocationSearch from '../../../components/LocationSearch';
 import {GlobalContext} from '../../../GlobalContext';
 import apis from '../../../apis/';
@@ -72,6 +74,7 @@ const AutoAdd = ({navigation}) => {
   return (
     <>
       <SafeAreaView style={styles.container}>
+        <ScreenHeader title={'Auto Add Accounts'} navigation={navigation} />
         <KeyboardAwareScrollView
           keyboardShouldPersistTaps="always"
           contentInsetAdjustmentBehavior="automatic"
@@ -187,14 +190,14 @@ const styles = StyleSheet.create({
   blockText: {
     ...Typography.subheaderText,
     textAlign: 'left',
-    marginVertical: 30,
-    marginHorizontal: 25,
+    marginVertical: RFValue(20),
+    marginHorizontal: RFValue(25),
   },
   bottomButtonsContainer: {
     flex: 1,
-    paddingHorizontal: 15,
+    paddingHorizontal: RFValue(15),
     justifyContent: 'flex-end',
-    maxHeight: 90,
-    marginBottom: 15,
+    maxHeight: RFValue(90),
+    marginBottom: RFValue(15),
   },
 });

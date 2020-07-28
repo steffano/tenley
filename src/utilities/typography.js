@@ -3,7 +3,7 @@ import * as Spacing from './spacing';
 import {RFValue} from 'react-native-responsive-fontsize';
 
 export const extraLargeFontSize = 32;
-export const largeFontSize = 20;
+export const largeFontSize = RFValue(17);
 export const buttonFontSize = 18;
 export const baseFontSize = RFValue(13);
 export const smallFontSize = RFValue(12);

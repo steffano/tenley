@@ -4,6 +4,7 @@ import {SafeAreaView, Text, StyleSheet, View, Image} from 'react-native';
 import {Spacing, Typography, colors} from '../../../utilities/styles';
 import {Form, TextInput} from '../../../components/Form';
 import {Button} from '../../../components/Button';
+import {ScreenHeader} from '../../../components/ScreenHeader';
 import {maskSSn, unmask} from '../../../utilities/validation';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import currency from 'currency.js';
@@ -74,16 +75,36 @@ const ManualAdd = ({navigation}) => {
     try {
       const added = await apis.addAccount(postBody, jwt);
       if (added) {
-        navigation.navigate('Load Accounts');
+        getAccounts();
       }
     } catch (error) {
       console.log(error.message);
     }
   };
 
+  const switchScreen = () => {
+    navigation.reset({
+      index: 0,
+      routes: [{name: 'Accounts', params: 'fromImportLoading'}],
+    });
+  };
+
+  const getAccounts = async () => {
+    const accts = await apis.getAccounts(jwt);
+    setGlobalData({
+      ...globalData,
+      accounts: accts.data.with,
+      ceaseAndDesist: false,
+    });
+    if (accts) {
+      switchScreen();
+    }
+  };
+
   return (
     <>
       <SafeAreaView style={styles.container}>
+        <ScreenHeader title={'Manually Add Accounts'} navigation={navigation} />
         <KeyboardAwareScrollView
           // contentInsetAdjustmentBehavior="automatic"
           contentContainerStyle={{
@@ -213,7 +234,7 @@ const styles = StyleSheet.create({
   blockText: {
     ...Typography.subheaderText,
     textAlign: 'left',
-    marginVertical: 15,
+    marginTop: RFValue(15),
     marginHorizontal: 25,
   },
   bottomButtonsContainer: {

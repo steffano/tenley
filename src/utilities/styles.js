@@ -27,7 +27,7 @@ export const getScreenOptions = () => {
     headerBackImage: () => (
       <Image
         source={require('../assets/icons/back-arrow.png')}
-        style={{marginLeft: 20}}
+        style={{margin: 20, backgroundColor: 'red'}}
       />
     ),
     headerTitleStyle: {

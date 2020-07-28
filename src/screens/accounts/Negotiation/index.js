@@ -11,6 +11,7 @@ import {GlobalContext} from '../../../GlobalContext';
 import {colors, Spacing, Typography} from '../../../utilities/styles';
 import {Button} from '../../../components/Button';
 import Calculator from '../../../components/Calculator';
+import {ScreenHeader} from '../../../components/ScreenHeader';
 import Bullet from '../../../components/Bullet';
 import {RFValue, RFPercentage} from 'react-native-responsive-fontsize';
 import currency from 'currency.js';
@@ -84,13 +85,17 @@ const Negotiation = ({route, navigation}) => {
   return (
     <>
       <SafeAreaView style={styles.container}>
+        <ScreenHeader
+          title={'Settlement Negotiation'}
+          navigation={navigation}
+        />
         <ScrollView>
-          <View style={{padding: 15}}>
+          <View style={{padding: RFValue(15)}}>
             <Text style={styles.blockText}>
               To start the settlement process, send an offer to your creditor or
               debt collector for how much you'd like to lower your balance.
             </Text>
-            <View style={{height: 20}} />
+            <View style={{height: RFValue(20)}} />
             <View style={styles.row}>
               <Text style={[styles.blockText, {fontFamily: 'Poppins-Bold'}]}>
                 You have 3 available offers{'  '}
@@ -166,17 +171,6 @@ const styles = StyleSheet.create({
     height: 1,
     backgroundColor: colors.lightGray,
     marginVertical: 5,
-  },
-  contentBlock: {
-    maxHeight: RFPercentage(25),
-    borderWidth: 1,
-    borderColor: colors.lightGray,
-    backgroundColor: 'white',
-    marginHorizontal: 15,
-    marginVertical: 10,
-    paddingVertical: 10,
-    paddingHorizontal: 15,
-    borderRadius: 5,
   },
   accountTitle: {
     fontFamily: 'Poppins-Regular',

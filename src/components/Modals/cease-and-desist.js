@@ -2,6 +2,7 @@ import React from 'react';
 import {View, SafeAreaView, Text, StyleSheet} from 'react-native';
 import {Button} from '../Button';
 import {colors, Spacing, Typography} from '../../utilities/styles';
+import {RFPercentage, RFValue} from 'react-native-responsive-fontsize';
 
 const CeaseAndDesist = ({onAccept, onDecline}) => {
   return (
@@ -21,7 +22,7 @@ const CeaseAndDesist = ({onAccept, onDecline}) => {
             justifyContent: 'center',
             alignSelf: 'center',
             maxWidth: '90%',
-            marginVertical: 10,
+            marginVertical: RFValue(10),
           }}>
           <Text style={styles.greenNumbers}>1.</Text>
           <Text style={styles.bodyText}>
@@ -35,7 +36,7 @@ const CeaseAndDesist = ({onAccept, onDecline}) => {
             justifyContent: 'center',
             alignSelf: 'center',
             maxWidth: '90%',
-            marginVertical: 10,
+            marginVertical: RFValue(10),
           }}>
           <Text style={styles.greenNumbers}>2.</Text>
           <Text style={styles.bodyText}>
@@ -45,14 +46,14 @@ const CeaseAndDesist = ({onAccept, onDecline}) => {
             Messages tab.
           </Text>
         </View>
-        <View style={{height: 20}} />
+        <View style={{height: RFValue(15)}} />
         <Text style={styles.bodyText}>
           To continue on your journey to being debt free, please agree to the
           Cease & Desist and communication information above.{'\n'}
-          <View style={{height: 30}} />
+          <View style={{height: RFValue(20)}} />
           <Text style={Typography.textLink}>See more details</Text>
         </Text>
-        <View style={{height: 30}} />
+        <View style={{height: RFValue(15)}} />
 
         <View>
           <Button title="Agree" onPress={onAccept} />
@@ -74,11 +75,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: 'white',
     borderRadius: 5,
+    maxHeight: RFPercentage(92),
   },
   header: {
     fontFamily: 'Poppins-Bold',
     letterSpacing: 0.9,
-    fontSize: 16,
+    fontSize: RFValue(16),
     color: colors.darkGreen,
   },
   text: {
@@ -97,6 +99,5 @@ const styles = StyleSheet.create({
   bodyText: {
     ...Typography.bodyText,
     alignSelf: 'flex-start',
-    paddingTop: 2,
   },
 });

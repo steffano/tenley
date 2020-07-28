@@ -29,7 +29,7 @@ const getScreenOptions = () => {
     headerBackImage: () => (
       <Image
         source={require('../../../assets/icons/back-arrow.png')}
-        style={{marginLeft: 20}}
+        style={{marginLeft: 20, backgroundColor: 'red'}}
       />
     ),
     headerTitleStyle: {
@@ -62,22 +62,22 @@ export function AccountsStackScreen() {
       <AccountsStack.Screen
         name="Account Details"
         component={AccountDetails}
-        options={getScreenOptions()}
+        options={{headerShown: false}}
       />
       <AccountsStack.Screen
         name="Auto Add Accounts"
         component={AutoAdd}
-        options={getScreenOptions()}
+        options={{headerShown: false}}
       />
       <AccountsStack.Screen
         name="Verification"
         component={Verification}
-        options={getScreenOptions()}
+        options={{headerShown: false}}
       />
       <AccountsStack.Screen
         name="Manually Add Accounts"
         component={ManualAdd}
-        options={getScreenOptions()}
+        options={{headerShown: false}}
       />
       <AccountsStack.Screen
         options={{headerShown: false}}
@@ -87,7 +87,7 @@ export function AccountsStackScreen() {
       <AccountsStack.Screen
         name="Settlement Negotiation"
         component={Negotiation}
-        options={getScreenOptions()}
+        options={{headerShown: false}}
       />
       {renderScreen('PaymentSetup', PaymentSetup)}
       {renderScreen(

@@ -212,6 +212,23 @@ const SchedulePayment = ({navigation, route}) => {
                     color: '#666666',
                     fontSize: RFValue(13),
                   },
+                  iconContainer: {
+                    top: 33,
+                    right: 50,
+                  },
+                }}
+                Icon={() => {
+                  return (
+                    <Image
+                      source={require('../../assets/icons/carat.png')}
+                      resizeMode="contain"
+                      style={{
+                        height: 15,
+                        width: 15,
+                        transform: [{rotate: '90deg'}],
+                      }}
+                    />
+                  );
                 }}
               />
             </View>
@@ -220,6 +237,7 @@ const SchedulePayment = ({navigation, route}) => {
 
         <View style={Spacing.bottomButtonsContainer}>
           <Button
+            disabled={paymentType === 'recurring' ? frequency === '' : false}
             title="Next Step: Bank Account"
             onPress={() =>
               navigation.navigate('BankSetup', {

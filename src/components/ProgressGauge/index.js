@@ -15,8 +15,8 @@ const ProgressLine = ({label, backgroundColor = '#e5e5e5', visualParts}) => {
                   height: 10,
                   width: item.percentage,
                   backgroundColor: item.color,
-                  borderTopLeftRadius: index === 0 ? 10 : 0,
-                  borderBottomLeftRadius: index === 0 ? 10 : 0,
+                  borderTopLeftRadius: index === 0 ? 100 : 0,
+                  borderBottomLeftRadius: index === 0 ? 100 : 0,
                 }}
               />
             );
@@ -36,6 +36,6 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 10,
     margin: 20,
-    borderRadius: 10,
+    borderRadius: 100,
   },
 });

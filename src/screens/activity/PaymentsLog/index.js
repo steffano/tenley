@@ -1,17 +1,153 @@
-import React, {useContext} from 'react';
-import {View, Text, Button} from 'react-native';
-// import {GlobalContext} from '../../GlobalContext';
+import React, {useContext, useEffect, useState} from 'react';
+import {
+  View,
+  SafeAreaView,
+  Text,
+  Image,
+  StyleSheet,
+  ScrollView,
+  TouchableOpacity,
+} from 'react-native';
+import {RFPercentage, RFValue} from 'react-native-responsive-fontsize';
+import {colors, Spacing, Typography} from '../../../utilities/styles';
+import AccountTile from '../../../components/AccountTile';
+import {AccountButton} from '../../../components/AccountButton';
+import {Button} from '../../../components/Button';
+import {GlobalContext} from '../../../GlobalContext';
 
-const PaymentsLog = () => {
-  // const [globalData, setGlobalData] = useContext(GlobalContext);
+const PaymentActivity = ({navigation}) => {
+  const [globalData, setGlobalData] = useContext(GlobalContext);
+  const {accounts, session} = globalData;
+  const jwt = session.accessToken.jwtToken;
+
+  const accountsWithPayments = accounts.filter(
+    ({payments}) => payments.length > 0,
+  );
+  console.log(accounts, accountsWithPayments);
 
   return (
     <>
-      <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-        <Text style={{fontFamily: 'VisbyCF-Medium'}}>PaymentsLog</Text>
-      </View>
+      <ScrollView>
+        {accountsWithPayments.length === 0 ? (
+          <>
+            <View
+              style={{
+                margin: RFValue(15),
+                flexDirection: 'row',
+                justifyContent: 'flex-start',
+                alignItems: 'flex-start',
+              }}>
+              <View style={styles.speechBubble}>
+                <Text style={styles.text}>
+                  {accounts.length === 0
+                    ? 'It looks like you haven’t added any accounts yet! Add an account to begin making payments.'
+                    : 'It looks like you haven’t made any payments yet! Make a single payment or schedule recurring payments below.'}
+                </Text>
+              </View>
+              <View style={{width: RFPercentage(30)}}>
+                <Image
+                  source={require('../../../assets/mascot/tenley-mascot3.png')}
+                  resizeMode="contain"
+                  style={styles.tenleyImage}
+                />
+              </View>
+            </View>
+
+            <View>
+              {accounts.map((account, key) => {
+                return (
+                  account && (
+                    <AccountTile
+                      key={key}
+                      account={account}
+                      navigation={navigation}
+                    />
+                  )
+                );
+              })}
+            </View>
+          </>
+        ) : (
+          <View style={{marginTop: RFValue(15)}}>
+            {accountsWithPayments.map((account, key) => {
+              return (
+                account && (
+                  <AccountButton
+                    key={key}
+                    account={account}
+                    navigation={navigation}
+                    accountName={account.originalCreditorName}
+                    lastFour={account.originalCreditorAccountNumber.slice(-4)}
+                    onPress={() =>
+                      navigation.navigate('Account Details', {account})
+                    }
+                  />
+                )
+              );
+            })}
+          </View>
+        )}
+
+        {accounts.length === 0 && (
+          <View
+            style={[Spacing.bottomButtonsContainer, {marginTop: RFValue(20)}]}>
+            <Button
+              title="Add an Account"
+              onPress={() => navigation.navigate('Accounts')}
+            />
+          </View>
+        )}
+      </ScrollView>
+      <TouchableOpacity>
+        <Image
+          source={require('../../../assets/icons/help-bubble.png')}
+          resizeMode="contain"
+          style={styles.helpIcon}
+        />
+      </TouchableOpacity>
     </>
   );
 };
 
-export default PaymentsLog;
+export default PaymentActivity;
+
+const styles = StyleSheet.create({
+  container: {
+    ...Spacing.defaultContainer,
+  },
+  text: {
+    color: colors.darkGreen,
+    fontFamily: 'Poppins-Regular',
+    fontSize: RFValue(11),
+    letterSpacing: 0.8,
+    paddingHorizontal: RFValue(10),
+    textAlign: 'center',
+  },
+  tenleyImage: {
+    width: RFValue(200),
+    height: RFValue(300),
+  },
+  helpButton: {
+    backgroundColor: colors.tenleyGreen,
+    paddingHorizontal: RFValue(12),
+    borderRadius: 100,
+    marginVertical: 20,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  speechBubble: {
+    width: RFPercentage(21),
+    borderColor: colors.lightGray,
+    borderWidth: 2,
+    borderRadius: 5,
+    alignSelf: 'flex-start',
+    paddingVertical: 15,
+  },
+  helpIcon: {
+    width: RFValue(50),
+    height: RFValue(50),
+    alignSelf: 'flex-end',
+    margin: 20,
+  },
+});

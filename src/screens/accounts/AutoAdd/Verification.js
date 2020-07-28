@@ -9,6 +9,8 @@ import {
 import {Spacing, Typography} from '../../../utilities/styles';
 import {colors} from '../../../utilities/styles';
 import {Button} from '../../../components/Button';
+import {ScreenHeader} from '../../../components/ScreenHeader';
+import {RFValue} from 'react-native-responsive-fontsize';
 // import {GlobalContext} from '../../GlobalContext';
 
 const Verification = ({navigation}) => {
@@ -19,6 +21,7 @@ const Verification = ({navigation}) => {
   return (
     <>
       <SafeAreaView style={styles.container}>
+        <ScreenHeader title={'Auto Add Accounts'} navigation={navigation} />
         <Text style={styles.blockText}>
           Great, you’re almost done! Confirm your identity by selecting which of
           these addresses you’ve previously lived at.
@@ -90,8 +93,8 @@ const styles = StyleSheet.create({
   blockText: {
     ...Typography.subheaderText,
     textAlign: 'left',
-    marginVertical: 30,
-    marginHorizontal: 25,
+    marginVertical: RFValue(20),
+    marginHorizontal: RFValue(25),
   },
   bottomButtonsContainer: {
     flex: 1,
@@ -105,17 +108,15 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     marginHorizontal: 15,
     marginVertical: 10,
-    paddingVertical: 15,
-    paddingHorizontal: 15,
+    padding: RFValue(15),
     borderRadius: 5,
     justifyContent: 'center',
   },
   addressText: {
     color: colors.darkGreen,
     fontFamily: 'Poppins-Bold',
-    fontSize: 16,
+    fontSize: RFValue(13),
     letterSpacing: 0.75,
-    lineHeight: 26,
   },
   selected: {
     backgroundColor: colors.mediumGreen,
