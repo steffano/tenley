@@ -35,35 +35,35 @@ const AutoAdd = ({navigation}) => {
   const jwt = session.accessToken.jwtToken;
 
   const handleSubmit = async () => {
-    const u = await Auth.currentAuthenticatedUser();
     if (validateForm()) {
+      updateUser();
       try {
-        await Auth.updateUserAttributes(u, {
-          'custom:ssn': unmask(ssn),
-          birthdate: date,
-          address,
-        });
-      } catch (err) {
-        console.log(err);
-      }
-      try {
-        const added = await apis
+        await apis
           .importAccounts(jwt)
           .then(res => {
             console.log('res', res);
           })
-          .then(navigation.navigate('Verification'))
-          .catch(err => {
-            console.log(err);
-          });
-        if (added) {
-          navigation.navigate('Load Accounts');
-        }
+          .then(navigation.navigate('Verification'));
       } catch (error) {
         console.log(error.message);
       }
     }
   };
+
+  const updateUser = async () => {
+    const u = await Auth.currentAuthenticatedUser();
+    try {
+      await Auth.updateUserAttributes(u, {
+        'custom:ssn': unmask(ssn),
+        birthdate: date,
+        address,
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  console.log(jwt);
 
   const validateForm = () => {
     return (

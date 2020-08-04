@@ -40,7 +40,7 @@ const BankLogin = ({onClose, onSuccess}) => {
           />
         </View>
 
-        <View style={{height: 300}}>
+        <View style={{height: RFValue(300)}}>
           {success ? (
             <>
               <View style={{height: 40}} />
@@ -56,7 +56,7 @@ const BankLogin = ({onClose, onSuccess}) => {
                 {'\n'}
                 Your account was {'\n'}successfully linked.
               </Text>
-              <View style={{height: 40}} />
+              <View style={{height: RFValue(30)}} />
 
               <TouchableOpacity onPress={onSuccess}>
                 <Text style={styles.button}>Continue</Text>
@@ -77,6 +77,7 @@ const BankLogin = ({onClose, onSuccess}) => {
                   placeholder="Password"
                   placeholderTextColor="#d1e5f3"
                   style={styles.input}
+                  obscured
                 />
               </View>
 
@@ -144,14 +145,14 @@ const styles = StyleSheet.create({
     backgroundColor: '#01539680',
     fontFamily: 'VisbyCF-Medium',
     fontSize: 22,
-    height: 70,
+    height: RFValue(50),
     padding: 10,
     margin: 10,
     color: '#d1e5f3',
   },
   button: {
     fontFamily: 'VisbyCF-ExtraBold',
-    fontSize: 33,
+    fontSize: RFValue(20),
     color: 'white',
     textAlign: 'center',
     textDecorationLine: 'underline',

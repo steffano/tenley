@@ -86,18 +86,7 @@ const ActiveUser = ({navigation, route, accounts}) => {
       ...globalData,
       user: {...user, acknowledgedCeaseAndDesist: true},
     });
-    const u = await Auth.currentAuthenticatedUser();
-    try {
-      await Auth.updateUserAttributes(u, {
-        'custom:cd_optIn': 'true',
-      })
-        .then(updateUser())
-        .catch(err => {
-          console.log(err);
-        });
-    } catch (err) {
-      console.log(err);
-    }
+    updateUser();
   };
 
   const declineCeaseAndDesist = async () => {
@@ -111,28 +100,21 @@ const ActiveUser = ({navigation, route, accounts}) => {
   const optIn = get(user, 'custom:cd_optIn');
   const optOut = get(user, 'acknowledgedCeaseAndDesist');
 
-  const notAcknowledged = !optIn && !optOut;
-
-  // const ceaseAndDesist = () => {
-  //   const checkOptIn = async () => {
-  //     if (notAcknowledged) {
-  //       setTimeout(() => {
-  //         setShowCeaseDesist(true);
-  //       }, 1000);
-  //     } else {
-  //       console.log('acknoledged c&d this session');
-  //     }
-  //   };
-  //   checkOptIn();
-  // };
+  const acknowledged = optIn || optOut;
 
   const updateUser = async () => {
     const u = await Auth.currentAuthenticatedUser();
-    setGlobalData({...globalData, user: u.attributes});
+    try {
+      await Auth.updateUserAttributes(u, {
+        'custom:cd_optIn': 'true',
+      });
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   useFocusEffect(() => {
-    if (notAcknowledged) {
+    if (!acknowledged) {
       setTimeout(() => {
         setShowCeaseDesist(true);
       }, 1000);
@@ -388,7 +370,7 @@ const ActiveUser = ({navigation, route, accounts}) => {
           setShowPaymentConfirmation(false);
           setGlobalData({
             ...globalData,
-            settlement: null,
+            newPayment: false,
           });
         }}>
         <PaymentConfirmation

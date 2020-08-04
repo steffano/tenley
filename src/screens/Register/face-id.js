@@ -1,5 +1,5 @@
 import React, {useContext} from 'react';
-import {View, Text, SafeAreaView, StyleSheet} from 'react-native';
+import {View, Text, SafeAreaView, StyleSheet, Image} from 'react-native';
 import {Button} from '../../components/Button';
 import {GlobalContext} from '../../GlobalContext';
 import {RFValue, RFPercentage} from 'react-native-responsive-fontsize';
@@ -26,6 +26,16 @@ const FaceId = () => {
             log in to the mobile app. This will not permanently replace your
             email and password.
           </Text>
+          <Image
+            source={require('../../assets/icons/face.png')}
+            resizeMode="contain"
+            style={{
+              height: 50,
+              width: 50,
+              marginRight: 20,
+              alignSelf: 'center',
+            }}
+          />
         </View>
         <View style={Spacing.bottomButtonsContainer}>
           <Button

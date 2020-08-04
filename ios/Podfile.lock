@@ -308,6 +308,8 @@ PODS:
     - React
   - RNCMaskedView (0.1.10):
     - React
+  - RNCPicker (1.6.5):
+    - React
   - RNDateTimePicker (2.5.0):
     - React
   - RNGestureHandler (1.6.1):
@@ -374,6 +376,7 @@ DEPENDENCIES:
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
   - RNAWSCognito (from `../node_modules/amazon-cognito-identity-js`)
   - "RNCMaskedView (from `../node_modules/@react-native-community/masked-view`)"
+  - "RNCPicker (from `../node_modules/@react-native-community/picker`)"
   - "RNDateTimePicker (from `../node_modules/@react-native-community/datetimepicker`)"
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
@@ -459,6 +462,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/amazon-cognito-identity-js"
   RNCMaskedView:
     :path: "../node_modules/@react-native-community/masked-view"
+  RNCPicker:
+    :path: "../node_modules/@react-native-community/picker"
   RNDateTimePicker:
     :path: "../node_modules/@react-native-community/datetimepicker"
   RNGestureHandler:
@@ -514,6 +519,7 @@ SPEC CHECKSUMS:
   ReactCommon: ed4e11d27609d571e7eee8b65548efc191116eb3
   RNAWSCognito: cd5c8904204db774c630c49d222c3230f24ed77e
   RNCMaskedView: 5a8ec07677aa885546a0d98da336457e2bea557f
+  RNCPicker: 55b9b4240d0a9eba8733d02616775d4040de2e7d
   RNDateTimePicker: a8000390e7a4fe23d9f36492ded9282640721c82
   RNGestureHandler: 8f09cd560f8d533eb36da5a6c5a843af9f056b38
   RNReanimated: b5ccb50650ba06f6e749c7c329a1bc3ae0c88b43

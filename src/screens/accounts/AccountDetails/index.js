@@ -9,8 +9,9 @@ import {
 } from 'react-native';
 import {colors, Spacing, Typography} from '../../../utilities/styles';
 import {Button} from '../../../components/Button';
-import Bullet from '../../../components/Bullet';
 import {ScreenHeader} from '../../../components/ScreenHeader';
+import AccountTile from '../../../components/AccountTile';
+
 import ProgressGauge from '../../../components/ProgressGauge';
 import {RFValue, RFPercentage} from 'react-native-responsive-fontsize';
 import currency from 'currency.js';
@@ -19,50 +20,20 @@ import filter from 'lodash/filter';
 import last from 'lodash/last';
 
 const AccountDetails = ({route, navigation}) => {
-  const account = route.params.account;
+  const {account, index} = route.params;
 
   const settlements = account.settlements;
   const currentSettlement = settlements[0];
-  console.log(currentSettlement);
 
   const toUSD = value => currency(value, {symbol: '$', precision: 2}).format();
 
-  const getWholePercent = (percentFor, percentOf) => {
-    return Math.floor((percentFor / percentOf) * 100);
-  };
-
-  const balance = currency(account.amountOwed).value;
-  const originalBalance = currency(account.originalAmountOwed).value;
-
-  const settlementBalance = 0;
-
-  const paid = originalBalance - balance;
-  const settled = 0;
-
-  const percentPaid = getWholePercent(paid, originalBalance);
-  const percentSaved = getWholePercent(settled, originalBalance);
-
-  const progressPercentages = [
-    // {
-    //   label: 'settlement',
-    //   percentage: percentSaved + '%',
-    //   color: colors.mediumGreen,
-    // },
-    {
-      label: 'payments',
-      percentage: percentPaid + '%',
-      color: colors.tenleyGreen,
-    },
-  ];
-
-  console.log(account.payments);
-
   const upcomingPayments = filter(account.payments, ['status', 'SCHEDULED']);
+  const postedPayments = filter(account.payments, ['status', 'POSTED']);
   const nextPayment = upcomingPayments[0];
   const finalPayment = last(upcomingPayments);
   const recentPayment = account.payments[0];
 
-  console.log(upcomingPayments, finalPayment);
+  console.log(index);
 
   const renderRow = (rowTitle, rowValue) => {
     return (
@@ -84,17 +55,13 @@ const AccountDetails = ({route, navigation}) => {
           <View style={styles.contentBlock}>
             {account.payments.length === 0 ? (
               <View style={styles.contentWrap}>
-                <View style={[styles.row, {marginBottom: 15}]}>
-                  <View style={[styles.row, {alignItems: 'center'}]}>
-                    <Text style={[styles.accountTitle, {maxWidth: 150}]}>
+                <View style={[styles.row, {marginBottom: RFValue(15)}]}>
+                  <View style={[styles.row, {alignItems: 'flex-start'}]}>
+                    <Text style={[styles.accountTitle, {maxWidth: 250}]}>
                       {account.originalCreditorName}
+                      {' \u2022 '}
+                      {account.originalCreditorAccountNumber.slice(-4)}
                     </Text>
-                    <View style={[styles.row, {alignItems: 'center'}]}>
-                      <Bullet color="black" small />
-                      <Text style={styles.accountTitle}>
-                        {account.originalCreditorAccountNumber.slice(-4)}
-                      </Text>
-                    </View>
                   </View>
                   <View>
                     <Text style={styles.balanceText}>
@@ -115,17 +82,13 @@ const AccountDetails = ({route, navigation}) => {
             ) : (
               <>
                 <View style={styles.contentWrap}>
-                  <View style={[styles.row, {marginBottom: 15}]}>
-                    <View style={[styles.row, {alignItems: 'center'}]}>
-                      <Text style={[styles.accountTitle, {maxWidth: 150}]}>
+                  <View style={[styles.row, {marginBottom: RFValue(15)}]}>
+                    <View style={[styles.row, {alignItems: 'flex-start'}]}>
+                      <Text style={[styles.accountTitle, {maxWidth: 250}]}>
                         {account.originalCreditorName}
+                        {' \u2022 '}
+                        {account.originalCreditorAccountNumber.slice(-4)}
                       </Text>
-                      <View style={[styles.row, {alignItems: 'center'}]}>
-                        <Bullet color="black" small />
-                        <Text style={styles.accountTitle}>
-                          {account.originalCreditorAccountNumber.slice(-4)}
-                        </Text>
-                      </View>
                     </View>
                     <View>
                       <Text style={styles.balanceText}>
@@ -148,68 +111,12 @@ const AccountDetails = ({route, navigation}) => {
                   )}
                   {renderRow('Status', account.status)}
                 </View>
-
-                <View
-                  style={{paddingHorizontal: RFValue(20), marginBottom: 15}}>
-                  {upcomingPayments.length > 0 && (
-                    <View style={styles.row}>
-                      <Text style={styles.rowText}>
-                        Est. Payoff:{' '}
-                        {moment(finalPayment.date).format('MM.DD.YYYY')}
-                      </Text>
-                      <Text style={styles.rowTextBold}>
-                        {upcomingPayments.length} payments to go
-                      </Text>
-                    </View>
-                  )}
-
-                  <View>
-                    <ProgressGauge
-                      backgroundColor="lightgrey"
-                      visualParts={progressPercentages}
-                    />
-                    <View style={styles.rowLeft}>
-                      <View style={styles.row}>
-                        <Bullet color={colors.mediumGreen} />
-                        <Text style={styles.text}>Settlement reduction</Text>
-                      </View>
-                      <View style={{width: 10}} />
-                      <View style={styles.row}>
-                        <Bullet color={colors.tenleyGreen} />
-                        <Text style={styles.text}>Your progress</Text>
-                      </View>
-                    </View>
-                  </View>
-                </View>
-
-                {upcomingPayments.length > 0 ? (
-                  <View style={{backgroundColor: colors.lightestGray}}>
-                    <View style={styles.contentWrap}>
-                      <Text
-                        style={[styles.text, {paddingVertical: RFValue(5)}]}>
-                        Next payment of{' '}
-                        <Text style={styles.boldGreen}>
-                          {nextPayment.amount}{' '}
-                        </Text>
-                        on {moment(nextPayment.date).format('MM.DD.YYYY')}
-                      </Text>
-                    </View>
-                  </View>
-                ) : (
-                  <View style={{backgroundColor: colors.lightestGray}}>
-                    <View style={styles.contentWrap}>
-                      <Text
-                        style={[styles.text, {paddingVertical: RFValue(5)}]}>
-                        Last payment of{' '}
-                        <Text style={styles.boldGreen}>
-                          {recentPayment.amount}{' '}
-                        </Text>
-                        processed on{' '}
-                        {moment(recentPayment.date).format('MM.DD.YYYY')}
-                      </Text>
-                    </View>
-                  </View>
-                )}
+                <AccountTile
+                  progressOnly
+                  key={1}
+                  account={account}
+                  navigation={navigation}
+                />
               </>
             )}
           </View>
@@ -309,9 +216,12 @@ const AccountDetails = ({route, navigation}) => {
           )}
         </ScrollView>
 
-        {account.payments.length > 0 && (
+        {upcomingPayments.length === 0 && account.payments.length > 0 && (
           <View style={Spacing.bottomButtonsContainer}>
-            <Button title="Make a Payment" />
+            <Button
+              title="Make a Payment"
+              onPress={() => navigation.navigate('PaymentSetup', {account})}
+            />
           </View>
         )}
       </SafeAreaView>

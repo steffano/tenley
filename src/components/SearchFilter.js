@@ -9,7 +9,6 @@ import {
 } from 'react-native';
 import {colors} from '../utilities/styles';
 import {RFPercentage, RFValue} from 'react-native-responsive-fontsize';
-import Bullet from './Bullet';
 
 import PropTypes from 'prop-types';
 import {white} from '../utilities/colors';

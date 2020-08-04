@@ -1,9 +1,18 @@
 import React, {useState, useEffect} from 'react';
-import {TextInput, StyleSheet, View, Text, Animated} from 'react-native';
+import {
+  TextInput,
+  StyleSheet,
+  View,
+  Text,
+  TouchableOpacity,
+  Animated,
+} from 'react-native';
 import {RFPercentage, RFValue} from 'react-native-responsive-fontsize';
 import Slider from 'react-native-slider';
 import {colors} from '../../utilities/styles';
 import currency from 'currency.js';
+import Modal from 'react-native-modal';
+import {Button} from '../Button';
 
 export default ({min, max, title, total, isCurrency, onSlide, onType}) => {
   const [calcValue, setCalcValue] = useState(
@@ -12,6 +21,7 @@ export default ({min, max, title, total, isCurrency, onSlide, onType}) => {
     }),
   );
   const [showCalcValue, setShowCalcValue] = useState(false);
+  const [showModal, setShowModal] = useState(false);
 
   // const min = 2000;
   // const max = 15700;
@@ -24,8 +34,11 @@ export default ({min, max, title, total, isCurrency, onSlide, onType}) => {
     if (val <= max && val >= min) {
       onSlide(val);
       setShowCalcValue(false);
+    } else if (calcValue === '') {
+      setShowCalcValue(false);
     } else {
       setShowCalcValue(false);
+      setShowModal(true);
     }
   };
 
@@ -97,6 +110,26 @@ export default ({min, max, title, total, isCurrency, onSlide, onType}) => {
           </Text>
         </View>
       </View>
+      <Modal
+        isVisible={showModal}
+        backdropColor={colors.transparentGreen}
+        onBackdropPress={() => setShowModal(false)}>
+        <View style={styles.modalWrap}>
+          <Text style={styles.text}>
+            Tenley recommends selecting an amount above{' '}
+            <Text
+              style={{color: colors.mediumGreen, fontFamily: 'Poppins-Bold'}}>
+              {USD(min)}
+            </Text>{' '}
+            for an acceptance of your settlement offer.
+          </Text>
+          <TouchableOpacity
+            onPress={() => setShowModal(false)}
+            style={styles.modalButton}>
+            <Text style={styles.whiteText}>OK</Text>
+          </TouchableOpacity>
+        </View>
+      </Modal>
     </>
   );
 };
@@ -108,6 +141,12 @@ const styles = StyleSheet.create({
     fontSize: RFValue(12),
     letterSpacing: 0.9,
     alignSelf: 'center',
+  },
+  whiteText: {
+    fontFamily: 'Poppins-Bold',
+    color: 'white',
+    textAlign: 'center',
+    fontSize: RFValue(11),
   },
   valueBox: {
     height: 41,
@@ -132,5 +171,23 @@ const styles = StyleSheet.create({
   track: {
     height: 8,
     borderRadius: 20,
+  },
+  modalWrap: {
+    backgroundColor: 'white',
+    height: RFValue(170),
+    width: RFValue(200),
+    alignSelf: 'center',
+    justifyContent: 'center',
+    padding: RFValue(15),
+    borderRadius: 5,
+  },
+  modalButton: {
+    backgroundColor: colors.mediumGreen,
+    width: RFValue(70),
+    height: RFValue(30),
+    alignSelf: 'center',
+    justifyContent: 'center',
+    marginTop: RFValue(15),
+    borderRadius: 5,
   },
 });

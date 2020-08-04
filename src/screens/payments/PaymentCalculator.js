@@ -7,12 +7,13 @@ import {
   TouchableOpacity,
   Image,
 } from 'react-native';
+import {GlobalContext} from '../../GlobalContext';
 import {Button} from '../../components/Button';
 import {ScreenHeader} from '../../components/ScreenHeader';
 import AccountTile from '../../components/AccountTile';
-import Bullet from '../../components/Bullet';
 import currency from 'currency.js';
 import Slider from '../../components/Calculator/Slider';
+import RNPickerSelect from 'react-native-picker-select';
 
 import {colors, Spacing} from '../../utilities/styles';
 import {RFValue} from 'react-native-responsive-fontsize';
@@ -20,10 +21,17 @@ import {RFValue} from 'react-native-responsive-fontsize';
 const PaymentCalculator = ({navigation, route}) => {
   const paymentType = route.params.paymentType;
   const account = route.params.account;
+  const [globalData, setGlobalData] = useContext(GlobalContext);
+
+  const user = globalData.user;
 
   const accountTotal = currency(account.amountOwed).value;
   const [payment, setPayment] = useState(accountTotal * 0.6);
   const [months, setMonths] = useState(Math.ceil(accountTotal / payment));
+
+  const [withdrawalAccount, setWithdrawalAccount] = useState(
+    user['custom:demo_bankAcct'] || null,
+  );
 
   const updatePayment = val => {
     setPayment(val);
@@ -36,6 +44,13 @@ const PaymentCalculator = ({navigation, route}) => {
   };
 
   const toUSD = value => currency(value, {symbol: '$', precision: 0}).format();
+
+  const pickerData = [
+    {
+      label: 'CitiBank - 1111',
+      value: 'CitiBank - 1111',
+    },
+  ];
 
   return (
     <>
@@ -51,15 +66,11 @@ const PaymentCalculator = ({navigation, route}) => {
             <View style={styles.accountWrap}>
               <View style={styles.row}>
                 <View style={[styles.row, {alignItems: 'flex-start'}]}>
-                  <Text style={[styles.accountTitle, {maxWidth: 150}]}>
+                  <Text style={[styles.accountTitle, {maxWidth: 250}]}>
                     {account.originalCreditorName}
+                    {' \u2022 '}
+                    {account.originalCreditorAccountNumber.slice(-4)}
                   </Text>
-                  <View style={[styles.row, {alignItems: 'center'}]}>
-                    <Bullet color="black" small />
-                    <Text style={styles.accountTitle}>
-                      {account.originalCreditorAccountNumber.slice(-4)}
-                    </Text>
-                  </View>
                 </View>
                 <View>
                   <Text style={styles.balanceText}>
@@ -80,26 +91,99 @@ const PaymentCalculator = ({navigation, route}) => {
               />
             ) : (
               <>
-                <Slider
-                  min={Math.ceil(accountTotal / 36 / 10) * 10}
-                  max={accountTotal}
-                  total={payment}
-                  onSlide={updatePayment}
-                  isCurrency
-                  title={'Monthly Payment'}
-                />
-                <View style={{height: RFValue(30)}} />
+                <View>
+                  <Slider
+                    min={Math.ceil(accountTotal / 36 / 10) * 10}
+                    max={accountTotal}
+                    total={payment}
+                    onSlide={updatePayment}
+                    isCurrency
+                    title={'Monthly Payment'}
+                  />
+                  <View style={{height: RFValue(30)}} />
 
-                <Slider
-                  min={1}
-                  max={36}
-                  total={months}
-                  onSlide={updateMonths}
-                  title={'Months to Payoff'}
-                />
+                  <Slider
+                    min={1}
+                    max={36}
+                    total={months}
+                    onSlide={updateMonths}
+                    title={'Months to Payoff'}
+                  />
+                </View>
               </>
             )}
           </View>
+          {withdrawalAccount && (
+            <>
+              <View>
+                <View
+                  style={[
+                    styles.row,
+                    {marginTop: RFValue(20), paddingHorizontal: RFValue(20)},
+                  ]}>
+                  <Text style={styles.tinyText}>Withdrawal Account</Text>
+                </View>
+
+                <RNPickerSelect
+                  pickerProps={{
+                    style: {
+                      height: 200,
+                      overflow: 'hidden',
+                    },
+                  }}
+                  placeholder={{}}
+                  onDonePress={console.log(withdrawalAccount)}
+                  doneText={'Done'}
+                  onValueChange={value => setWithdrawalAccount(value)}
+                  items={pickerData}
+                  useNativeAndroidPickerStyle={false}
+                  style={{
+                    inputIOS: [styles.input],
+                    inputAndroid: {
+                      fontFamily: 'Poppins-Regular',
+                      fontSize: RFValue(13),
+                    },
+                    inputAndroidContainer: [styles.input],
+                    placeholder: {
+                      fontFamily: 'Poppins-Regular',
+                      color: '#666666',
+                      fontSize: RFValue(13),
+                    },
+                    iconContainer: {
+                      top: 33,
+                      right: 50,
+                    },
+                  }}
+                  Icon={() => {
+                    return (
+                      <Image
+                        source={require('../../assets/icons/carat.png')}
+                        resizeMode="contain"
+                        style={{
+                          height: 15,
+                          width: 15,
+                          transform: [{rotate: '90deg'}],
+                        }}
+                      />
+                    );
+                  }}
+                />
+                <TouchableOpacity>
+                  <Text
+                    style={[
+                      styles.tinyText,
+                      {
+                        paddingHorizontal: RFValue(20),
+                        color: colors.mediumGreen,
+                        textDecorationLine: 'underline',
+                      },
+                    ]}>
+                    Add new payment method
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </>
+          )}
           <View
             style={{
               marginVertical: RFValue(20),
@@ -107,6 +191,7 @@ const PaymentCalculator = ({navigation, route}) => {
               borderColor: colors.lightGray,
             }}
           />
+
           <View
             style={{
               flexDirection: 'row',
@@ -114,7 +199,7 @@ const PaymentCalculator = ({navigation, route}) => {
               marginHorizontal: 10,
             }}>
             <Image
-              source={require('../../assets/icons/checkmark/fill.png')}
+              source={require('../../assets/icons/checkmark/empty.png')}
               resizeMode="contain"
               style={{
                 maxWidth: RFValue(20),
@@ -128,7 +213,7 @@ const PaymentCalculator = ({navigation, route}) => {
                 fontSize: RFValue(11),
                 letterSpacing: RFValue(1),
               }}>
-              Apply 10 Tenley Bucks to this payment{'  '}
+              Apply Tenley Bucks to this payment{'  '}
             </Text>
             <Image
               source={require('../../assets/icons/info/gray.png')}
@@ -140,7 +225,8 @@ const PaymentCalculator = ({navigation, route}) => {
             />
           </View>
         </View>
-        <View style={Spacing.bottomButtonsContainer}>
+        <View
+          style={[Spacing.bottomButtonsContainer, {maxHeight: RFValue(100)}]}>
           <Button
             title={
               paymentType === 'recurring'
@@ -196,10 +282,23 @@ const styles = StyleSheet.create({
     alignContent: 'center',
     alignItems: 'center',
   },
-  bottomButtonsContainer: {
-    flex: 1,
-    paddingHorizontal: 15,
-    justifyContent: 'flex-end',
-    marginBottom: 10,
+  input: {
+    borderRadius: RFValue(5),
+    marginHorizontal: RFValue(15),
+    marginVertical: RFValue(10),
+    paddingHorizontal: RFValue(15),
+    justifyContent: 'center',
+    color: colors.darkGreen,
+    fontFamily: 'Poppins-Regular',
+    fontSize: RFValue(13),
+    letterSpacing: 0.8,
+    borderColor: colors.lightGray,
+    height: RFValue(45),
+    borderWidth: 1,
+  },
+  tinyText: {
+    fontFamily: 'Poppins-Regular',
+    fontSize: RFValue(10),
+    letterSpacing: 1.25,
   },
 });

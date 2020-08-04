@@ -65,23 +65,25 @@ const Message = ({navigation}) => {
         <View style={[styles.container, {justifyContent: 'flex-start'}]}>
           <ScrollView>
             <SearchFilter />
-            {accounts.map((account, key) => {
-              return (
-                account && (
-                  <AccountButton
-                    notification={key === 0}
-                    key={key}
-                    accountName={account.originalCreditorName}
-                    lastFour={account.originalCreditorAccountNumber.slice(-4)}
-                    onPress={() =>
-                      navigation.navigate('Inbox', {
-                        account,
-                      })
-                    }
-                  />
-                )
-              );
-            })}
+            <View style={{marginHorizontal: 15}}>
+              {accounts.map((account, key) => {
+                return (
+                  account && (
+                    <AccountButton
+                      notification={key === 0}
+                      key={key}
+                      accountName={account.originalCreditorName}
+                      lastFour={account.originalCreditorAccountNumber.slice(-4)}
+                      onPress={() =>
+                        navigation.navigate('Inbox', {
+                          account,
+                        })
+                      }
+                    />
+                  )
+                );
+              })}
+            </View>
             {/* </Text> */}
           </ScrollView>
         </View>
@@ -109,7 +111,7 @@ const styles = StyleSheet.create({
     width: 71,
     color: colors.darkGreen,
     fontFamily: 'Poppins-Bold',
-    fontSize: 16,
+    fontSize: RFValue(14),
     letterSpacing: 0.75,
     lineHeight: 26,
     textAlign: 'center',
@@ -136,7 +138,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 5,
     color: colors.darkGreen,
     fontFamily: 'Poppins-Regular',
-    fontSize: RFValue(14),
+    fontSize: RFValue(12),
     letterSpacing: 0.88,
     lineHeight: 22,
     textAlign: 'center',

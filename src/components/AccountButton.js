@@ -2,7 +2,6 @@ import React from 'react';
 import {TouchableOpacity, View, Text, StyleSheet, Image} from 'react-native';
 import {colors} from '../utilities/styles';
 import {RFPercentage, RFValue} from 'react-native-responsive-fontsize';
-import Bullet from './Bullet';
 
 import PropTypes from 'prop-types';
 
@@ -12,12 +11,14 @@ export const AccountButton = ({
   lastFour,
   notification,
   clearNotification,
+  balance,
 }) => {
   const containerStyle = [styles.container];
 
   if (notification) {
     containerStyle.push(styles.notificationContainer);
   }
+
   return (
     <TouchableOpacity onPress={onPress || null} style={containerStyle}>
       <View style={styles.row}>
@@ -26,9 +27,10 @@ export const AccountButton = ({
             styles.row,
             {paddingHorizontal: 0, justifyContent: 'center'},
           ]}>
-          <Text style={[styles.text, {maxWidth: 220}]}>
+          <Text style={[styles.text, {maxWidth: RFValue(200)}]}>
             {accountName}
-            {/* <Bullet small color={colors.darkGreen} /> */} - {lastFour}
+            {' \u2022 '}
+            {lastFour}
           </Text>
           {notification && (
             <View style={styles.notificationBubble}>
@@ -36,15 +38,21 @@ export const AccountButton = ({
             </View>
           )}
         </View>
-
-        <Image
-          source={require('../assets/icons/carat.png')}
-          resizeMode="contain"
-          style={{
-            maxWidth: 20,
-            maxHeight: 20,
-          }}
-        />
+        <View style={styles.row}>
+          {balance && (
+            // <View style={styles.notificationBubble}>
+            <Text style={styles.balanceText}>{balance}</Text>
+            // </View>
+          )}
+          <Image
+            source={require('../assets/icons/carat.png')}
+            resizeMode="contain"
+            style={{
+              maxWidth: 20,
+              maxHeight: 20,
+            }}
+          />
+        </View>
       </View>
     </TouchableOpacity>
   );
@@ -59,7 +67,7 @@ const styles = StyleSheet.create({
     borderColor: colors.lightGray,
     marginVertical: 5,
     height: RFValue(60),
-    marginHorizontal: 15,
+    // marginHorizontal: 15,
   },
   notificationContainer: {
     backgroundColor: 'white',
@@ -69,7 +77,7 @@ const styles = StyleSheet.create({
     borderColor: colors.tenleyGreen,
     marginVertical: 5,
     height: RFValue(60),
-    marginHorizontal: 15,
+    // marginHorizontal: 15,
   },
   text: {
     color: colors.darkGreen,
@@ -82,7 +90,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: 20,
+    paddingHorizontal: 15,
   },
   notificationBubble: {
     height: 22,
@@ -97,6 +105,12 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins-Bold',
     color: 'white',
     fontSize: RFValue(13),
+  },
+  balanceText: {
+    color: colors.darkGreen,
+    fontFamily: 'Poppins-Bold',
+    fontSize: RFValue(14),
+    marginRight: RFValue(15),
   },
 });
 

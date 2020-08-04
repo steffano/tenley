@@ -33,9 +33,9 @@ const styles = StyleSheet.create({
   progressVisualFull: {
     display: 'flex',
     alignSelf: 'center',
-    width: '100%',
+    width: '99%',
     height: 10,
-    margin: 20,
+    // margin: 10,
     borderRadius: 100,
   },
 });

@@ -1,5 +1,14 @@
 import React, {useContext} from 'react';
-import {SafeAreaView, View, Text} from 'react-native';
+import {
+  SafeAreaView,
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Image,
+} from 'react-native';
+import {RFValue} from 'react-native-responsive-fontsize';
+import {colors, Spacing} from '../../../utilities/styles';
 import {GlobalContext} from '../../../GlobalContext';
 import {Header} from '../../../components/Header';
 import {Button} from '../../../components/Button';
@@ -9,29 +18,63 @@ const Profile = ({navigation}) => {
 
   return (
     <>
-      <SafeAreaView style={{flex: 1}}>
+      <SafeAreaView style={{flex: 1, backgroundColor: 'white'}}>
         <Header header={'Profile'} />
         <View style={{paddingHorizontal: 15, paddingVertical: 20}}>
-          <Button
-            title="Personal"
-            onPress={() => navigation.navigate('Personal')}
-          />
-          <Button
-            title="Agreements"
-            onPress={() => navigation.navigate('Agreements')}
-          />
-          <Button
-            title="Notification Settings"
-            onPress={() => navigation.navigate('Notification Settings')}
-          />
-          <Button
-            title="Ask Tenley"
-            onPress={() => navigation.navigate('Ask Tenley')}
-          />
-          <Button
-            title="Log Out"
-            onPress={() => setGlobalData({loggedIn: false})}
-          />
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => navigation.navigate('Personal')}>
+            <View style={styles.row}>
+              <View style={styles.row}>
+                <Text style={styles.buttonText}>Personal</Text>
+              </View>
+              <Image source={require('../../../assets/icons/carat.png')} />
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => navigation.navigate('Agreements')}>
+            <View style={styles.row}>
+              <View style={styles.row}>
+                <Text style={styles.buttonText}>Agreements</Text>
+              </View>
+              <Image source={require('../../../assets/icons/carat.png')} />
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => navigation.navigate('Notification Settings')}>
+            <View style={styles.row}>
+              <View style={styles.row}>
+                <Text style={styles.buttonText}>Notification Settings</Text>
+              </View>
+              <Image source={require('../../../assets/icons/carat.png')} />
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => navigation.navigate('Ask Tenley')}>
+            <View style={styles.row}>
+              <View style={styles.row}>
+                <Text style={styles.buttonText}>Ask Tenley</Text>
+              </View>
+              <Image source={require('../../../assets/icons/carat.png')} />
+            </View>
+          </TouchableOpacity>
+        </View>
+        <View style={Spacing.bottomButtonsContainer}>
+          <TouchableOpacity onPress={() => setGlobalData({loggedIn: false})}>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'center',
+                alignItems: 'center',
+                marginBottom: RFValue(15),
+              }}>
+              <Image source={require('../../../assets/icons/log-out.png')} />
+              <Text style={styles.buttonText}>{'  '}Log Out</Text>
+            </View>
+          </TouchableOpacity>
         </View>
       </SafeAreaView>
     </>
@@ -39,3 +82,30 @@ const Profile = ({navigation}) => {
 };
 
 export default Profile;
+
+const styles = StyleSheet.create({
+  row: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+  },
+  button: {
+    flexDirection: 'row',
+    borderWidth: 1,
+    borderColor: colors.lightGray,
+    borderRadius: 5,
+    alignContent: 'center',
+    marginVertical: RFValue(5),
+    minHeight: RFValue(55),
+    padding: RFValue(15),
+  },
+  buttonText: {
+    fontFamily: 'Poppins-Regular',
+    color: colors.darkGreen,
+    fontSize: RFValue(13),
+    letterSpacing: 0.8,
+    alignSelf: 'center',
+    textAlign: 'center',
+  },
+});

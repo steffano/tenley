@@ -38,11 +38,8 @@ const getAccounts = async jwt => {
 };
 
 const importAccounts = async jwt => {
-  return api
-    .post('/accounts/import', {
-      headers: {Authorization: `Bearer ${jwt}`},
-    })
-    .then(response => console.log(response.data));
+  api.setHeader('Authorization', `Bearer ${jwt}`);
+  return api.post('/accounts/import');
 };
 
 const postSettlement = async (postBody, jwt, id) => {

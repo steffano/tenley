@@ -4,7 +4,6 @@ import {colors, Spacing} from '../../utilities/styles';
 import {GlobalContext} from '../../GlobalContext';
 import {Button} from '../../components/Button';
 import {ScreenHeader} from '../../components/ScreenHeader';
-import Bullet from '../../components/Bullet';
 import apis from '../../apis/';
 
 import {RFValue, RFPercentage} from 'react-native-responsive-fontsize';
@@ -27,20 +26,46 @@ const PaymentConfirmation = ({navigation, route}) => {
 
   const toUSD = value => currency(value, {symbol: '$', precision: 0}).format();
 
+  const paymentDay = parseInt(moment(paymentDate).format('D'));
+  const paymentWeekday = parseInt(moment(paymentDate).format('d'));
+
+  const secondPaymentDay = parseInt(
+    moment(paymentDate)
+      .add(14, 'days')
+      .format('D'),
+  );
+  const secondPaymentWeekday = parseInt(
+    moment(paymentDate)
+      .add(3, 'days')
+      .format('d'),
+  );
+
+  const paymentParams =
+    frequency === 'monthlyByDate'
+      ? {date: paymentDay}
+      : frequency === 'twiceWeekly'
+      ? {day_1: paymentWeekday, day_2: secondPaymentWeekday}
+      : frequency === 'everyNWeeks'
+      ? {n: 4, day: paymentWeekday}
+      : frequency === 'twiceMonthlyByDate'
+      ? {date_1: paymentDay, date_2: secondPaymentDay}
+      : null;
+
   const oneTimePayment = {
     paymentAmount: toUSD(paymentAmount),
     tenleyBucksApplied: '10',
-    // date: paymentDate,
   };
 
   const recurringPayment = {
-    strategy: 'weekly',
+    strategy: frequency,
     paymentAmount: toUSD(paymentAmount),
-    params: {day: 4},
+    params: paymentParams,
   };
 
   const {session} = globalData;
   const jwt = session.accessToken.jwtToken;
+
+  console.log(paymentParams);
 
   const handlePaymentConfirm = async () => {
     if (paymentType === 'recurring') {
@@ -116,15 +141,11 @@ const PaymentConfirmation = ({navigation, route}) => {
             <View style={styles.accountWrap}>
               <View style={styles.row}>
                 <View style={[styles.row, {alignItems: 'flex-start'}]}>
-                  <Text style={[styles.accountTitle, {maxWidth: 150}]}>
+                  <Text style={[styles.accountTitle, {maxWidth: 250}]}>
                     {account.originalCreditorName}
+                    {' \u2022 '}
+                    {account.originalCreditorAccountNumber.slice(-4)}
                   </Text>
-                  <View style={[styles.row, {alignItems: 'center'}]}>
-                    <Bullet color="black" small />
-                    <Text style={styles.accountTitle}>
-                      {account.originalCreditorAccountNumber.slice(-4)}
-                    </Text>
-                  </View>
                 </View>
                 <View>
                   <Text style={styles.balanceText}>

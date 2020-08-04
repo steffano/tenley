@@ -1,7 +1,6 @@
 import React from 'react';
 import {View, SafeAreaView, Text, StyleSheet, Image} from 'react-native';
 import {Button} from '../Button';
-import Bullet from '../Bullet';
 import {colors, Spacing, Typography} from '../../utilities/styles';
 import {RFValue, RFPercentage} from 'react-native-responsive-fontsize';
 import find from 'lodash/find';
@@ -62,15 +61,11 @@ const SettlementConfirmation = ({
             <View style={styles.accountWrap}>
               <View style={styles.row}>
                 <View style={[styles.row, {alignItems: 'flex-start'}]}>
-                  <Text style={[styles.accountTitle, {maxWidth: 150}]}>
+                  <Text style={[styles.accountTitle, {maxWidth: 175}]}>
                     {nextAccount.originalCreditorName}
+                    {' \u2022 '}
+                    {nextAccount.originalCreditorAccountNumber.slice(-4)}
                   </Text>
-                  <View style={[styles.row, {alignItems: 'center'}]}>
-                    <Bullet color="black" small />
-                    <Text style={styles.accountTitle}>
-                      {nextAccount.originalCreditorAccountNumber.slice(-4)}
-                    </Text>
-                  </View>
                 </View>
                 <View>
                   <Text style={styles.balanceText}>

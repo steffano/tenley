@@ -7,8 +7,10 @@ import ProgressGauge from '../ProgressGauge';
 import Bullet from '../Bullet';
 import currency from 'currency.js';
 import moment from 'moment';
+import filter from 'lodash/filter';
+import last from 'lodash/last';
 
-const AccountTile = ({navigation, account, hideButton}) => {
+const AccountTile = ({navigation, account, hideButton, progressOnly}) => {
   const statusBlockStyle = [styles.statusBlock];
   const statusBlockText = [styles.offeredText];
 
@@ -38,6 +40,10 @@ const AccountTile = ({navigation, account, hideButton}) => {
     }
   }
 
+  if (progressOnly) {
+    containerStyle.push(styles.progressOnly);
+  }
+
   const toUSD = value => currency(value, {symbol: '$', precision: 0}).format();
 
   const getWholePercent = (percentFor, percentOf) => {
@@ -54,6 +60,12 @@ const AccountTile = ({navigation, account, hideButton}) => {
 
   const percentPaid = getWholePercent(paid, originalBalance);
   const percentSaved = getWholePercent(settled, originalBalance);
+
+  const upcomingPayments = filter(account.payments, ['status', 'SCHEDULED']);
+  const postedPayments = filter(account.payments, ['status', 'POSTED']);
+  const nextPayment = upcomingPayments[0];
+  const finalPayment = last(upcomingPayments);
+  const recentPayment = account.payments[0];
 
   const progressPercentages = [
     // {
@@ -72,69 +84,102 @@ const AccountTile = ({navigation, account, hideButton}) => {
     <>
       <View style={containerStyle}>
         <View style={styles.detailWrap}>
-          <View style={styles.row}>
-            <View style={[styles.row, {alignItems: 'flex-start'}]}>
-              <Text style={[styles.accountTitle, {maxWidth: 150}]}>
-                {account.originalCreditorName}
-              </Text>
-              <View style={[styles.row, {alignItems: 'center'}]}>
-                <Bullet color="black" small />
-                <Text style={styles.accountTitle}>
-                  {account.originalCreditorAccountNumber.slice(-4)}
-                </Text>
-              </View>
-            </View>
-            <View>
-              <Text style={styles.balanceText}>
-                {toUSD(account.amountOwed)}
-              </Text>
-            </View>
-          </View>
-
-          <View style={styles.row}>
-            <View style={statusBlockStyle}>
-              {settlements.length !== 0 && (
-                <Text style={statusBlockText}>
-                  {currentSettlement.offer} OFFER SUBMITTED
-                </Text>
-              )}
-            </View>
-
-            <View>
-              <TouchableOpacity
-                onPress={() =>
-                  navigation.navigate('Account Details', {account})
-                }>
-                {payments.length <= 0 && (
-                  <Text style={styles.linkText}>
-                    {'\n'}
-                    VIEW >
-                  </Text>
-                )}
-              </TouchableOpacity>
-            </View>
-          </View>
-          {payments.length > 0 && (
+          {!progressOnly && (
             <>
-              {/* <View style={styles.row}>
-                <Text style={styles.text}>Est. Payoff: 1.21.22</Text>
-                <Text style={styles.text}>Next Payment: 10.21.20</Text>
-              </View> */}
+              <View style={[styles.row, {marginBottom: RFValue(10)}]}>
+                <View style={[styles.row, {alignItems: 'flex-start'}]}>
+                  <Text style={[styles.accountTitle, {maxWidth: RFValue(200)}]}>
+                    {account.originalCreditorName}
+                    {' \u2022 '}
+                    {account.originalCreditorAccountNumber.slice(-4)}
+                  </Text>
+                </View>
+                <View>
+                  <Text style={styles.balanceText}>
+                    {toUSD(account.amountOwed)}
+                  </Text>
+                </View>
+              </View>
+
+              <View style={styles.row}>
+                <View style={statusBlockStyle}>
+                  {settlements.length !== 0 && (
+                    <Text style={statusBlockText}>
+                      {currentSettlement.offer} OFFER SUBMITTED
+                    </Text>
+                  )}
+                </View>
+
+                <View>
+                  <TouchableOpacity
+                    onPress={() =>
+                      navigation.navigate('Account Details', {account})
+                    }>
+                    {payments.length <= 0 && (
+                      <Text style={styles.linkText}>
+                        {'\n'}
+                        VIEW >
+                      </Text>
+                    )}
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </>
+          )}
+
+          {postedPayments.length > 0 && (
+            <>
+              {upcomingPayments.length > 0 && (
+                <View style={{marginBottom: RFValue(15)}}>
+                  <View
+                    style={[
+                      styles.row,
+                      {
+                        justifyContent: 'space-between',
+                        paddingHorizontal: progressOnly ? RFValue(5) : null,
+                      },
+                    ]}>
+                    <Text style={styles.rowText}>
+                      Est. Payoff:{' '}
+                      {moment(finalPayment.date).format('MM.DD.YYYY')}
+                    </Text>
+
+                    {progressOnly ? (
+                      <View>
+                        <Text style={styles.rowTextBold}>
+                          {upcomingPayments.length} payments to go
+                        </Text>
+                      </View>
+                    ) : (
+                      <Text style={styles.rowText}>
+                        Next Payment:{' '}
+                        {moment(nextPayment.date).format('MM.DD.YYYY')}
+                      </Text>
+                    )}
+                  </View>
+                </View>
+              )}
+
               <View>
                 <ProgressGauge
                   backgroundColor="lightgrey"
                   visualParts={progressPercentages}
                 />
-                <View
-                  style={{flexDirection: 'row', justifyContent: 'flex-start'}}>
-                  <View style={styles.row}>
-                    <Bullet color={colors.mediumGreen} />
-                    <Text style={styles.text}>Settlement reduction</Text>
-                  </View>
-                  <View style={{width: 10}} />
+                <View style={{height: 15}} />
+
+                <View style={styles.rowLeft}>
+                  {settlements.length > 0 && (
+                    <>
+                      <View style={styles.row}>
+                        <Bullet color={colors.mediumGreen} />
+                        <Text style={styles.rowText}>Settlement reduction</Text>
+                      </View>
+                      <View style={{width: 10}} />
+                    </>
+                  )}
                   <View style={styles.row}>
                     <Bullet color={colors.tenleyGreen} />
-                    <Text style={styles.text}>Your progress</Text>
+                    <Text style={styles.rowText}>Your progress</Text>
                   </View>
                 </View>
               </View>
@@ -143,27 +188,65 @@ const AccountTile = ({navigation, account, hideButton}) => {
         </View>
 
         {payments.length !== 0 && (
-          <View
-            style={{
-              minWidth: 200,
-              backgroundColor: colors.lightestGray,
-            }}>
-            <TouchableOpacity
-              onPress={() => navigation.navigate('Account Details', {account})}>
-              <View style={styles.detailWrap}>
-                <View style={styles.row}>
-                  <Text style={styles.text}>
-                    Original Balance{' '}
-                    <Text style={styles.bold}>{toUSD(originalBalance)}</Text> |
-                    Paid{' '}
-                    <Text style={styles.bold}>
-                      {toUSD(originalBalance - balance)}
+          <View style={{backgroundColor: colors.lightestGray}}>
+            <View style={styles.detailWrap}>
+              <View style={styles.row}>
+                {postedPayments.length === 0 && upcomingPayments.length > 0 ? (
+                  <>
+                    <Text style={styles.text}>
+                      First payment of{' '}
+                      <Text style={styles.boldGreen}>
+                        {toUSD(nextPayment.amount)}{' '}
+                      </Text>
+                      on{' '}
+                      <Text style={styles.bold}>
+                        {moment(nextPayment.date).format('MM.DD.YYYY')}
+                      </Text>
                     </Text>
-                  </Text>
-                  <Text style={styles.linkText}>VIEW ></Text>
-                </View>
+                  </>
+                ) : (
+                  <>
+                    {!progressOnly ? (
+                      <Text style={styles.text}>
+                        Original Balance{' '}
+                        <Text style={styles.bold}>
+                          {toUSD(originalBalance)}
+                        </Text>{' '}
+                        | Paid{' '}
+                        <Text style={styles.bold}>
+                          {toUSD(originalBalance - balance)}
+                        </Text>
+                      </Text>
+                    ) : progressOnly && upcomingPayments.length > 0 ? (
+                      <Text style={styles.text}>
+                        Next payment of{' '}
+                        <Text style={styles.boldGreen}>
+                          {toUSD(nextPayment.amount)}{' '}
+                        </Text>
+                        on {moment(nextPayment.date).format('MM.DD.YYYY')}
+                      </Text>
+                    ) : (
+                      <Text style={styles.text}>
+                        <Text style={styles.boldGreen}>
+                          {toUSD(recentPayment.amount)}{' '}
+                        </Text>
+                        payment processed on{' '}
+                        {moment(recentPayment.date).format('MM.DD.YYYY')}
+                      </Text>
+                    )}
+                  </>
+                )}
+
+                {!progressOnly && (
+                  <TouchableOpacity
+                    onPress={() =>
+                      navigation.navigate('Account Details', {account})
+                    }>
+                    <Text style={styles.linkText}>VIEW ></Text>
+                  </TouchableOpacity>
+                )}
               </View>
-            </TouchableOpacity>
+            </View>
           </View>
         )}
 
@@ -202,16 +285,32 @@ const styles = StyleSheet.create({
   text: {
     fontFamily: 'Poppins-Regular',
     color: colors.darkGreen,
-    fontSize: RFValue(11),
+    fontSize: RFValue(10),
     letterSpacing: 0.5,
     justifyContent: 'center',
   },
   detailWrap: {
-    padding: 15,
+    padding: RFValue(10),
     alignContent: 'center',
   },
   bold: {
     fontFamily: 'Poppins-Bold',
+  },
+  boldGreen: {
+    color: colors.mediumGreen,
+    fontFamily: 'Poppins-Bold',
+  },
+  rowText: {
+    fontFamily: 'Poppins-Regular',
+    color: colors.darkGreen,
+    fontSize: RFValue(9),
+    letterSpacing: 0.75,
+  },
+  rowTextBold: {
+    fontFamily: 'Poppins-Bold',
+    color: colors.darkGreen,
+    fontSize: RFValue(9),
+    letterSpacing: 0.75,
   },
   accountContainer: {
     borderColor: colors.lightGray,
@@ -222,6 +321,13 @@ const styles = StyleSheet.create({
     marginVertical: RFValue(10),
     borderRadius: 5,
   },
+  progressOnly: {
+    borderWidth: 0,
+    marginHorizontal: 0,
+    marginVertical: 0,
+    borderRadius: 0,
+    // backgroundColor: 'red',
+  },
   failedPayment: {
     borderColor: colors.darkRed,
   },
@@ -230,6 +336,10 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignContent: 'center',
     alignItems: 'center',
+  },
+  rowLeft: {
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
   },
   offered: {
     alignSelf: 'flex-end',
@@ -266,15 +376,9 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins-Bold',
     letterSpacing: 1.5,
     color: colors.mediumGreen,
+    padding: 5,
   },
   statusBlock: {
-    // alignSelf: 'flex-end',
-    // borderRadius: 3,
-    // justifyContent: 'center',
-    // alignItems: 'center',
-    // backgroundColor: colors.mediumGreen,
-    // height: 30,
-    // width: 150,
-    // letterSpacing: 0.5,
+    height: 0,
   },
 });

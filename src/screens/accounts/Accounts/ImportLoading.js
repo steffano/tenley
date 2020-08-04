@@ -15,12 +15,6 @@ import apis from '../../../apis';
 import {GlobalContext} from '../../../GlobalContext';
 
 const ImportLoading = ({navigation}) => {
-  // const startCounter = () => {
-  setTimeout(() => {
-    switchScreen();
-  }, 4500);
-  // };
-
   const switchScreen = () => {
     navigation.reset({
       index: 0,
@@ -125,13 +119,16 @@ const ImportLoading = ({navigation}) => {
   ];
 
   const [globalData, setGlobalData] = useContext(GlobalContext);
-  console.log(globalData, 'smh');
   const session = globalData.session;
   const jwt = session.accessToken.jwtToken;
 
   useEffect(() => {
     const getAccounts = async () => {
-      const accts = await apis.getAccounts(jwt);
+      const accts = await apis.getAccounts(jwt).then(
+        setTimeout(() => {
+          switchScreen();
+        }, 4500),
+      );
       setGlobalData({
         ...globalData,
         accounts: accts.data.with,

@@ -42,22 +42,22 @@ export function ProfileStackScreen() {
       <ProfileStack.Screen
         name="Personal"
         component={PersonalDetails}
-        options={getScreenOptions()}
+        options={{headerShown: false}}
       />
       <ProfileStack.Screen
         name="Agreements"
         component={Agreements}
-        options={getScreenOptions()}
+        options={{headerShown: false}}
       />
       <ProfileStack.Screen
         name="Notification Settings"
         component={NotificationSettings}
-        options={getScreenOptions()}
+        options={{headerShown: false}}
       />
       <ProfileStack.Screen
         name="Ask Tenley"
         component={AskTenley}
-        options={getScreenOptions()}
+        options={{headerShown: false}}
       />
     </ProfileStack.Navigator>
   );

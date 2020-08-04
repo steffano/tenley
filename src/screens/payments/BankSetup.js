@@ -7,17 +7,20 @@ import {
   Image,
   TouchableOpacity,
 } from 'react-native';
+import {GlobalContext} from '../../GlobalContext';
 import {colors, Spacing} from '../../utilities/styles';
 import {Button} from '../../components/Button';
 import {ScreenHeader} from '../../components/ScreenHeader';
 import {SearchFilter} from '../../components/SearchFilter';
 import Modal from 'react-native-modal';
 import BankLogin from '../../components/Modals/bank-login';
-
+import {Auth} from 'aws-amplify';
 import {RFValue} from 'react-native-responsive-fontsize';
 
 const BankSetup = ({navigation, route}) => {
   const [showLogin, setShowLogin] = useState(false);
+  const [globalData, setGlobalData] = useContext(GlobalContext);
+  const {user} = globalData;
 
   const {
     paymentType,
@@ -27,6 +30,26 @@ const BankSetup = ({navigation, route}) => {
     paymentDate,
     frequency,
   } = route.params;
+
+  const completeBankLogin = async () => {
+    setShowLogin(false);
+    setGlobalData({
+      ...globalData,
+      user: {...user, 'custom:demo_bankAcct': 'true'},
+    });
+    updateUser();
+  };
+
+  const updateUser = async () => {
+    const u = await Auth.currentAuthenticatedUser();
+    try {
+      await Auth.updateUserAttributes(u, {
+        'custom:demo_bankAcct': 'true',
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   return (
     <>
@@ -75,7 +98,7 @@ const BankSetup = ({navigation, route}) => {
         <BankLogin
           onClose={() => setShowLogin(false)}
           onSuccess={() => {
-            setShowLogin(false);
+            completeBankLogin();
             navigation.navigate('PaymentConfirmation', {
               paymentType,
               account,

@@ -1,10 +1,11 @@
 import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import Activity from '../Activity';
-import PaymentsLog from '../PaymentsLog';
 import {Image} from 'react-native';
 import {getScreenOptions} from '../../../utilities/styles';
 import PaymentSetup from '../../payments/PaymentSetup';
+import PaymentDetails from '../PaymentDetails';
+import PaymentActivity from '../PaymentActivity';
 
 const ActivityStack = createStackNavigator();
 
@@ -27,9 +28,14 @@ export function ActivityStackScreen() {
         component={Activity}
       />
       <ActivityStack.Screen
-        options={getScreenOptions()}
-        name="Payment Log"
-        component={PaymentsLog}
+        options={{headerShown: false}}
+        name="Payment Activity"
+        component={PaymentActivity}
+      />
+      <ActivityStack.Screen
+        options={{headerShown: false}}
+        name="Payment Details"
+        component={PaymentDetails}
       />
       {renderScreen('Payment Setup', PaymentSetup)}
     </ActivityStack.Navigator>

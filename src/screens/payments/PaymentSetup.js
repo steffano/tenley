@@ -28,15 +28,11 @@ const PaymentSetup = ({navigation, route}) => {
             <View style={styles.accountWrap}>
               <View style={styles.row}>
                 <View style={[styles.row, {alignItems: 'flex-start'}]}>
-                  <Text style={[styles.accountTitle, {maxWidth: 150}]}>
+                  <Text style={[styles.accountTitle, {maxWidth: 250}]}>
                     {account.originalCreditorName}
+                    {' \u2022 '}
+                    {account.originalCreditorAccountNumber.slice(-4)}
                   </Text>
-                  <View style={[styles.row, {alignItems: 'center'}]}>
-                    <Bullet color="black" small />
-                    <Text style={styles.accountTitle}>
-                      {account.originalCreditorAccountNumber.slice(-4)}
-                    </Text>
-                  </View>
                 </View>
                 <View>
                   <Text style={styles.balanceText}>
@@ -174,6 +170,7 @@ const styles = StyleSheet.create({
     borderColor: colors.lightGray,
     justifyContent: 'center',
     padding: 15,
+    borderRadius: 5,
   },
   speechBubbleText: {
     fontFamily: 'Poppins-Bold',

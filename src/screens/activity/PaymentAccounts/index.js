@@ -15,14 +15,14 @@ import {AccountButton} from '../../../components/AccountButton';
 import {Button} from '../../../components/Button';
 import {GlobalContext} from '../../../GlobalContext';
 
-const PaymentActivity = ({navigation}) => {
+const PaymentAccounts = ({navigation}) => {
   const [globalData, setGlobalData] = useContext(GlobalContext);
   const {accounts, session} = globalData;
   const jwt = session.accessToken.jwtToken;
 
-  const accountsWithPayments = accounts.filter(
-    ({payments}) => payments.length > 0,
-  );
+  const accountsWithPayments = accounts
+    ? accounts.filter(({payments}) => payments.length > 0)
+    : null;
   console.log(accounts, accountsWithPayments);
 
   return (
@@ -69,22 +69,27 @@ const PaymentActivity = ({navigation}) => {
           </>
         ) : (
           <View style={{marginTop: RFValue(15)}}>
-            {accountsWithPayments.map((account, key) => {
-              return (
-                account && (
-                  <AccountButton
-                    key={key}
-                    account={account}
-                    navigation={navigation}
-                    accountName={account.originalCreditorName}
-                    lastFour={account.originalCreditorAccountNumber.slice(-4)}
-                    onPress={() =>
-                      navigation.navigate('Account Details', {account})
-                    }
-                  />
-                )
-              );
-            })}
+            <View style={{marginHorizontal: 15}}>
+              {accountsWithPayments.map((account, index) => {
+                return (
+                  account && (
+                    <AccountButton
+                      key={index}
+                      account={account}
+                      navigation={navigation}
+                      accountName={account.originalCreditorName}
+                      lastFour={account.originalCreditorAccountNumber.slice(-4)}
+                      onPress={() =>
+                        navigation.navigate('Payment Activity', {
+                          account,
+                          index,
+                        })
+                      }
+                    />
+                  )
+                );
+              })}
+            </View>
           </View>
         )}
 
@@ -109,7 +114,7 @@ const PaymentActivity = ({navigation}) => {
   );
 };
 
-export default PaymentActivity;
+export default PaymentAccounts;
 
 const styles = StyleSheet.create({
   container: {

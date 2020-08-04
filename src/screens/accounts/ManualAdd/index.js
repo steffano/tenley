@@ -11,19 +11,21 @@ import currency from 'currency.js';
 import {RFValue} from 'react-native-responsive-fontsize';
 // import {maskCurrency} from '../../../utilities/validation';
 import {Auth} from 'aws-amplify';
-
+import get from 'lodash/get';
 import apis from '../../../apis/';
 // import {GlobalContext} from '../../GlobalContext';
 
 const ManualAdd = ({navigation}) => {
   const [globalData, setGlobalData] = useContext(GlobalContext);
-
+  const {user, session} = globalData;
   const [amountOwed, setAmountOwed] = useState('');
   const [acctName, setAcctName] = useState('');
   const [acctNum, setAcctNum] = useState('');
-  const [ssn, setSsn] = useState('');
-  const [date, setDate] = useState('');
-  const {user, session} = globalData;
+  const [ssn, setSsn] = useState(
+    user['custom:ssn'] ? maskSSn(user['custom:ssn']) : '',
+  );
+  const [date, setDate] = useState(user.birthdate || '');
+
   const [fn, setFn] = useState(user.given_name);
   const [ln, setLn] = useState(user.family_name);
   const jwt = session.accessToken.jwtToken;
@@ -42,13 +44,15 @@ const ManualAdd = ({navigation}) => {
     originalCreditorName: acctName,
     originalCreditorAccountNumber: acctNum,
     amountOwed: toUSD(amountOwed),
-    openDate: '2012-07-02',
-    currentCreditorName: 'Shady Acres Financial, LLC',
+    originalAmountOwed: toUSD(amountOwed),
+    openDate: '2017-07-02',
+    currentCreditorName: null,
     currentCreditorAccountNumber: null,
   };
 
   const val = currency('$20920.23');
   console.log(val.value, toUSD(1234.56));
+  console.log(user.birthdate);
 
   const validateForm = () => {
     return (

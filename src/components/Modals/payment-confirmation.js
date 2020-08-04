@@ -8,7 +8,6 @@ import {
   Image,
 } from 'react-native';
 import {Button} from '../Button';
-import Bullet from '../Bullet';
 import {colors, Spacing, Typography} from '../../utilities/styles';
 import {RFValue, RFPercentage} from 'react-native-responsive-fontsize';
 import find from 'lodash/find';
@@ -48,13 +47,13 @@ const PaymentConfirmation = ({onClose, paymentType}) => {
         />
         <View style={{padding: 15}}>
           <Text style={[styles.header, {textAlign: 'center'}]}>
-            Payments confirmed!
+            Payment confirmed!
           </Text>
 
           <Text style={styles.bodyText}>
-            Your payment plan has been set up. {'\n'}We will send you a
-            notification {'\n'}reminder before your payment date. {'\n'}You can
-            manage your notification {'\n'}preferences in your Profile.
+            Your payment has been set up. {'\n'}We will send you a notification{' '}
+            {'\n'}reminder before your payment date. {'\n'}You can manage your
+            notification {'\n'}preferences in your Profile.
           </Text>
         </View>
       </View>

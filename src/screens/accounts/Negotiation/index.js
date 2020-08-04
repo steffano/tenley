@@ -12,7 +12,6 @@ import {colors, Spacing, Typography} from '../../../utilities/styles';
 import {Button} from '../../../components/Button';
 import Calculator from '../../../components/Calculator';
 import {ScreenHeader} from '../../../components/ScreenHeader';
-import Bullet from '../../../components/Bullet';
 import {RFValue, RFPercentage} from 'react-native-responsive-fontsize';
 import currency from 'currency.js';
 import moment from 'moment';

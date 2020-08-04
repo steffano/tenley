@@ -1,8 +1,9 @@
 import React, {useContext, useState} from 'react';
+import {GlobalContext} from '../../GlobalContext';
 import {SafeAreaView, Text, View, StyleSheet, Image} from 'react-native';
 import {colors, Spacing} from '../../utilities/styles';
 import {Button} from '../../components/Button';
-import {RFValue} from 'react-native-responsive-fontsize';
+import {RFValue, RFPercentage} from 'react-native-responsive-fontsize';
 import {ScreenHeader} from '../../components/ScreenHeader';
 import {Calendar, LocaleConfig} from 'react-native-calendars';
 import moment from 'moment';
@@ -10,6 +11,14 @@ import RNPickerSelect from 'react-native-picker-select';
 
 const SchedulePayment = ({navigation, route}) => {
   const [date, setDate] = useState(moment().format('YYYY-MM-DD'));
+
+  const [globalData, setGlobalData] = useContext(GlobalContext);
+
+  const user = globalData.user;
+
+  const [withdrawalAccount, setWithdrawalAccount] = useState(
+    user['custom:demo_bankAcct'] || null,
+  );
 
   console.log(route.params);
 
@@ -19,7 +28,7 @@ const SchedulePayment = ({navigation, route}) => {
     todayTextColor: colors.darkGreen,
     monthTextColor: colors.darkGreen,
     arrowColor: colors.mediumGreen,
-    textDisabledColor: 'white',
+    textDisabledColor: colors.mediumGray,
     textDayFontFamily: 'Poppins-Regular',
     textDayHeaderFontFamily: 'Poppins-Regular',
     textMonthFontFamily: 'Poppins-Regular',
@@ -170,6 +179,7 @@ const SchedulePayment = ({navigation, route}) => {
             flex: 4,
           }}>
           <Calendar
+            minDate={moment().format('YYYY-MM-DD')}
             calendarHeight={RFValue(200)}
             style={styles.calendar}
             onDayPress={day => setDate(day.dateString)}
@@ -184,72 +194,93 @@ const SchedulePayment = ({navigation, route}) => {
             theme={calendarTheme}
           />
           {paymentType === 'recurring' && (
-            <View>
-              <RNPickerSelect
-                pickerProps={{
-                  style: {height: RFValue(200), overflow: 'hidden'},
-                }}
-                placeholder={{
-                  label: 'Select Frequency',
-                  value: '',
-                  color: 'gray',
-                }}
-                onDonePress={console.log(frequency)}
-                value={frequency}
-                doneText={'Done'}
-                onValueChange={value => setFrequency(value)}
-                items={pickerData}
-                useNativeAndroidPickerStyle={false}
-                style={{
-                  inputIOS: [styles.input],
-                  inputAndroid: {
-                    fontFamily: 'Poppins-Regular',
-                    fontSize: RFValue(13),
-                  },
-                  inputAndroidContainer: [styles.input],
-                  placeholder: {
-                    fontFamily: 'Poppins-Regular',
-                    color: '#666666',
-                    fontSize: RFValue(13),
-                  },
-                  iconContainer: {
-                    top: 33,
-                    right: 50,
-                  },
-                }}
-                Icon={() => {
-                  return (
-                    <Image
-                      source={require('../../assets/icons/carat.png')}
-                      resizeMode="contain"
-                      style={{
-                        height: 15,
-                        width: 15,
-                        transform: [{rotate: '90deg'}],
-                      }}
-                    />
-                  );
-                }}
-              />
-            </View>
+            // <View>
+            <RNPickerSelect
+              pickerProps={{
+                style: {
+                  height: 200,
+                  overflow: 'hidden',
+                },
+              }}
+              placeholder={{
+                label: 'Select Frequency',
+                value: '',
+                color: 'gray',
+              }}
+              onDonePress={console.log(frequency)}
+              value={frequency}
+              doneText={'Done'}
+              onValueChange={value => setFrequency(value)}
+              items={pickerData}
+              useNativeAndroidPickerStyle={false}
+              style={{
+                inputIOS: [styles.input],
+                inputAndroid: {
+                  fontFamily: 'Poppins-Regular',
+                  fontSize: RFValue(13),
+                },
+                inputAndroidContainer: [styles.input],
+                placeholder: {
+                  fontFamily: 'Poppins-Regular',
+                  color: '#666666',
+                  fontSize: RFValue(13),
+                },
+                iconContainer: {
+                  top: 33,
+                  right: 50,
+                },
+              }}
+              Icon={() => {
+                return (
+                  <Image
+                    source={require('../../assets/icons/carat.png')}
+                    resizeMode="contain"
+                    style={{
+                      height: RFValue(10),
+                      width: RFValue(10),
+                      margin: 0,
+                      transform: [{rotate: '90deg'}],
+                    }}
+                  />
+                );
+              }}
+            />
+            // </View>
           )}
         </View>
 
         <View style={Spacing.bottomButtonsContainer}>
-          <Button
-            disabled={paymentType === 'recurring' ? frequency === '' : false}
-            title="Next Step: Bank Account"
-            onPress={() =>
-              navigation.navigate('BankSetup', {
-                account,
-                paymentType,
-                paymentAmount,
-                months: paymentType === 'recurring' ? months : null,
-                paymentDate: date,
-                frequency,
-              })
-            }
-          />
+          {!withdrawalAccount ? (
+            <Button
+              // disabled={paymentType === 'recurring' ? frequency === '' : false}
+              title="Next Step: Bank Account"
+              onPress={() =>
+                navigation.navigate('BankSetup', {
+                  account,
+                  paymentType,
+                  paymentAmount,
+                  months: paymentType === 'recurring' ? months : null,
+                  paymentDate: date,
+                  frequency,
+                })
+              }
+            />
+          ) : (
+            <Button
+              disabled={paymentType === 'recurring' ? frequency === '' : false}
+              title="Payment Confirmation"
+              onPress={() =>
+                navigation.navigate('PaymentConfirmation', {
+                  account,
+                  paymentType,
+                  paymentAmount,
+                  months: paymentType === 'recurring' ? months : null,
+                  paymentDate: date,
+                  frequency,
+                })
+              }
+            />
+          )}
         </View>
       </SafeAreaView>
     </>

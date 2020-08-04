@@ -12,7 +12,8 @@ import ActiveUser from '../../accounts/Accounts/ActiveUser';
 import {RFValue} from 'react-native-responsive-fontsize';
 import {colors} from '../../../utilities/styles';
 import {Header} from '../../../components/Header';
-import PaymentActivity from '../PaymentsLog';
+import TenleyBucks from './TenleyBucks';
+import PaymentAccounts from '../PaymentAccounts';
 
 const Activity = ({navigation}) => {
   // const [globalData, setGlobalData] = useContext(GlobalContext);
@@ -53,9 +54,9 @@ const Activity = ({navigation}) => {
 
         <View style={{flex: 1}}>
           {section === 'Payments' ? (
-            <PaymentActivity navigation={navigation} />
+            <PaymentAccounts navigation={navigation} />
           ) : (
-            <Text>bbux</Text>
+            <TenleyBucks navigation={navigation} />
           )}
         </View>
       </SafeAreaView>
