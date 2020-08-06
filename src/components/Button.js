@@ -1,5 +1,10 @@
 import React from 'react';
-import {TouchableOpacity, Text, StyleSheet} from 'react-native';
+import {
+  TouchableOpacity,
+  Text,
+  StyleSheet,
+  ActivityIndicator,
+} from 'react-native';
 import {colors} from '../utilities/styles';
 import {RFPercentage, RFValue} from 'react-native-responsive-fontsize';
 
@@ -12,6 +17,7 @@ export const Button = ({
   disabled,
   textOnly,
   style,
+  loading,
 }) => {
   const containerStyle = [styles.container];
   const textStyle = [styles.text];
@@ -31,8 +37,8 @@ export const Button = ({
     <TouchableOpacity
       onPress={onPress || null}
       style={[containerStyle, style]}
-      disabled={disabled}>
-      <Text style={textStyle}>{title}</Text>
+      disabled={disabled || loading}>
+      {loading ? <ActivityIndicator /> : <Text style={textStyle}>{title}</Text>}
     </TouchableOpacity>
   );
 };

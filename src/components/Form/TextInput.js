@@ -56,7 +56,6 @@ export default ({
 
   const setDate = date => {
     let showDate = moment(date).format('MM/DD/YYYY');
-    // let postDate = moment(value).format('YYYY-MM-DD');
     setIsFocused(false);
     setShowPicker(false);
     setDateValue(showDate);

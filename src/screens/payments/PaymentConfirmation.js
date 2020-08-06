@@ -1,6 +1,6 @@
 import React, {useContext, useState} from 'react';
 import {SafeAreaView, Text, View, StyleSheet, Image} from 'react-native';
-import {colors, Spacing} from '../../utilities/styles';
+import {colors, Spacing, Typography} from '../../utilities/styles';
 import {GlobalContext} from '../../GlobalContext';
 import {Button} from '../../components/Button';
 import {ScreenHeader} from '../../components/ScreenHeader';
@@ -24,6 +24,8 @@ const PaymentConfirmation = ({navigation, route}) => {
   const accountTotal = currency(account.amountOwed).value;
   const [payment, setPayment] = useState(accountTotal * 0.6);
 
+  const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const toUSD = value => currency(value, {symbol: '$', precision: 0}).format();
 
   const paymentDay = parseInt(moment(paymentDate).format('D'));
@@ -43,10 +45,12 @@ const PaymentConfirmation = ({navigation, route}) => {
   const paymentParams =
     frequency === 'monthlyByDate'
       ? {date: paymentDay}
+      : frequency === 'weekly'
+      ? {day: paymentWeekday}
       : frequency === 'twiceWeekly'
       ? {day_1: paymentWeekday, day_2: secondPaymentWeekday}
       : frequency === 'everyNWeeks'
-      ? {n: 4, day: paymentWeekday}
+      ? {n: 2, day: paymentWeekday}
       : frequency === 'twiceMonthlyByDate'
       ? {date_1: paymentDay, date_2: secondPaymentDay}
       : null;
@@ -68,6 +72,8 @@ const PaymentConfirmation = ({navigation, route}) => {
   console.log(paymentParams);
 
   const handlePaymentConfirm = async () => {
+    setIsLoading(true);
+    setError('');
     if (paymentType === 'recurring') {
       try {
         const paymentSuccess = await apis.schedulePayments(
@@ -79,8 +85,12 @@ const PaymentConfirmation = ({navigation, route}) => {
           getAccounts();
           console.log(paymentSuccess);
         }
-      } catch (error) {
-        console.log(error.message);
+      } catch (err) {
+        setIsLoading(false);
+        console.log(err.message);
+        setError(
+          'An error occurred, please check your information and try again',
+        );
       }
     } else {
       try {
@@ -93,8 +103,12 @@ const PaymentConfirmation = ({navigation, route}) => {
           getAccounts();
           console.log(paymentSuccess);
         }
-      } catch (error) {
-        console.log(error);
+      } catch (err) {
+        setIsLoading(false);
+        console.log(err.message);
+        setError(
+          'An error occurred, please check your information and try again',
+        );
       }
     }
   };
@@ -107,14 +121,15 @@ const PaymentConfirmation = ({navigation, route}) => {
         accounts: accts.data.with,
         newPayment: true,
       });
+      switchScreen();
     } catch (error) {
+      setIsLoading(false);
       console.log(error);
     }
-
-    switchScreen();
   };
 
   const switchScreen = () => {
+    setIsLoading(false);
     navigation.reset({
       index: 0,
       routes: [{name: 'Accounts', params: 'fromImportLoading'}],
@@ -211,7 +226,13 @@ const PaymentConfirmation = ({navigation, route}) => {
           />
         </View>
         <View style={Spacing.bottomButtonsContainer}>
-          <Button title="Complete" onPress={() => handlePaymentConfirm()} />
+          <Button
+            title="Complete"
+            onPress={() => handlePaymentConfirm()}
+            disabled={isLoading}
+            loading={isLoading}
+          />
+          <Text style={Typography.errorText}>{error}</Text>
         </View>
       </SafeAreaView>
     </>

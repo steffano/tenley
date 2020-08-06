@@ -15,6 +15,7 @@ import {AccountsStackScreen} from './screens/accounts/AccountsStack';
 import {ActivityStackScreen} from './screens/activity/ActivityStack';
 import {ProfileStackScreen} from './screens/profile/ProfileStack';
 import {MessageStackScreen} from './screens/messages/MessagesStack';
+import {Auth} from 'aws-amplify';
 // import Payments from './screens/payments/PaymentStack.js';
 // import StoryBook from '../storybook';
 
@@ -22,6 +23,8 @@ const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
 const iconStyle = {height: 20, width: 20};
+
+console.log('hell?', Auth.currentSession());
 
 function Navigation() {
   const [globalData] = useContext(GlobalContext);
@@ -136,6 +139,11 @@ function Navigation() {
                   />
                 ),
               }}
+              listeners={({navigation}) => ({
+                tabPress: e => {
+                  navigation.navigate('Profile', {screen: 'Profile Home'});
+                },
+              })}
             />
           </Tab.Navigator>
         )}

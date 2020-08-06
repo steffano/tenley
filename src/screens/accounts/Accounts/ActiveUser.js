@@ -296,7 +296,10 @@ const ActiveUser = ({navigation, route, accounts}) => {
               </Text>
             </TouchableOpacity>
           </View>
-          <TouchableOpacity>
+          <TouchableOpacity
+            onPress={() =>
+              navigation.navigate('Profile', {screen: 'Ask Tenley'})
+            }>
             <Image
               source={require('../../../assets/icons/help-bubble.png')}
               resizeMode="contain"

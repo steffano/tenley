@@ -38,6 +38,9 @@ const ManualAdd = ({navigation}) => {
   const [ssnValid, setSsnValid] = useState(true);
   const [dateValid, setDateValid] = useState(true);
 
+  const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+
   const toUSD = value => currency(value, {symbol: '$', precision: 2}).format();
   const postBody = {
     debtType: 'UNSECURED',
@@ -69,11 +72,13 @@ const ManualAdd = ({navigation}) => {
   const handleComplete = async () => {
     const u = await Auth.currentAuthenticatedUser();
     try {
+      setIsLoading(true);
       await Auth.updateUserAttributes(u, {
         'custom:ssn': unmask(ssn),
         birthdate: date,
       });
     } catch (err) {
+      setIsLoading(false);
       console.log(err);
     }
     try {
@@ -81,8 +86,12 @@ const ManualAdd = ({navigation}) => {
       if (added) {
         getAccounts();
       }
-    } catch (error) {
-      console.log(error.message);
+    } catch (err) {
+      setIsLoading(false);
+      console.log(err.message);
+      setError(
+        'An error occurred, please check your information and try again',
+      );
     }
   };
 
@@ -103,6 +112,7 @@ const ManualAdd = ({navigation}) => {
     if (accts) {
       switchScreen();
     }
+    setIsLoading(false);
   };
 
   return (
@@ -218,7 +228,8 @@ const ManualAdd = ({navigation}) => {
           </Form>
           <View style={Spacing.bottomButtonsContainer}>
             <Button
-              disabled={!validateForm()}
+              loading={isLoading}
+              disabled={!validateForm() || isLoading}
               title="Complete Manual Add"
               onPress={() => handleComplete()}
             />

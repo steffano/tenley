@@ -10,7 +10,7 @@ import {
 import {colors} from '../utilities/styles';
 import {RFValue} from 'react-native-responsive-fontsize';
 
-export const ScreenHeader = ({navigation, title}) => {
+export const ScreenHeader = ({navigation, title, onPress}) => {
   return (
     <>
       <View
@@ -22,7 +22,7 @@ export const ScreenHeader = ({navigation, title}) => {
         <View style={{flex: 1}}>
           <TouchableOpacity
             style={{paddingVertical: RFValue(10)}}
-            onPress={() => navigation.goBack()}>
+            onPress={onPress ? onPress : () => navigation.goBack()}>
             <Image
               source={require('../assets/icons/back-arrow.png')}
               style={{marginLeft: 20}}

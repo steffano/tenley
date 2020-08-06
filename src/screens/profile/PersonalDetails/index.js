@@ -12,29 +12,51 @@ import {GlobalContext} from '../../../GlobalContext';
 import {Header} from '../../../components/Header';
 import {Form, TextInput} from '../../../components/Form';
 import {Button} from '../../../components/Button';
-
 import {ScreenHeader} from '../../../components/ScreenHeader';
 import {colors, Spacing} from '../../../utilities/styles';
+import {Auth} from 'aws-amplify';
+import apis from '../../../apis/';
 import {RFValue, RFPercentage} from 'react-native-responsive-fontsize';
 
 const Personal = ({navigation}) => {
   const [globalData, setGlobalData] = useContext(GlobalContext);
-  const {user, session} = globalData;
+  const {user} = globalData;
   const [fn, setFn] = useState(user.given_name);
   const [ln, setLn] = useState(user.family_name);
-  const [email, setEmail] = useState('');
-  const [phone, setPhone] = useState('');
-  const [address, setAddress] = useState('');
+  const [email, setEmail] = useState(user.email);
+  const [phone, setPhone] = useState(user.phone_number);
 
   const [fnValid, setFnValid] = useState(true);
   const [lnValid, setLnValid] = useState(true);
   const [emailValid, setEmailValid] = useState(true);
   const [phoneValid, setPhoneValid] = useState(true);
-  const [addressValid, setAddressValid] = useState(true);
+
+  const handleComplete = async () => {
+    setGlobalData({
+      ...globalData,
+      user: {...user, given_name: fn, family_name: ln, phone_number: phone},
+    });
+    const u = await Auth.currentAuthenticatedUser();
+    try {
+      await Auth.updateUserAttributes(u, {
+        given_name: fn,
+        family_name: ln,
+        phone_number: phone,
+      }).then(
+        navigation.reset({
+          index: 3,
+          routes: [{name: 'Profile'}],
+        }),
+      );
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return (
     <>
       <SafeAreaView style={styles.container}>
-        <ScreenHeader title={'Personal'} navigation={navigation} />
+        <ScreenHeader title={'Account'} navigation={navigation} />
         <View style={{height: RFValue(15)}} />
         <Form>
           <TextInput
@@ -61,10 +83,6 @@ const Personal = ({navigation}) => {
           />
           <TextInput
             label="Email Address"
-            onChangeText={text => {
-              setEmail(text);
-              setEmailValid(true);
-            }}
             value={email}
             highlightOnFocus
             invalid={!emailValid}
@@ -89,7 +107,7 @@ const Personal = ({navigation}) => {
             <Text style={styles.rowText}>Enable Face ID</Text>
             <Switch />
           </View>
-          <Button title="Save Changes" />
+          <Button title="Save Changes" onPress={() => handleComplete()} />
         </View>
       </SafeAreaView>
     </>

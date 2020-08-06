@@ -24,6 +24,19 @@ const NotificationSettings = ({navigation}) => {
   const [newOffer, setNewOffer] = useState(false);
   const [offerAccepted, setOfferAccepted] = useState(false);
 
+  const [allowNotifications, setAllowNotifications] = useState(false);
+
+  const toggleAll = () => {
+    setAllowNotifications(!allowNotifications);
+    setNewMessage(!allowNotifications);
+    setUpcomingPayment(!allowNotifications);
+    setPaymentComplete(!allowNotifications);
+    setPaidInFull(!allowNotifications);
+    setBucksEarned(!allowNotifications);
+    setNewOffer(!allowNotifications);
+    setOfferAccepted(!allowNotifications);
+  };
+
   return (
     <>
       <SafeAreaView style={styles.container}>
@@ -31,7 +44,7 @@ const NotificationSettings = ({navigation}) => {
         <View style={{paddingHorizontal: 15, paddingVertical: 20}}>
           <View style={styles.row}>
             <Text style={styles.rowText}>Allow Notifications</Text>
-            <Switch />
+            <Switch value={allowNotifications} onChange={() => toggleAll()} />
           </View>
         </View>
 

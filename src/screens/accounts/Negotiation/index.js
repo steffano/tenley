@@ -30,6 +30,9 @@ const Negotiation = ({route, navigation}) => {
   const [payment, setPayment] = useState(debtBalance * 0.1);
   const [months, setMonths] = useState(Math.ceil(debtBalance / payment));
 
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
+
   const bucksTotal = debtBalance - 100;
 
   const savingsPercentage = Math.floor(
@@ -43,30 +46,12 @@ const Negotiation = ({route, navigation}) => {
     updateDate: moment().format('YYYY-MM-DD'),
   };
 
-  const {user, session} = globalData;
+  const session = globalData.session;
   const jwt = session.accessToken.jwtToken;
 
-  console.log(jwt);
-
-  const getAccounts = async () => {
-    console.log('made it');
-    const accts = await apis.getAccounts(jwt);
-    setGlobalData({
-      ...globalData,
-      accounts: accts.data.with,
-      settlement: toUSD(debtBalance),
-    });
-    switchScreen();
-  };
-
-  const switchScreen = () => {
-    navigation.reset({
-      index: 0,
-      routes: [{name: 'Accounts', params: {message: 'fromImportLoading'}}],
-    });
-  };
-
   const handleComplete = async () => {
+    setIsLoading(true);
+    setError('');
     try {
       const added = await apis.postSettlement(
         settlementObj,
@@ -76,9 +61,36 @@ const Negotiation = ({route, navigation}) => {
       if (added) {
         getAccounts();
       }
-    } catch (error) {
-      console.log(error.message);
+    } catch (err) {
+      setIsLoading(false);
+      console.log(err.message);
+      setError(
+        'An error occurred, please check your information and try again',
+      );
     }
+  };
+
+  const getAccounts = async () => {
+    try {
+      const accts = await apis.getAccounts(jwt);
+      setGlobalData({
+        ...globalData,
+        accounts: accts.data.with,
+        settlement: toUSD(debtBalance),
+      });
+      switchScreen();
+    } catch (error) {
+      setIsLoading(false);
+      console.log(error);
+    }
+  };
+
+  const switchScreen = () => {
+    setIsLoading(false);
+    navigation.reset({
+      index: 0,
+      routes: [{name: 'Accounts'}],
+    });
   };
 
   return (
@@ -140,8 +152,13 @@ const Negotiation = ({route, navigation}) => {
               reply with a counter offer or accept your offer.
             </Text>
             <View style={{height: 20}} />
-
-            <Button title="Submit Offer" onPress={() => handleComplete()} />
+            <Text style={Typography.errorText}>{error}</Text>
+            <Button
+              disabled={isLoading}
+              loading={isLoading}
+              title="Submit Offer"
+              onPress={() => handleComplete()}
+            />
           </View>
         </ScrollView>
       </SafeAreaView>

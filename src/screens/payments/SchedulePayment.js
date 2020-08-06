@@ -106,21 +106,29 @@ const SchedulePayment = ({navigation, route}) => {
 
   const pickerData = [
     {
-      label: 'Bi-Weekly',
+      label: 'Twice Weekly',
       value: 'twiceWeekly',
     },
     {
-      label: 'Twice Monthly',
-      value: 'twiceMonthlyByDate',
+      label: 'Weekly',
+      value: 'weekly',
+    },
+    {
+      label: 'Every 2 Weeks',
+      value: 'everyNWeeks',
     },
     {
       label: 'Monthly',
       value: 'monthlyByDate',
     },
     {
-      label: 'Every 4 Weeks',
-      value: 'everyNWeeks',
+      label: 'Twice Monthly',
+      value: 'twiceMonthlyByDate',
     },
+    // {
+    //   label: 'Every 4 Weeks',
+    //   value: 'everyNWeeks',
+    // },
   ];
 
   const [frequency, setFrequency] = useState('');

@@ -32,10 +32,15 @@ const AutoAdd = ({navigation}) => {
   const [placeName, setPlaceName] = useState('');
   const [placeGooglePlaceId, setPlaceGooglePlaceId] = useState('');
 
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
+
   const jwt = session.accessToken.jwtToken;
 
   const handleSubmit = async () => {
     if (validateForm()) {
+      setIsLoading(true);
+      setError('');
       updateUser();
       try {
         await apis
@@ -46,8 +51,12 @@ const AutoAdd = ({navigation}) => {
           .then(navigation.navigate('Verification'));
       } catch (error) {
         console.log(error.message);
+        setError(
+          'An error occurred, please check your information and try again',
+        );
       }
     }
+    setIsLoading(false);
   };
 
   const updateUser = async () => {
@@ -170,6 +179,7 @@ const AutoAdd = ({navigation}) => {
           </Form>
           <View style={Spacing.bottomButtonsContainer}>
             <Button
+              loading={isLoading}
               disabled={!validateForm()}
               title="Complete Auto Add"
               onPress={() => handleSubmit()}

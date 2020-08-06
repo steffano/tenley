@@ -26,7 +26,7 @@ const Profile = ({navigation}) => {
             onPress={() => navigation.navigate('Personal')}>
             <View style={styles.row}>
               <View style={styles.row}>
-                <Text style={styles.buttonText}>Personal</Text>
+                <Text style={styles.buttonText}>Account</Text>
               </View>
               <Image source={require('../../../assets/icons/carat.png')} />
             </View>
@@ -57,6 +57,16 @@ const Profile = ({navigation}) => {
             <View style={styles.row}>
               <View style={styles.row}>
                 <Text style={styles.buttonText}>Ask Tenley</Text>
+              </View>
+              <Image source={require('../../../assets/icons/carat.png')} />
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => navigation.navigate('Change Password')}>
+            <View style={styles.row}>
+              <View style={styles.row}>
+                <Text style={styles.buttonText}>Change Password</Text>
               </View>
               <Image source={require('../../../assets/icons/carat.png')} />
             </View>

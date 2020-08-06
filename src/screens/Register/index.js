@@ -189,6 +189,7 @@ const Register = ({navigation}) => {
         </Form>
         <View style={Spacing.bottomButtonsContainer}>
           <Button
+            loading={loading}
             disabled={loading}
             title="Create Account"
             onPress={() => startSignup()}

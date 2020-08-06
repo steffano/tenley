@@ -103,7 +103,8 @@ const PaymentAccounts = ({navigation}) => {
           </View>
         )}
       </ScrollView>
-      <TouchableOpacity>
+      <TouchableOpacity
+        onPress={() => navigation.navigate('Profile', {screen: 'Ask Tenley'})}>
         <Image
           source={require('../../../assets/icons/help-bubble.png')}
           resizeMode="contain"

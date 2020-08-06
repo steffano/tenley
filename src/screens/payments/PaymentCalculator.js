@@ -98,7 +98,7 @@ const PaymentCalculator = ({navigation, route}) => {
                     total={payment}
                     onSlide={updatePayment}
                     isCurrency
-                    title={'Monthly Payment'}
+                    title={'Payment Amount'}
                   />
                   <View style={{height: RFValue(30)}} />
 
@@ -107,7 +107,7 @@ const PaymentCalculator = ({navigation, route}) => {
                     max={36}
                     total={months}
                     onSlide={updateMonths}
-                    title={'Months to Payoff'}
+                    title={'Payments to Payoff'}
                   />
                 </View>
               </>
