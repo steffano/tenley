@@ -42,16 +42,9 @@ export default ({min, max, title, total, isCurrency, onSlide, onType}) => {
     }
   };
 
-  const roundUpVal = Math.round(total / 100) * 100 - total;
-  const regularValue = max > 2500 ? 100 : 10;
-  const test = total % 100 === 0;
-  const sliderStep = max > 2500 && test ? regularValue : roundUpVal;
-
-  // step should be 50 or 100
+  const sliderStep = max > 2500 ? 100 : 10;
 
   const USD = value => currency(value, {symbol: '$', precision: 0}).format();
-
-  console.log(total, sliderStep, test);
 
   return (
     <>
@@ -123,15 +116,10 @@ export default ({min, max, title, total, isCurrency, onSlide, onType}) => {
         onBackdropPress={() => setShowModal(false)}>
         <View style={styles.modalWrap}>
           <Text style={styles.text}>
-            Tenley recommends selecting an amount higher than{' '}
+            Tenley recommends selecting an amount above{' '}
             <Text
               style={{color: colors.mediumGreen, fontFamily: 'Poppins-Bold'}}>
               {USD(min)}
-            </Text>{' '}
-            and lower than{' '}
-            <Text
-              style={{color: colors.mediumGreen, fontFamily: 'Poppins-Bold'}}>
-              {USD(max)}
             </Text>{' '}
             for an acceptance of your settlement offer.
           </Text>

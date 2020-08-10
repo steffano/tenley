@@ -36,7 +36,7 @@ const Calculator = ({
       // setPayment(Math.ceil(Number(num) / months / 10) * 10);
     } else {
       setDebtBalance(val);
-      setPayment(Math.ceil(val / months));
+      setPayment(val / months);
     }
   };
 
