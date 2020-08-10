@@ -119,15 +119,13 @@ const ImportLoading = ({navigation}) => {
   ];
 
   const [globalData, setGlobalData] = useContext(GlobalContext);
-  const session = globalData.session;
-  const jwt = session.accessToken.jwtToken;
 
   useEffect(() => {
     const getAccounts = async () => {
-      const accts = await apis.getAccounts(jwt).then(
+      const accts = await apis.getAccounts().then(
         setTimeout(() => {
           switchScreen();
-        }, 4500),
+        }, 5000),
       );
       setGlobalData({
         ...globalData,
@@ -175,9 +173,9 @@ const ImportLoading = ({navigation}) => {
             unfilledColor={colors.lightGray}
             borderRadius={100}
             marginTop={RFValue(20)}
-            marginBottom={RFValue(10)}
+            marginBottom={RFValue(30)}
           />
-          <TouchableOpacity style={styles.helpButton}>
+          {/* <TouchableOpacity style={styles.helpButton}>
             <Text
               style={[styles.text, {color: 'white', fontSize: RFValue(12)}]}>
               Have any questions? I'm here to help!{' '}
@@ -190,7 +188,7 @@ const ImportLoading = ({navigation}) => {
                 alignSelf: 'center',
               }}
             />
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
       </View>
     </SafeAreaView>

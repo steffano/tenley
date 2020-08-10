@@ -48,6 +48,8 @@ const Verify = ({navigation}) => {
     setValue,
   });
 
+  console.log(user.phone_number);
+
   return (
     <SafeAreaView style={styles.container}>
       <Text style={[styles.headerText, {textAlign: 'center'}]}>

@@ -25,9 +25,7 @@ const TenleyBucks = ({navigation}) => {
   const [showShareModal, setShowShareModal] = useState(false);
 
   const [globalData, setGlobalData] = useContext(GlobalContext);
-  const {accounts, session} = globalData;
-  const jwt = session.accessToken.jwtToken;
-
+  const {accounts} = globalData;
   const USD = value => currency(value, {symbol: '$', precision: 0}).format();
 
   const accountsWithoutSettlements = accounts
@@ -41,7 +39,7 @@ const TenleyBucks = ({navigation}) => {
     let a = [];
     accounts.map(account => {
       filter(account.payments, ['status', 'POSTED']).map(payment => {
-        a.push('acct', payment);
+        a.push(payment);
       });
     });
     console.log(a.length);

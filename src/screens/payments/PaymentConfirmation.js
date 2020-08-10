@@ -66,9 +66,6 @@ const PaymentConfirmation = ({navigation, route}) => {
     params: paymentParams,
   };
 
-  const {session} = globalData;
-  const jwt = session.accessToken.jwtToken;
-
   console.log(paymentParams);
 
   const handlePaymentConfirm = async () => {
@@ -78,7 +75,6 @@ const PaymentConfirmation = ({navigation, route}) => {
       try {
         const paymentSuccess = await apis.schedulePayments(
           recurringPayment,
-          jwt,
           account.accountID,
         );
         if (paymentSuccess) {
@@ -96,7 +92,6 @@ const PaymentConfirmation = ({navigation, route}) => {
       try {
         const paymentSuccess = await apis.oneTimePayment(
           oneTimePayment,
-          jwt,
           account.accountID,
         );
         if (paymentSuccess) {
@@ -115,7 +110,7 @@ const PaymentConfirmation = ({navigation, route}) => {
 
   const getAccounts = async () => {
     try {
-      const accts = await apis.getAccounts(jwt);
+      const accts = await apis.getAccounts();
       setGlobalData({
         ...globalData,
         accounts: accts.data.with,
@@ -144,7 +139,7 @@ const PaymentConfirmation = ({navigation, route}) => {
       : frequency === 'monthlyByDate'
       ? 'Monthly'
       : frequency === 'everyNWeeks'
-      ? 'Every 4 Weeks'
+      ? 'Every 2 Weeks'
       : null;
 
   return (

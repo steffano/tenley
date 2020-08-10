@@ -35,8 +35,6 @@ const AutoAdd = ({navigation}) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
 
-  const jwt = session.accessToken.jwtToken;
-
   const handleSubmit = async () => {
     if (validateForm()) {
       setIsLoading(true);
@@ -44,7 +42,7 @@ const AutoAdd = ({navigation}) => {
       updateUser();
       try {
         await apis
-          .importAccounts(jwt)
+          .importAccounts()
           .then(res => {
             console.log('res', res);
           })
@@ -72,8 +70,6 @@ const AutoAdd = ({navigation}) => {
     }
   };
 
-  console.log(jwt);
-
   const validateForm = () => {
     return (
       fn !== '' && ln !== '' && ssn !== '' && date !== '' && address !== ''
@@ -85,6 +81,7 @@ const AutoAdd = ({navigation}) => {
       <SafeAreaView style={styles.container}>
         <ScreenHeader title={'Auto Add Accounts'} navigation={navigation} />
         <KeyboardAwareScrollView
+          keyboardOpeningTime={Number.MAX_SAFE_INTEGER}
           keyboardShouldPersistTaps="always"
           contentInsetAdjustmentBehavior="automatic"
           contentContainerStyle={{

@@ -105,6 +105,7 @@ const Register = ({navigation}) => {
   return (
     <SafeAreaView style={styles.container}>
       <KeyboardAwareScrollView
+        keyboardOpeningTime={Number.MAX_SAFE_INTEGER}
         contentInsetAdjustmentBehavior="automatic"
         contentContainerStyle={{
           flexGrow: 1,

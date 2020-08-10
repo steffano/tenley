@@ -17,8 +17,7 @@ import {GlobalContext} from '../../../GlobalContext';
 
 const PaymentAccounts = ({navigation}) => {
   const [globalData, setGlobalData] = useContext(GlobalContext);
-  const {accounts, session} = globalData;
-  const jwt = session.accessToken.jwtToken;
+  const {accounts} = globalData;
 
   const accountsWithPayments = accounts
     ? accounts.filter(({payments}) => payments.length > 0)

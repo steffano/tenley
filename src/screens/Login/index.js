@@ -43,8 +43,7 @@ const Login = ({navigation}) => {
 
   const fetchData = async user => {
     const session = user.signInUserSession;
-    const jwt = session.accessToken.jwtToken;
-    const accts = await apis.getAccounts(jwt);
+    const accts = await apis.getAccounts();
     setGlobalData({
       user: user.attributes,
       session,

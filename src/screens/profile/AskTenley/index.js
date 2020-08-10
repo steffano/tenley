@@ -52,6 +52,22 @@ const AskTenley = ({navigation}) => {
           </View>
           <View style={{height: 2, backgroundColor: colors.tenleyGreen}} />
           <View style={{paddingHorizontal: 15, paddingVertical: 20}}>
+            <View style={styles.button}>
+              <Text
+                style={{
+                  color: colors.mediumGray,
+                  fontFamily: 'Poppins-Regular',
+                  fontSize: RFValue(13),
+                  letterSpacing: 1.25,
+                }}>
+                What are you looking for?
+              </Text>
+            </View>
+          </View>
+          <View
+            style={{borderBottomColor: colors.lightGray, borderBottomWidth: 1}}
+          />
+          <View style={{paddingHorizontal: 15, paddingVertical: 20}}>
             <TouchableOpacity
               style={styles.button}
               onPress={() => setExpandQ1(!expandQ1)}>

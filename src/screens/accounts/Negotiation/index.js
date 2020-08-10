@@ -13,6 +13,8 @@ import {Button} from '../../../components/Button';
 import Calculator from '../../../components/Calculator';
 import {ScreenHeader} from '../../../components/ScreenHeader';
 import {RFValue, RFPercentage} from 'react-native-responsive-fontsize';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+
 import currency from 'currency.js';
 import moment from 'moment';
 import apis from '../../../apis/';
@@ -46,9 +48,6 @@ const Negotiation = ({route, navigation}) => {
     updateDate: moment().format('YYYY-MM-DD'),
   };
 
-  const session = globalData.session;
-  const jwt = session.accessToken.jwtToken;
-
   const handleComplete = async () => {
     setIsLoading(true);
     setError('');
@@ -72,7 +71,7 @@ const Negotiation = ({route, navigation}) => {
 
   const getAccounts = async () => {
     try {
-      const accts = await apis.getAccounts(jwt);
+      const accts = await apis.getAccounts();
       setGlobalData({
         ...globalData,
         accounts: accts.data.with,
@@ -100,7 +99,9 @@ const Negotiation = ({route, navigation}) => {
           title={'Settlement Negotiation'}
           navigation={navigation}
         />
-        <ScrollView>
+        <KeyboardAwareScrollView
+          keyboardOpeningTime={Number.MAX_SAFE_INTEGER}
+          contentInsetAdjustmentBehavior="automatic">
           <View style={{padding: RFValue(15)}}>
             <Text style={styles.blockText}>
               To start the settlement process, send an offer to your creditor or
@@ -160,7 +161,7 @@ const Negotiation = ({route, navigation}) => {
               onPress={() => handleComplete()}
             />
           </View>
-        </ScrollView>
+        </KeyboardAwareScrollView>
       </SafeAreaView>
     </>
   );

@@ -83,7 +83,7 @@ const PaymentDetails = ({route, navigation}) => {
       : payment.type === 'MONTHLY_BY_DATE'
       ? 'Monthly'
       : payment.type === 'EVERY_N_WEEKS'
-      ? 'Every 4 Weeks'
+      ? 'Every 2 Weeks'
       : payment.type === 'ONE-TIME'
       ? 'One time'
       : null;
@@ -130,7 +130,10 @@ const PaymentDetails = ({route, navigation}) => {
         {account.payments.length > 0 && (
           <View style={{flexDirection: 'row'}}>
             <View style={Spacing.bottomButtonsContainer}>
-              <Button title="Pay Now" />
+              <Button
+                title="Pay Now"
+                onPress={() => navigation.navigate('PaymentSetup', {account})}
+              />
             </View>
             {payment.status === 'SCHEDULED' && (
               <View style={Spacing.bottomButtonsContainer}>

@@ -36,7 +36,7 @@ const Calculator = ({
       // setPayment(Math.ceil(Number(num) / months / 10) * 10);
     } else {
       setDebtBalance(val);
-      setPayment(Math.ceil(val / months / 10) * 10);
+      setPayment(Math.ceil(val / months));
     }
   };
 
@@ -47,7 +47,7 @@ const Calculator = ({
 
   const updateMonths = val => {
     setMonths(Math.ceil(val));
-    setPayment(Math.ceil(debtBalance / val / 10) * 10);
+    setPayment(Math.ceil(debtBalance / val));
   };
 
   return (
@@ -103,7 +103,7 @@ const Calculator = ({
         </View>
         <View style={{height: 30}} />
         <Slider
-          min={Math.ceil(debtBalance / 36 / 10) * 10}
+          min={Math.ceil(debtBalance / 36)}
           max={debtBalance}
           total={payment}
           onSlide={updatePayment}

@@ -15,6 +15,7 @@ import {Button} from '../../../components/Button';
 import {ScreenHeader} from '../../../components/ScreenHeader';
 import {colors, Spacing} from '../../../utilities/styles';
 import {Auth} from 'aws-amplify';
+import {maskPhone, unmask, phoneRegex} from '../../../utilities/validation';
 import apis from '../../../apis/';
 import {RFValue, RFPercentage} from 'react-native-responsive-fontsize';
 
@@ -24,33 +25,51 @@ const Personal = ({navigation}) => {
   const [fn, setFn] = useState(user.given_name);
   const [ln, setLn] = useState(user.family_name);
   const [email, setEmail] = useState(user.email);
-  const [phone, setPhone] = useState(user.phone_number);
+  const [phone, setPhone] = useState(maskPhone(user.phone_number.slice(2)));
 
   const [fnValid, setFnValid] = useState(true);
   const [lnValid, setLnValid] = useState(true);
   const [emailValid, setEmailValid] = useState(true);
   const [phoneValid, setPhoneValid] = useState(true);
 
+  const [faceId, setFaceId] = useState(false);
+
   const handleComplete = async () => {
-    setGlobalData({
-      ...globalData,
-      user: {...user, given_name: fn, family_name: ln, phone_number: phone},
-    });
-    const u = await Auth.currentAuthenticatedUser();
-    try {
-      await Auth.updateUserAttributes(u, {
-        given_name: fn,
-        family_name: ln,
-        phone_number: phone,
-      }).then(
-        navigation.reset({
-          index: 3,
-          routes: [{name: 'Profile'}],
-        }),
-      );
-    } catch (err) {
-      console.log(err);
+    if (validateForm()) {
+      setGlobalData({
+        ...globalData,
+        user: {
+          ...user,
+          given_name: fn,
+          family_name: ln,
+          phone_number: '+1' + unmask(phone),
+        },
+      });
+      const u = await Auth.currentAuthenticatedUser();
+      try {
+        await Auth.updateUserAttributes(u, {
+          given_name: fn,
+          family_name: ln,
+          phone_number: '+1' + unmask(phone),
+        }).then(
+          navigation.reset({
+            index: 3,
+            routes: [{name: 'Profile'}],
+          }),
+        );
+      } catch (err) {
+        console.log(err);
+      }
     }
+  };
+
+  console.log(phone, unmask(phone), '+1' + unmask(phone));
+
+  const validateForm = () => {
+    setFnValid(fn !== '');
+    setLnValid(ln !== '');
+    setPhoneValid(phoneRegex.test(unmask(phone)));
+    return fn !== '' && ln !== '' && phoneRegex.test(unmask(phone));
   };
 
   return (
@@ -87,25 +106,25 @@ const Personal = ({navigation}) => {
             highlightOnFocus
             invalid={!emailValid}
             message={'Please enter your email'}
+            editable={false}
           />
           <TextInput
-            setPhoneValue={value => setPhone(value)}
-            onPress={text => {
-              setPhone(text);
+            onChangeText={text => {
+              setPhone(maskPhone(text));
               setPhoneValid(true);
             }}
             label="Phone Number"
             value={phone}
             highlightOnFocus
             invalid={!phoneValid}
-            message={'Please enter your phone number'}
+            message={'Please enter a valid phone number'}
           />
         </Form>
 
         <View style={Spacing.bottomButtonsContainer}>
           <View style={[styles.row, {marginHorizontal: RFValue(10)}]}>
             <Text style={styles.rowText}>Enable Face ID</Text>
-            <Switch />
+            <Switch value={faceId} onChange={() => setFaceId(!faceId)} />
           </View>
           <Button title="Save Changes" onPress={() => handleComplete()} />
         </View>

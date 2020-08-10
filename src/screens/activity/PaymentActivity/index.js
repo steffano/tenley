@@ -14,14 +14,9 @@ import AccountTile from '../../../components/AccountTile';
 import {PaymentButton} from '../../../components/PaymentButton';
 import {Button} from '../../../components/Button';
 import {ScreenHeader} from '../../../components/ScreenHeader';
-import {GlobalContext} from '../../../GlobalContext';
 import filter from 'lodash/filter';
 
 const PaymentActivity = ({navigation, route}) => {
-  const [globalData, setGlobalData] = useContext(GlobalContext);
-  const {accounts, session} = globalData;
-  const jwt = session.accessToken.jwtToken;
-
   const account = route.params.account;
   const upcomingPayments = filter(account.payments, ['status', 'SCHEDULED']);
   const pastPayments = filter(account.payments, ['status', 'POSTED']);

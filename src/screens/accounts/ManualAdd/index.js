@@ -17,7 +17,7 @@ import apis from '../../../apis/';
 
 const ManualAdd = ({navigation}) => {
   const [globalData, setGlobalData] = useContext(GlobalContext);
-  const {user, session} = globalData;
+  const {user} = globalData;
   const [amountOwed, setAmountOwed] = useState('');
   const [acctName, setAcctName] = useState('');
   const [acctNum, setAcctNum] = useState('');
@@ -28,8 +28,6 @@ const ManualAdd = ({navigation}) => {
 
   const [fn, setFn] = useState(user.given_name);
   const [ln, setLn] = useState(user.family_name);
-  const jwt = session.accessToken.jwtToken;
-
   const [fnValid, setFnValid] = useState(true);
   const [lnValid, setLnValid] = useState(true);
   const [acctNumValid, setAcctNumValid] = useState(true);
@@ -42,6 +40,7 @@ const ManualAdd = ({navigation}) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const toUSD = value => currency(value, {symbol: '$', precision: 2}).format();
+
   const postBody = {
     debtType: 'UNSECURED',
     originalCreditorName: acctName,
@@ -53,10 +52,6 @@ const ManualAdd = ({navigation}) => {
     currentCreditorAccountNumber: null,
   };
 
-  const val = currency('$20920.23');
-  console.log(val.value, toUSD(1234.56));
-  console.log(user.birthdate);
-
   const validateForm = () => {
     return (
       fn !== '' &&
@@ -67,6 +62,27 @@ const ManualAdd = ({navigation}) => {
       ssn !== '' &&
       date !== ''
     );
+  };
+
+  const switchScreen = () => {
+    navigation.reset({
+      index: 0,
+      routes: [{name: 'Accounts', params: 'fromImportLoading'}],
+    });
+  };
+
+  const getAccounts = async () => {
+    const accts = await apis.getAccounts();
+    setGlobalData({
+      ...globalData,
+      accounts: accts.data.with,
+      ceaseAndDesist: false,
+    });
+    if (accts) {
+      console.log(accts, 'accts');
+      switchScreen();
+    }
+    setIsLoading(false);
   };
 
   const handleComplete = async () => {
@@ -82,8 +98,9 @@ const ManualAdd = ({navigation}) => {
       console.log(err);
     }
     try {
-      const added = await apis.addAccount(postBody, jwt);
+      const added = await apis.addAccount(postBody);
       if (added) {
+        console.log(added, 'added');
         getAccounts();
       }
     } catch (err) {
@@ -95,32 +112,13 @@ const ManualAdd = ({navigation}) => {
     }
   };
 
-  const switchScreen = () => {
-    navigation.reset({
-      index: 0,
-      routes: [{name: 'Accounts', params: 'fromImportLoading'}],
-    });
-  };
-
-  const getAccounts = async () => {
-    const accts = await apis.getAccounts(jwt);
-    setGlobalData({
-      ...globalData,
-      accounts: accts.data.with,
-      ceaseAndDesist: false,
-    });
-    if (accts) {
-      switchScreen();
-    }
-    setIsLoading(false);
-  };
-
   return (
     <>
       <SafeAreaView style={styles.container}>
         <ScreenHeader title={'Manually Add Accounts'} navigation={navigation} />
         <KeyboardAwareScrollView
-          // contentInsetAdjustmentBehavior="automatic"
+          keyboardOpeningTime={Number.MAX_SAFE_INTEGER}
+          contentInsetAdjustmentBehavior="automatic"
           contentContainerStyle={{
             flexGrow: 1,
           }}>

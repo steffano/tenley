@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useContext} from 'react';
 import {
   SafeAreaView,
   Text,
@@ -16,15 +16,25 @@ import {colors, Spacing} from '../../../utilities/styles';
 import {RFValue, RFPercentage} from 'react-native-responsive-fontsize';
 
 const NotificationSettings = ({navigation}) => {
-  const [newMessage, setNewMessage] = useState(false);
-  const [upcomingPayment, setUpcomingPayment] = useState(false);
-  const [paymentComplete, setPaymentComplete] = useState(false);
-  const [paidInFull, setPaidInFull] = useState(false);
-  const [bucksEarned, setBucksEarned] = useState(false);
-  const [newOffer, setNewOffer] = useState(false);
-  const [offerAccepted, setOfferAccepted] = useState(false);
+  const [globalData, setGlobalData] = useContext(GlobalContext);
+  const {notifications} = globalData;
 
-  const [allowNotifications, setAllowNotifications] = useState(false);
+  const [newMessage, setNewMessage] = useState(notifications.newMessage);
+  const [upcomingPayment, setUpcomingPayment] = useState(
+    notifications.upcomingPayment,
+  );
+  const [paymentComplete, setPaymentComplete] = useState(
+    notifications.paymentComplete,
+  );
+  const [paidInFull, setPaidInFull] = useState(notifications.paidInFull);
+  const [bucksEarned, setBucksEarned] = useState(notifications.bucksEarned);
+  const [newOffer, setNewOffer] = useState(notifications.newOffer);
+  const [offerAccepted, setOfferAccepted] = useState(
+    notifications.offerAccepted,
+  );
+  const [allowNotifications, setAllowNotifications] = useState(
+    notifications.allowNotifications,
+  );
 
   const toggleAll = () => {
     setAllowNotifications(!allowNotifications);
@@ -37,10 +47,35 @@ const NotificationSettings = ({navigation}) => {
     setOfferAccepted(!allowNotifications);
   };
 
+  console.log(globalData, 'user');
+
+  const updateSettings = () => {
+    setGlobalData({
+      ...globalData,
+      notifications: {
+        allowNotifications,
+        newMessage,
+        upcomingPayment,
+        paymentComplete,
+        paidInFull,
+        bucksEarned,
+        newOffer,
+        offerAccepted,
+      },
+    });
+  };
+
   return (
     <>
       <SafeAreaView style={styles.container}>
-        <ScreenHeader title={'Notification Settings'} navigation={navigation} />
+        <ScreenHeader
+          title={'Notification Settings'}
+          navigation={navigation}
+          onPress={() => {
+            navigation.goBack();
+            updateSettings();
+          }}
+        />
         <View style={{paddingHorizontal: 15, paddingVertical: 20}}>
           <View style={styles.row}>
             <Text style={styles.rowText}>Allow Notifications</Text>
@@ -57,7 +92,9 @@ const NotificationSettings = ({navigation}) => {
             <Text style={styles.rowText}>New message</Text>
             <Switch
               value={newMessage}
-              onChange={() => setNewMessage(!newMessage)}
+              onChange={() => {
+                setNewMessage(!newMessage);
+              }}
             />
           </View>
           <View style={styles.row}>

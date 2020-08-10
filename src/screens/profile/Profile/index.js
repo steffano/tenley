@@ -51,22 +51,29 @@ const Profile = ({navigation}) => {
               <Image source={require('../../../assets/icons/carat.png')} />
             </View>
           </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => navigation.navigate('Ask Tenley')}>
-            <View style={styles.row}>
-              <View style={styles.row}>
-                <Text style={styles.buttonText}>Ask Tenley</Text>
-              </View>
-              <Image source={require('../../../assets/icons/carat.png')} />
-            </View>
-          </TouchableOpacity>
+
           <TouchableOpacity
             style={styles.button}
             onPress={() => navigation.navigate('Change Password')}>
             <View style={styles.row}>
               <View style={styles.row}>
                 <Text style={styles.buttonText}>Change Password</Text>
+              </View>
+              <Image source={require('../../../assets/icons/carat.png')} />
+            </View>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => navigation.navigate('Ask Tenley')}>
+            <View style={styles.row}>
+              <View style={styles.row}>
+                <Image
+                  source={require('../../../assets/icons/help-bubble.png')}
+                  resizeMode="contain"
+                  style={styles.helpIcon}
+                />
+                <Text style={styles.buttonText}>Ask Tenley</Text>
               </View>
               <Image source={require('../../../assets/icons/carat.png')} />
             </View>
@@ -117,5 +124,11 @@ const styles = StyleSheet.create({
     letterSpacing: 0.8,
     alignSelf: 'center',
     textAlign: 'center',
+  },
+  helpIcon: {
+    width: RFValue(30),
+    height: RFValue(30),
+    alignSelf: 'center',
+    marginRight: RFValue(10),
   },
 });

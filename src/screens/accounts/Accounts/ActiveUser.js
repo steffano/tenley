@@ -312,7 +312,11 @@ const ActiveUser = ({navigation, route, accounts}) => {
         onBackdropPress={() => setShowSelectAccount(false)}
         backdropColor={colors.transparentGreen}
         isVisible={showSelectAccount}>
-        <SelectAccount onClose={() => setShowSelectAccount(false)} />
+        <SelectAccount
+          onClose={() => setShowSelectAccount(false)}
+          accounts={accounts}
+          navigation={navigation}
+        />
       </Modal>
       <Modal
         isVisible={showCeaseDesist}

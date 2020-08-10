@@ -8,10 +8,14 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import {Button} from '../Button';
+import {AccountButton} from '../AccountButton';
 import {colors, Spacing, Typography} from '../../utilities/styles';
 import {RFValue} from 'react-native-responsive-fontsize';
+import currency from 'currency.js';
 
-const SelectAccount = ({onClose, navigation}) => {
+const SelectAccount = ({onClose, navigation, accounts}) => {
+  const USD = value => currency(value, {symbol: '$', precision: 0}).format();
+
   return (
     <SafeAreaView style={styles.modalWrap}>
       <View
@@ -40,8 +44,24 @@ const SelectAccount = ({onClose, navigation}) => {
           To begin payments or a settlement negotiation, select an account to
           view.
         </Text>
-        <Button title="Citibank 1234" />
-        <Button title="Citibank 1234" />
+        {accounts.slice(0, 2).map((account, key) => {
+          return (
+            account && (
+              <AccountButton
+                key={key}
+                account={account}
+                navigation={navigation}
+                accountName={account.originalCreditorName}
+                lastFour={account.originalCreditorAccountNumber.slice(-4)}
+                balance={USD(account.amountOwed)}
+                onPress={() => {
+                  onClose();
+                  navigation.navigate('Account Details', {account});
+                }}
+              />
+            )
+          );
+        })}
       </View>
     </SafeAreaView>
   );
