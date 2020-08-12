@@ -18,41 +18,13 @@ import filter from 'lodash/filter';
 import last from 'lodash/last';
 
 const PaymentDetails = ({route, navigation}) => {
-  const {account, payment, index} = route.params;
+  const {account, payment, index, type} = route.params;
 
   const settlements = account.settlements;
   const currentSettlement = settlements[0];
   console.log(index);
 
   const toUSD = value => currency(value, {symbol: '$', precision: 2}).format();
-
-  const getWholePercent = (percentFor, percentOf) => {
-    return Math.floor((percentFor / percentOf) * 100);
-  };
-
-  const balance = currency(account.amountOwed).value;
-  const originalBalance = currency(account.originalAmountOwed).value;
-
-  const settlementBalance = 0;
-
-  const paid = originalBalance - balance;
-  const settled = 0;
-
-  const percentPaid = getWholePercent(paid, originalBalance);
-  const percentSaved = getWholePercent(settled, originalBalance);
-
-  const progressPercentages = [
-    // {
-    //   label: 'settlement',
-    //   percentage: percentSaved + '%',
-    //   color: colors.mediumGreen,
-    // },
-    {
-      label: 'payments',
-      percentage: percentPaid + '%',
-      color: colors.tenleyGreen,
-    },
-  ];
 
   const upcomingPayments = filter(account.payments, ['status', 'SCHEDULED']);
   const nextPayment = upcomingPayments[0];
@@ -128,19 +100,32 @@ const PaymentDetails = ({route, navigation}) => {
         </ScrollView>
 
         {account.payments.length > 0 && (
-          <View style={{flexDirection: 'row'}}>
-            <View style={Spacing.bottomButtonsContainer}>
-              <Button
-                title="Pay Now"
-                onPress={() => navigation.navigate('PaymentSetup', {account})}
-              />
-            </View>
-            {payment.status === 'SCHEDULED' && (
+          <>
+            <View style={{flexDirection: 'row'}}>
               <View style={Spacing.bottomButtonsContainer}>
-                <Button secondary title="Edit Details" />
+                <Button
+                  title="Pay Now"
+                  onPress={() =>
+                    type === 'past'
+                      ? navigation.navigate('PaymentSetup', {account})
+                      : null
+                  }
+                />
               </View>
+              {payment.status === 'SCHEDULED' && (
+                <View style={Spacing.bottomButtonsContainer}>
+                  <Button secondary title="Edit Details" />
+                </View>
+              )}
+            </View>
+            {type === 'upcoming' && (
+              <Button
+                textOnly
+                title="Cancel Payment"
+                style={{marginTop: -10}}
+              />
             )}
-          </View>
+          </>
         )}
       </SafeAreaView>
     </>

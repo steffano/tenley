@@ -6,6 +6,7 @@ import {getScreenOptions} from '../../../utilities/styles';
 import PaymentSetup from '../../payments/PaymentSetup';
 import PaymentDetails from '../PaymentDetails';
 import PaymentActivity from '../PaymentActivity';
+import AskTenley from '../../profile/AskTenley';
 
 const ActivityStack = createStackNavigator();
 
@@ -38,6 +39,7 @@ export function ActivityStackScreen() {
         component={PaymentDetails}
       />
       {renderScreen('Payment Setup', PaymentSetup)}
+      {renderScreen('AskTenley', AskTenley)}
     </ActivityStack.Navigator>
   );
 }

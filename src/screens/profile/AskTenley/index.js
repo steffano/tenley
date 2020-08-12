@@ -14,11 +14,21 @@ import {Header} from '../../../components/Header';
 import {ScreenHeader} from '../../../components/ScreenHeader';
 import {colors, Spacing} from '../../../utilities/styles';
 import {RFValue, RFPercentage} from 'react-native-responsive-fontsize';
+import {TextInput} from '../../../components/Form';
+import {useFocusEffect} from '@react-navigation/native';
 
 const AskTenley = ({navigation}) => {
   const [expandQ1, setExpandQ1] = useState(false);
   const [expandQ2, setExpandQ2] = useState(false);
   const [expandQ3, setExpandQ3] = useState(false);
+
+  const [searchQuery, setSearchQuery] = useState('');
+
+  useFocusEffect(
+    React.useCallback(() => {
+      return () => setSearchQuery('');
+    }, []),
+  );
 
   return (
     <>
@@ -52,17 +62,13 @@ const AskTenley = ({navigation}) => {
           </View>
           <View style={{height: 2, backgroundColor: colors.tenleyGreen}} />
           <View style={{paddingHorizontal: 15, paddingVertical: 20}}>
-            <View style={styles.button}>
-              <Text
-                style={{
-                  color: colors.mediumGray,
-                  fontFamily: 'Poppins-Regular',
-                  fontSize: RFValue(13),
-                  letterSpacing: 1.25,
-                }}>
-                What are you looking for?
-              </Text>
-            </View>
+            <TextInput
+              label="What are you looking for?"
+              keyboardType="numeric"
+              onChangeText={text => setSearchQuery(text)}
+              value={searchQuery}
+              highlightOnFocus
+            />
           </View>
           <View
             style={{borderBottomColor: colors.lightGray, borderBottomWidth: 1}}

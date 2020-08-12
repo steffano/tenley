@@ -9,6 +9,7 @@ import {
   Button,
   Switch,
 } from 'react-native';
+import get from 'lodash/get';
 import {GlobalContext} from '../../../GlobalContext';
 import {Header} from '../../../components/Header';
 import {ScreenHeader} from '../../../components/ScreenHeader';
@@ -19,21 +20,29 @@ const NotificationSettings = ({navigation}) => {
   const [globalData, setGlobalData] = useContext(GlobalContext);
   const {notifications} = globalData;
 
-  const [newMessage, setNewMessage] = useState(notifications.newMessage);
+  const [newMessage, setNewMessage] = useState(
+    get(notifications, 'newMessage', true),
+  );
   const [upcomingPayment, setUpcomingPayment] = useState(
-    notifications.upcomingPayment,
+    get(notifications, 'upcomingPayment', true),
   );
   const [paymentComplete, setPaymentComplete] = useState(
-    notifications.paymentComplete,
+    get(notifications, 'paymentComplete', true),
   );
-  const [paidInFull, setPaidInFull] = useState(notifications.paidInFull);
-  const [bucksEarned, setBucksEarned] = useState(notifications.bucksEarned);
-  const [newOffer, setNewOffer] = useState(notifications.newOffer);
+  const [paidInFull, setPaidInFull] = useState(
+    get(notifications, 'paidInFull', true),
+  );
+  const [bucksEarned, setBucksEarned] = useState(
+    get(notifications, 'bucksEarned', true),
+  );
+  const [newOffer, setNewOffer] = useState(
+    get(notifications, 'newOffer', true),
+  );
   const [offerAccepted, setOfferAccepted] = useState(
-    notifications.offerAccepted,
+    get(notifications, 'offerAccepted', true),
   );
   const [allowNotifications, setAllowNotifications] = useState(
-    notifications.allowNotifications,
+    get(notifications, 'allowNotifications', true),
   );
 
   const toggleAll = () => {

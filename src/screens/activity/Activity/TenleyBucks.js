@@ -115,18 +115,20 @@ const TenleyBucks = ({navigation}) => {
             </Text>
           </TouchableOpacity>
 
-          <TouchableOpacity
-            style={styles.bucksButton}
-            onPress={() => setShowPaymentPlanModal(true)}>
-            <Image
-              source={require('../../../assets/badges/tenley-icons-pay_setup.png')}
-              resizeMode="contain"
-              style={styles.iconBadge}
-            />
-            <Text style={styles.buttonText}>
-              Set up a payment plan for 15 Bucks
-            </Text>
-          </TouchableOpacity>
+          {accountsWithoutPayments.length > 0 && (
+            <TouchableOpacity
+              style={styles.bucksButton}
+              onPress={() => setShowPaymentPlanModal(true)}>
+              <Image
+                source={require('../../../assets/badges/tenley-icons-pay_setup.png')}
+                resizeMode="contain"
+                style={styles.iconBadge}
+              />
+              <Text style={styles.buttonText}>
+                Set up a payment plan for 15 Bucks
+              </Text>
+            </TouchableOpacity>
+          )}
 
           <TouchableOpacity
             style={styles.bucksButton}
@@ -300,6 +302,13 @@ const TenleyBucks = ({navigation}) => {
                 )
               );
             })}
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate('Accounts');
+                setShowPaymentPlanModal(false);
+              }}>
+              <Text style={styles.greenLink}>View all accounts</Text>
+            </TouchableOpacity>
           </View>
         </Modal>
       </SafeAreaView>
@@ -407,5 +416,14 @@ const styles = StyleSheet.create({
   },
   checkmark: {
     margin: 6,
+  },
+  greenLink: {
+    color: colors.mediumGreen,
+    fontFamily: 'Poppins-Medium',
+    letterSpacing: 1.25,
+    textDecorationLine: 'underline',
+    fontSize: RFValue(10),
+    textAlign: 'center',
+    marginVertical: RFValue(10),
   },
 });

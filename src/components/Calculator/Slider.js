@@ -36,9 +36,11 @@ export default ({min, max, title, total, isCurrency, onSlide, onType}) => {
       setShowCalcValue(false);
     } else if (calcValue === '') {
       setShowCalcValue(false);
-    } else {
+    } else if (val < min) {
       setShowCalcValue(false);
       setShowModal(true);
+    } else {
+      setShowCalcValue(false);
     }
   };
 

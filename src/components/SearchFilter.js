@@ -13,7 +13,7 @@ import {RFPercentage, RFValue} from 'react-native-responsive-fontsize';
 import PropTypes from 'prop-types';
 import {white} from '../utilities/colors';
 
-export const SearchFilter = ({searchOnly}) => {
+export const SearchFilter = ({searchOnly, searchQuery, setSearchQuery}) => {
   return (
     <View style={styles.row}>
       <View style={[styles.searchBox, {width: searchOnly ? '100%' : '85%'}]}>
@@ -29,6 +29,8 @@ export const SearchFilter = ({searchOnly}) => {
             selectionColor={colors.tenleyGreen}
             returnKeyType="done"
             style={styles.text}
+            onChangeText={setSearchQuery ? text => setSearchQuery(text) : null}
+            value={searchQuery ? searchQuery : null}
           />
         </View>
       </View>

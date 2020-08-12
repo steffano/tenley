@@ -75,6 +75,7 @@ const PaymentActivity = ({navigation, route}) => {
                           account,
                           payment,
                           index,
+                          type: 'upcoming',
                         })
                       }
                     />
@@ -100,6 +101,7 @@ const PaymentActivity = ({navigation, route}) => {
                         navigation.navigate('Payment Details', {
                           account,
                           payment,
+                          type: 'past',
                         })
                       }
                     />
@@ -114,15 +116,17 @@ const PaymentActivity = ({navigation, route}) => {
             </View>
           )}
         </ScrollView>
-        <View
-          style={{
-            padding: RFValue(15),
-            justifyContent: 'flex-end',
-            borderTopColor: colors.lightGray,
-            borderTopWidth: 1,
-          }}>
-          <Button title="Make a One Time Payment" />
-        </View>
+        {upcomingPayments.length === 0 && (
+          <View
+            style={{
+              padding: RFValue(15),
+              justifyContent: 'flex-end',
+              borderTopColor: colors.lightGray,
+              borderTopWidth: 1,
+            }}>
+            <Button title="Make a One Time Payment" />
+          </View>
+        )}
       </SafeAreaView>
     </>
   );

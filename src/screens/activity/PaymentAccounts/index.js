@@ -101,9 +101,11 @@ const PaymentAccounts = ({navigation}) => {
             />
           </View>
         )}
+        <View style={{height: RFValue(70)}} />
       </ScrollView>
       <TouchableOpacity
-        onPress={() => navigation.navigate('Profile', {screen: 'Ask Tenley'})}>
+        onPress={() => navigation.navigate('AskTenley')}
+        style={styles.helpIconWrapper}>
         <Image
           source={require('../../../assets/icons/help-bubble.png')}
           resizeMode="contain"
@@ -148,6 +150,13 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     alignSelf: 'flex-start',
     paddingVertical: 15,
+  },
+  helpIconWrapper: {
+    position: 'absolute',
+    alignItems: 'center',
+    justifyContent: 'center',
+    right: RFValue(0),
+    bottom: RFValue(0),
   },
   helpIcon: {
     width: RFValue(50),

@@ -86,30 +86,36 @@ const ManualAdd = ({navigation}) => {
   };
 
   const handleComplete = async () => {
-    const u = await Auth.currentAuthenticatedUser();
-    try {
-      setIsLoading(true);
-      await Auth.updateUserAttributes(u, {
-        'custom:ssn': unmask(ssn),
-        birthdate: date,
-      });
-    } catch (err) {
-      setIsLoading(false);
-      console.log(err);
-    }
-    try {
-      const added = await apis.addAccount(postBody);
-      if (added) {
-        console.log(added, 'added');
-        getAccounts();
+    if (checkAmount()) {
+      const u = await Auth.currentAuthenticatedUser();
+      try {
+        setIsLoading(true);
+        await Auth.updateUserAttributes(u, {
+          'custom:ssn': unmask(ssn),
+          birthdate: date,
+        });
+      } catch (err) {
+        setIsLoading(false);
+        console.log(err);
       }
-    } catch (err) {
-      setIsLoading(false);
-      console.log(err.message);
-      setError(
-        'An error occurred, please check your information and try again',
-      );
+      try {
+        const added = await apis.addAccount(postBody);
+        if (added) {
+          console.log(added, 'added');
+          getAccounts();
+        }
+      } catch (err) {
+        setIsLoading(false);
+        console.log(err.message);
+        setError(
+          'An error occurred, please check your information and try again',
+        );
+      }
     }
+  };
+  const checkAmount = () => {
+    setAmountValid(fn < 1000000);
+    return amountOwed < 1000000;
   };
 
   return (
@@ -211,6 +217,7 @@ const ManualAdd = ({navigation}) => {
               value={acctNum}
               highlightOnFocus
               invalid={!acctNumValid}
+              maxLength={16}
             />
             <TextInput
               onSubmitEditing={() => setAmountOwed(toUSD(amountOwed))}
@@ -222,6 +229,7 @@ const ManualAdd = ({navigation}) => {
               value={amountOwed}
               highlightOnFocus
               invalid={!amountValid}
+              message={'Please enter an amount below 1,000,000'}
             />
           </Form>
           <View style={Spacing.bottomButtonsContainer}>

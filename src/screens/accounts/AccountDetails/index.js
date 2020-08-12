@@ -18,6 +18,7 @@ import currency from 'currency.js';
 import moment from 'moment';
 import filter from 'lodash/filter';
 import last from 'lodash/last';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 
 const AccountDetails = ({route, navigation}) => {
   const {account, index} = route.params;
@@ -215,15 +216,26 @@ const AccountDetails = ({route, navigation}) => {
             </>
           )}
         </ScrollView>
-
-        {upcomingPayments.length === 0 && account.payments.length > 0 && (
-          <View style={Spacing.bottomButtonsContainer}>
+        <View style={Spacing.bottomButtonsContainer}>
+          {upcomingPayments.length === 0 && account.payments.length > 0 && (
             <Button
               title="Make a Payment"
               onPress={() => navigation.navigate('PaymentSetup', {account})}
             />
-          </View>
-        )}
+          )}
+          {account.payments.length > 0 && (
+            <Button
+              textOnly
+              title="See all activity"
+              onPress={() =>
+                navigation.navigate('Activity', {
+                  params: {account},
+                  screen: 'Payment Activity',
+                })
+              }
+            />
+          )}
+        </View>
       </SafeAreaView>
     </>
   );

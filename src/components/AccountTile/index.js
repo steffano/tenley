@@ -82,7 +82,14 @@ const AccountTile = ({navigation, account, hideButton, progressOnly}) => {
 
   return (
     <>
-      <View style={containerStyle}>
+      <TouchableOpacity
+        activeOpacity={progressOnly ? 100 : null}
+        onPress={
+          progressOnly
+            ? null
+            : () => navigation.navigate('Account Details', {account})
+        }
+        style={containerStyle}>
         <View style={styles.detailWrap}>
           {!progressOnly && (
             <>
@@ -111,17 +118,14 @@ const AccountTile = ({navigation, account, hideButton, progressOnly}) => {
                 </View>
 
                 <View>
-                  <TouchableOpacity
-                    onPress={() =>
-                      navigation.navigate('Account Details', {account})
-                    }>
+                  <View>
                     {payments.length <= 0 && (
                       <Text style={styles.linkText}>
                         {'\n'}
                         VIEW >
                       </Text>
                     )}
-                  </TouchableOpacity>
+                  </View>
                 </View>
               </View>
             </>
@@ -238,12 +242,9 @@ const AccountTile = ({navigation, account, hideButton, progressOnly}) => {
                 )}
 
                 {!progressOnly && (
-                  <TouchableOpacity
-                    onPress={() =>
-                      navigation.navigate('Account Details', {account})
-                    }>
+                  <View>
                     <Text style={styles.linkText}>VIEW ></Text>
-                  </TouchableOpacity>
+                  </View>
                 )}
               </View>
             </View>
@@ -274,7 +275,7 @@ const AccountTile = ({navigation, account, hideButton, progressOnly}) => {
             </TouchableOpacity>
           </View>
         )} */}
-      </View>
+      </TouchableOpacity>
     </>
   );
 };

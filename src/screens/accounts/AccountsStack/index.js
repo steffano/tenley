@@ -8,6 +8,8 @@ import ManualAdd from '../ManualAdd';
 import ImportLoading from '../Accounts/ImportLoading';
 import Verification from '../AutoAdd/Verification';
 import Negotiation from '../Negotiation';
+import AskTenley from '../../profile/AskTenley';
+import PaymentActivity from '../../activity/PaymentActivity';
 import {
   BankLogin,
   BankSetup,
@@ -104,6 +106,9 @@ export function AccountsStackScreen() {
 
         SchedulePayment,
       )}
+
+      {renderScreen('AskTenley', AskTenley)}
+      {renderScreen('PaymentActivity', PaymentActivity)}
     </AccountsStack.Navigator>
   );
 }

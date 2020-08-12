@@ -22,7 +22,7 @@ export const ScreenHeader = ({navigation, title, onPress}) => {
         <View style={{flex: 1}}>
           <TouchableOpacity
             style={{paddingVertical: RFValue(10)}}
-            onPress={onPress ? onPress : () => navigation.goBack()}>
+            onPress={() => navigation.goBack()}>
             <Image
               source={require('../assets/icons/back-arrow.png')}
               style={{marginLeft: 20}}

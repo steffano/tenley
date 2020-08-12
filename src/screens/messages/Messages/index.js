@@ -1,4 +1,4 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext, useState, useEffect} from 'react';
 import {
   SafeAreaView,
   Text,
@@ -14,16 +14,19 @@ import {Header} from '../../../components/Header';
 import {colors, Spacing} from '../../../utilities/styles';
 import {SearchFilter} from '../../../components/SearchFilter';
 import {RFValue} from 'react-native-responsive-fontsize';
+import {useFocusEffect} from '@react-navigation/native';
 
 const Message = ({navigation}) => {
   const [globalData, setGlobalData] = useContext(GlobalContext);
-
   const [section, setSection] = useState('Messages');
-
-  const [showNotification, setShowNotification] = useState(true);
-
+  const [searchQuery, setSearchQuery] = useState('');
   const {accounts} = globalData;
-  console.log('msg', accounts);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      return () => setSearchQuery('');
+    }, []),
+  );
 
   return (
     <>
@@ -64,26 +67,37 @@ const Message = ({navigation}) => {
         </View>
         <View style={[styles.container, {justifyContent: 'flex-start'}]}>
           <ScrollView>
-            <SearchFilter />
-            <View style={{marginHorizontal: 15}}>
-              {accounts.map((account, key) => {
-                return (
-                  account && (
-                    <AccountButton
-                      notification={key === 0}
-                      key={key}
-                      accountName={account.originalCreditorName}
-                      lastFour={account.originalCreditorAccountNumber.slice(-4)}
-                      onPress={() =>
-                        navigation.navigate('Inbox', {
-                          account,
-                        })
-                      }
-                    />
-                  )
-                );
-              })}
-            </View>
+            <SearchFilter
+              searchQuery={searchQuery}
+              setSearchQuery={setSearchQuery}
+            />
+            {accounts.length === 0 ? (
+              <Text style={[styles.sectionTitle, {alignSelf: 'center'}]}>
+                There are no messages to display
+              </Text>
+            ) : (
+              <View style={{marginHorizontal: 15}}>
+                {accounts.map((account, key) => {
+                  return (
+                    account && (
+                      <AccountButton
+                        notification={key === 0}
+                        key={key}
+                        accountName={account.originalCreditorName}
+                        lastFour={account.originalCreditorAccountNumber.slice(
+                          -4,
+                        )}
+                        onPress={() =>
+                          navigation.navigate('Inbox', {
+                            account,
+                          })
+                        }
+                      />
+                    )
+                  );
+                })}
+              </View>
+            )}
             {/* </Text> */}
           </ScrollView>
         </View>

@@ -52,11 +52,7 @@ const Negotiation = ({route, navigation}) => {
     setIsLoading(true);
     setError('');
     try {
-      const added = await apis.postSettlement(
-        settlementObj,
-        jwt,
-        account.accountID,
-      );
+      const added = await apis.postSettlement(settlementObj, account.accountID);
       if (added) {
         getAccounts();
       }

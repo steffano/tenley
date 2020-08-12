@@ -296,18 +296,17 @@ const ActiveUser = ({navigation, route, accounts}) => {
               </Text>
             </TouchableOpacity>
           </View>
-          <TouchableOpacity
-            onPress={() =>
-              navigation.navigate('Profile', {screen: 'Ask Tenley'})
-            }>
-            <Image
-              source={require('../../../assets/icons/help-bubble.png')}
-              resizeMode="contain"
-              style={styles.helpIcon}
-            />
-          </TouchableOpacity>
         </SafeAreaView>
       </ScrollView>
+      <TouchableOpacity
+        onPress={() => navigation.navigate('AskTenley')}
+        style={styles.helpIconWrapper}>
+        <Image
+          source={require('../../../assets/icons/help-bubble.png')}
+          resizeMode="contain"
+          style={styles.helpIcon}
+        />
+      </TouchableOpacity>
       <Modal
         onBackdropPress={() => setShowSelectAccount(false)}
         backdropColor={colors.transparentGreen}
@@ -506,9 +505,16 @@ const styles = StyleSheet.create({
     textDecorationLine: 'underline',
     fontSize: RFValue(10),
     textAlign: 'center',
+    marginBottom: RFValue(60),
+  },
+  helpIconWrapper: {
+    position: 'absolute',
+    alignItems: 'center',
+    justifyContent: 'center',
+    right: RFValue(0),
+    bottom: RFValue(0),
   },
   helpIcon: {
-    // position: 'absolute',
     width: RFValue(50),
     height: RFValue(50),
     alignSelf: 'flex-end',
