@@ -35,6 +35,10 @@ const TenleyBucks = ({navigation}) => {
     ? accountsWithoutSettlements.filter(({payments}) => payments.length === 0)
     : null;
 
+  const accountsWithPayments = accounts
+    ? accountsWithoutSettlements.filter(({payments}) => payments.length > 0)
+    : null;
+
   const countPayments = () => {
     let a = [];
     accounts.map(account => {
@@ -61,7 +65,7 @@ const TenleyBucks = ({navigation}) => {
                 fontFamily: 'Poppins-Bold',
                 color: colors.tenleyGreen,
               }}>
-              $100
+              {paymentsMade ? '$115' : '$100'}
             </Text>
             <Text
               style={{
@@ -115,7 +119,7 @@ const TenleyBucks = ({navigation}) => {
             </Text>
           </TouchableOpacity>
 
-          {accountsWithoutPayments.length > 0 && (
+          {paymentsMade === 0 && (
             <TouchableOpacity
               style={styles.bucksButton}
               onPress={() => setShowPaymentPlanModal(true)}>
@@ -125,7 +129,7 @@ const TenleyBucks = ({navigation}) => {
                 style={styles.iconBadge}
               />
               <Text style={styles.buttonText}>
-                Set up a payment plan for 15 Bucks
+                Make a payment today for 15 Bucks
               </Text>
             </TouchableOpacity>
           )}
@@ -233,21 +237,23 @@ const TenleyBucks = ({navigation}) => {
               }}>
               {Array(paymentsMade)
                 .fill()
-                .map(() => {
+                .map(index => {
                   return (
                     <Image
                       source={require('../../../assets/icons/done/green.png')}
                       style={styles.checkmark}
+                      key={index}
                     />
                   );
                 })}
               {Array(paymentsRemaining)
                 .fill()
-                .map(() => {
+                .map(index => {
                   return (
                     <Image
                       source={require('../../../assets/icons/done/gray.png')}
                       style={styles.checkmark}
+                      key={index}
                     />
                   );
                 })}
@@ -257,7 +263,7 @@ const TenleyBucks = ({navigation}) => {
               title="View Accounts"
               onPress={() => {
                 setShowPaymentsModal(false);
-                navigation.navigate('Accounts');
+                navigation.navigate('Accounts', {screen: 'Accounts'});
               }}
             />
           </View>
@@ -279,9 +285,11 @@ const TenleyBucks = ({navigation}) => {
             </TouchableOpacity>
 
             <Text style={styles.modalHeader}>Set Up a Payment Plan</Text>
-            <Text style={styles.modalSubheader}>
-              Select an account to begin
-            </Text>
+            {accounts.length !== 0 && (
+              <Text style={styles.modalSubheader}>
+                Select an account to begin
+              </Text>
+            )}
             <View style={{height: RFValue(10)}} />
 
             {accountsWithoutPayments.slice(0, 2).map((account, key) => {
@@ -307,7 +315,11 @@ const TenleyBucks = ({navigation}) => {
                 navigation.navigate('Accounts');
                 setShowPaymentPlanModal(false);
               }}>
-              <Text style={styles.greenLink}>View all accounts</Text>
+              <Text style={styles.greenLink}>
+                {accounts.length === 0
+                  ? 'Add your accounts to begin'
+                  : 'View all accounts'}
+              </Text>
             </TouchableOpacity>
           </View>
         </Modal>

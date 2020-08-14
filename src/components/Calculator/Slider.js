@@ -14,7 +14,7 @@ import currency from 'currency.js';
 import Modal from 'react-native-modal';
 import {Button} from '../Button';
 
-export default ({min, max, title, total, isCurrency, onSlide, onType}) => {
+export default ({min, max, title, total, isCurrency, onSlide, isPayment}) => {
   const [calcValue, setCalcValue] = useState(
     total.toLocaleString(navigator.language, {
       maximumFractionDigits: 0,
@@ -27,8 +27,6 @@ export default ({min, max, title, total, isCurrency, onSlide, onType}) => {
   // const max = 15700;
   // const title = 'Total Debt Balance';
 
-  // console.log(total, calcValue, 'total#######');
-
   const handleDone = () => {
     const val = currency(calcValue).value;
     if (val <= max && val >= min) {
@@ -36,9 +34,11 @@ export default ({min, max, title, total, isCurrency, onSlide, onType}) => {
       setShowCalcValue(false);
     } else if (calcValue === '') {
       setShowCalcValue(false);
-    } else if (val < min) {
+    } else if (val < min && !isPayment) {
       setShowCalcValue(false);
       setShowModal(true);
+    } else if (val < min && isPayment) {
+      setShowCalcValue(false);
     } else {
       setShowCalcValue(false);
     }
@@ -99,7 +99,7 @@ export default ({min, max, title, total, isCurrency, onSlide, onType}) => {
           maximumTrackTintColor={colors.lightGray}
           value={total}
           onValueChange={onSlide}
-          step={isCurrency ? sliderStep : null}
+          step={isCurrency ? sliderStep : 1}
           thumbStyle={styles.thumb}
           trackStyle={styles.track}
         />

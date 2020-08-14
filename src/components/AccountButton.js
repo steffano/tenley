@@ -27,7 +27,7 @@ export const AccountButton = ({
             styles.row,
             {paddingHorizontal: 0, justifyContent: 'center'},
           ]}>
-          <Text style={[styles.text, {maxWidth: RFValue(200)}]}>
+          <Text style={[styles.text, {maxWidth: RFValue(170)}]}>
             {accountName}
             {' \u2022 '}
             {lastFour}

@@ -131,7 +131,7 @@ const SchedulePayment = ({navigation, route}) => {
     // },
   ];
 
-  const [frequency, setFrequency] = useState('');
+  const [frequency, setFrequency] = useState('monthlyByDate');
 
   const {paymentType, account, paymentAmount, months} = route.params;
 

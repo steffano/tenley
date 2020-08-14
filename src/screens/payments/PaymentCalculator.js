@@ -26,9 +26,13 @@ const PaymentCalculator = ({navigation, route}) => {
   const user = globalData.user;
 
   const accountTotal = currency(account.amountOwed).value;
-  const [payment, setPayment] = useState(accountTotal * 0.6);
-  const [months, setMonths] = useState(Math.ceil(accountTotal / payment));
 
+  const [months, setMonths] = useState(12);
+  const [payment, setPayment] = useState(
+    paymentType === 'recurring'
+      ? Math.ceil(accountTotal / months)
+      : accountTotal,
+  );
   const [withdrawalAccount, setWithdrawalAccount] = useState(
     user['custom:demo_bankAcct'] || null,
   );
@@ -52,6 +56,7 @@ const PaymentCalculator = ({navigation, route}) => {
     },
   ];
 
+  console.log(accountTotal, months, payment);
   return (
     <>
       <SafeAreaView style={styles.container}>
@@ -88,6 +93,7 @@ const PaymentCalculator = ({navigation, route}) => {
                 total={payment}
                 onSlide={val => setPayment(val)}
                 title={'Payment Amount'}
+                isPayment={true}
               />
             ) : (
               <>
@@ -99,6 +105,7 @@ const PaymentCalculator = ({navigation, route}) => {
                     onSlide={updatePayment}
                     isCurrency
                     title={'Payment Amount'}
+                    isPayment={true}
                   />
                   <View style={{height: RFValue(30)}} />
 
@@ -108,6 +115,7 @@ const PaymentCalculator = ({navigation, route}) => {
                     total={months}
                     onSlide={updateMonths}
                     title={'Payments to Payoff'}
+                    isPayment={true}
                   />
                 </View>
               </>
@@ -227,21 +235,67 @@ const PaymentCalculator = ({navigation, route}) => {
         </View>
         <View
           style={[Spacing.bottomButtonsContainer, {maxHeight: RFValue(100)}]}>
-          <Button
-            title={
-              paymentType === 'recurring'
-                ? 'Next Step: Select Dates'
-                : 'Next Step: Select Date'
-            }
-            onPress={() =>
-              navigation.navigate('SchedulePayment', {
-                account,
-                paymentType,
-                paymentAmount: payment,
-                months: paymentType === 'recurring' ? months : null,
-              })
-            }
-          />
+          {paymentType === 'recurring' ? (
+            <Button
+              title={
+                paymentType === 'recurring'
+                  ? 'Next Step: Select Dates'
+                  : 'Select Date'
+              }
+              onPress={() =>
+                navigation.navigate('SchedulePayment', {
+                  account,
+                  paymentType,
+                  paymentAmount: payment,
+                  months: paymentType === 'recurring' ? months : null,
+                })
+              }
+            />
+          ) : (
+            <>
+              {!withdrawalAccount ? (
+                <Button
+                  title="Pay Now"
+                  onPress={() =>
+                    navigation.navigate('BankSetup', {
+                      account,
+                      paymentType,
+                      paymentAmount: payment,
+                      months: paymentType === 'recurring' ? months : null,
+                      frequency: 'oneTime',
+                    })
+                  }
+                />
+              ) : (
+                <Button
+                  title="Pay Now"
+                  onPress={() =>
+                    navigation.navigate('PaymentConfirmation', {
+                      account,
+                      paymentType,
+                      paymentAmount: payment,
+                      months: paymentType === 'recurring' ? months : null,
+                      frequency: 'oneTime',
+                    })
+                  }
+                />
+              )}
+            </>
+          )}
+          {paymentType === 'oneTime' && (
+            <Button
+              textOnly
+              title={'Select a date'}
+              onPress={() =>
+                navigation.navigate('SchedulePayment', {
+                  account,
+                  paymentType,
+                  paymentAmount: payment,
+                  months: paymentType === 'recurring' ? months : null,
+                })
+              }
+            />
+          )}
         </View>
       </SafeAreaView>
     </>

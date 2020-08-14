@@ -4,7 +4,7 @@ import {Button} from '../Button';
 import {colors, Spacing, Typography} from '../../utilities/styles';
 import {RFPercentage, RFValue} from 'react-native-responsive-fontsize';
 
-const CeaseAndDesist = ({onAccept, onDecline}) => {
+const CeaseAndDesist = ({onAccept, onDecline, accounts}) => {
   return (
     <SafeAreaView style={styles.modalWrap}>
       <View style={{padding: 15, marginTop: 20}}>
@@ -12,8 +12,12 @@ const CeaseAndDesist = ({onAccept, onDecline}) => {
           Congrats! You’re on your{'\n'}way to debt freedom.
         </Text>
         <Text style={styles.bodyText}>
-          We see you have 2 debts that are in negative standing. Tenley can stop
-          these creditors from harassing you by:{'\n'}
+          {accounts.length > 1
+            ? `We see you have ${
+                accounts.length
+              } debts that are in negative standing. `
+            : 'We see you have 1 debt that is in negative standing. '}
+          Tenley can stop these creditors from harassing you by:{'\n'}
         </Text>
 
         <View

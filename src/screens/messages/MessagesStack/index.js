@@ -25,6 +25,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import Message from '../Messages';
 import Inbox from '../Inbox';
 import MessageDetails from '../MessageDetails';
+import AskTenley from '../../profile/AskTenley';
 import {getScreenOptions} from '../../../utilities/styles';
 import AccountsStack from '../../accounts/AccountsStack';
 
@@ -50,6 +51,12 @@ export function MessageStackScreen() {
         // options={getScreenOptions()}
         name="Details"
         component={MessageDetails}
+      />
+      <MessagesStack.Screen
+        options={{headerShown: false}}
+        // options={getScreenOptions()}
+        name="AskTenley"
+        component={AskTenley}
       />
     </MessagesStack.Navigator>
   );

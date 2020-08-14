@@ -15,6 +15,7 @@ import {RFValue, RFPercentage} from 'react-native-responsive-fontsize';
 import currency from 'currency.js';
 import moment from 'moment';
 import filter from 'lodash/filter';
+import reject from 'lodash/reject';
 import last from 'lodash/last';
 
 const PaymentDetails = ({route, navigation}) => {
@@ -22,16 +23,17 @@ const PaymentDetails = ({route, navigation}) => {
 
   const settlements = account.settlements;
   const currentSettlement = settlements[0];
-  console.log(index);
 
   const toUSD = value => currency(value, {symbol: '$', precision: 2}).format();
 
   const upcomingPayments = filter(account.payments, ['status', 'SCHEDULED']);
+  const scheduledPayments = reject(account.payments, ['type', 'ONE-TIME'])
+    .length;
   const nextPayment = upcomingPayments[0];
   const finalPayment = last(upcomingPayments);
   const recentPayment = account.payments[0];
 
-  console.log(upcomingPayments, finalPayment);
+  console.log(upcomingPayments, scheduledPayments, finalPayment);
 
   const renderRow = (rowTitle, rowValue) => {
     return (
@@ -92,7 +94,12 @@ const PaymentDetails = ({route, navigation}) => {
               moment(payment.date).format('MMMM Do, YYYY'),
             )}
             {payment.type !== 'ONE-TIME' && (
-              <>{renderRow('Payment Timeline', payment.status)}</>
+              <>
+                {renderRow(
+                  'Payment Timeline',
+                  `${index + 1} / ${scheduledPayments} Payments`,
+                )}
+              </>
             )}
             {renderRow('Frequency', frequencyName)}
             {renderRow('Withdrawal Bank', 'CitiBank - 1111')}

@@ -140,6 +140,8 @@ const PaymentConfirmation = ({navigation, route}) => {
       ? 'Monthly'
       : frequency === 'everyNWeeks'
       ? 'Every 2 Weeks'
+      : frequency === 'weekly'
+      ? 'Weekly'
       : null;
 
   return (
@@ -185,7 +187,9 @@ const PaymentConfirmation = ({navigation, route}) => {
                 <View style={styles.rowSeparator} />
                 <View style={styles.row}>
                   <Text style={styles.rowText}>Payment Timeline</Text>
-                  <Text style={styles.rowTextBold}>{months} Months</Text>
+                  <Text style={styles.rowTextBold}>
+                    {months} {frequencyName} Payments
+                  </Text>
                 </View>
               </>
             )}

@@ -69,15 +69,6 @@ const ActiveUser = ({navigation, route, accounts}) => {
     return o.settlements.length === 0;
   });
 
-  console.log('route', route);
-  console.log('user', user);
-  console.log('accounts', accounts);
-  console.log(
-    'c&d opt in',
-    get(user, 'custom:cd_optIn'),
-    'decline',
-    get(user, 'acknowledgedCeaseAndDesist', false),
-  );
   const toUSD = value => currency(value, {symbol: '$', precision: 0}).format();
 
   const acceptCeaseAndDesist = async () => {
@@ -324,6 +315,7 @@ const ActiveUser = ({navigation, route, accounts}) => {
         <CeaseAndDesist
           onDecline={() => declineCeaseAndDesist()}
           onAccept={() => acceptCeaseAndDesist()}
+          accounts={accounts}
         />
       </Modal>
       <Modal

@@ -22,7 +22,6 @@ const PaymentAccounts = ({navigation}) => {
   const accountsWithPayments = accounts
     ? accounts.filter(({payments}) => payments.length > 0)
     : null;
-  console.log(accounts, accountsWithPayments);
 
   return (
     <>

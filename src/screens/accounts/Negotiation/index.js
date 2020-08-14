@@ -28,9 +28,9 @@ const Negotiation = ({route, navigation}) => {
   const account = route.params.account;
 
   const totalDebt = currency(account.amountOwed).value;
-  const [debtBalance, setDebtBalance] = useState(totalDebt * 0.6);
-  const [payment, setPayment] = useState(debtBalance * 0.1);
-  const [months, setMonths] = useState(Math.ceil(debtBalance / payment));
+  const [debtBalance, setDebtBalance] = useState(totalDebt);
+  const [months, setMonths] = useState(12);
+  const [payment, setPayment] = useState(Math.ceil(totalDebt / months));
 
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');

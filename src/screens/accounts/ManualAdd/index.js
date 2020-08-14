@@ -114,8 +114,8 @@ const ManualAdd = ({navigation}) => {
     }
   };
   const checkAmount = () => {
-    setAmountValid(fn < 1000000);
-    return amountOwed < 1000000;
+    setAmountValid(currency(amountOwed) < 1000000);
+    return currency(amountOwed) < 1000000;
   };
 
   return (

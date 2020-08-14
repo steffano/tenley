@@ -38,7 +38,7 @@ const Verification = ({navigation}) => {
               styles.addressText,
               selected === 1 ? styles.selected : null,
             ]}>
-            101 Address Street{'\n'}Chicago, IL 60614
+            2447 N Halsted St{'\n'}Chicago, IL 60614
           </Text>
         </TouchableOpacity>
 
@@ -53,7 +53,7 @@ const Verification = ({navigation}) => {
               styles.addressText,
               selected === 2 ? styles.selected : null,
             ]}>
-            101 Address Street{'\n'}Apt 2{'\n'}Chicago, IL 60614
+            601 Gregory Street{'\n'}Apt 2{'\n'}Normal, IL 61761
           </Text>
         </TouchableOpacity>
 
@@ -68,7 +68,7 @@ const Verification = ({navigation}) => {
               styles.addressText,
               selected === 3 ? styles.selected : null,
             ]}>
-            101 Address Street{'\n'}Chicago, IL 60614
+            669 N Michigan Ave{'\n'}Chicago, IL 60611
           </Text>
         </TouchableOpacity>
 

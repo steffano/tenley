@@ -54,7 +54,7 @@ const BankSetup = ({navigation, route}) => {
   return (
     <>
       <SafeAreaView style={styles.container}>
-        <ScreenHeader title={'Schedule Payments'} navigation={navigation} />
+        <ScreenHeader title={'Set Up Bank Account'} navigation={navigation} />
         <View
           style={{
             flex: 1,

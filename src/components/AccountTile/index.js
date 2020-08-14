@@ -20,7 +20,6 @@ const AccountTile = ({navigation, account, hideButton, progressOnly}) => {
   const currentSettlement = settlements[0];
 
   if (settlements.length !== 0) {
-    // console.log(settlements, '####');
     if (currentSettlement.status === 'OFFERED') {
       statusBlockStyle.push(styles.offered);
     }

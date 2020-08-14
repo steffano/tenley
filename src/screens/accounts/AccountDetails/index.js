@@ -34,7 +34,7 @@ const AccountDetails = ({route, navigation}) => {
   const finalPayment = last(upcomingPayments);
   const recentPayment = account.payments[0];
 
-  console.log(index);
+  console.log('account', account);
 
   const renderRow = (rowTitle, rowValue) => {
     return (
@@ -78,7 +78,14 @@ const AccountDetails = ({route, navigation}) => {
                   'Date Opened',
                   moment(account.openDate).format('MMMM Do, YYYY'),
                 )}
-                {renderRow('Status', account.status)}
+                {renderRow(
+                  'Status',
+                  currentSettlement
+                    ? 'Pending response'
+                    : account.payments.length > 0
+                    ? 'Active payments'
+                    : 'Pending action',
+                )}
               </View>
             ) : (
               <>
@@ -110,7 +117,14 @@ const AccountDetails = ({route, navigation}) => {
                     'Date Opened',
                     moment(account.openDate).format('MMMM Do, YYYY'),
                   )}
-                  {renderRow('Status', account.status)}
+                  {renderRow(
+                    'Status',
+                    currentSettlement
+                      ? 'Pending response'
+                      : account.payments.length > 0
+                      ? 'Active payments'
+                      : 'Pending action',
+                  )}
                 </View>
                 <AccountTile
                   progressOnly

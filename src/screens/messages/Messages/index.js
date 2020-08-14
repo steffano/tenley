@@ -7,6 +7,7 @@ import {
   View,
   StyleSheet,
   Button,
+  Image,
 } from 'react-native';
 import {GlobalContext} from '../../../GlobalContext';
 import {AccountButton} from '../../../components/AccountButton';
@@ -60,13 +61,21 @@ const Message = ({navigation}) => {
                       : 'transparent',
                 },
               ]}
-              onPress={() => setSection('Notifications')}>
+              // onPress={() => setSection('Notifications')}
+            >
               <Text style={styles.sectionTitle}>Notifications</Text>
             </TouchableOpacity>
           </View>
         </View>
         <View style={[styles.container, {justifyContent: 'flex-start'}]}>
           <ScrollView>
+            {/* <Text
+              style={[
+                styles.sectionTitle,
+                {alignSelf: 'center', marginTop: RFValue(10)},
+              ]}>
+              Text describing messages
+            </Text> */}
             <SearchFilter
               searchQuery={searchQuery}
               setSearchQuery={setSearchQuery}
@@ -100,6 +109,15 @@ const Message = ({navigation}) => {
             )}
             {/* </Text> */}
           </ScrollView>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('AskTenley')}
+            style={styles.helpIconWrapper}>
+            <Image
+              source={require('../../../assets/icons/help-bubble.png')}
+              resizeMode="contain"
+              style={styles.helpIcon}
+            />
+          </TouchableOpacity>
         </View>
       </SafeAreaView>
     </>
@@ -158,5 +176,18 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     alignSelf: 'flex-end',
     marginBottom: 5,
+  },
+  helpIconWrapper: {
+    position: 'absolute',
+    alignItems: 'center',
+    justifyContent: 'center',
+    right: RFValue(0),
+    bottom: RFValue(0),
+  },
+  helpIcon: {
+    width: RFValue(50),
+    height: RFValue(50),
+    alignSelf: 'flex-end',
+    margin: 20,
   },
 });

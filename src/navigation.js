@@ -24,8 +24,6 @@ const Tab = createBottomTabNavigator();
 
 const iconStyle = {height: 20, width: 20};
 
-console.log('hell?', Auth.currentSession());
-
 function Navigation() {
   const [globalData] = useContext(GlobalContext);
 

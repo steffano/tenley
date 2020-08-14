@@ -16,6 +16,8 @@ import {Button} from '../../../components/Button';
 const Profile = ({navigation}) => {
   const [globalData, setGlobalData] = useContext(GlobalContext);
 
+  // console.log(globalData.user, 'user!!!');
+
   return (
     <>
       <SafeAreaView style={{flex: 1, backgroundColor: 'white'}}>
