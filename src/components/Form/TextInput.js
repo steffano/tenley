@@ -30,6 +30,7 @@ export default ({
   children,
   eyeball,
   tooltip,
+  removeBorder,
   ...rest
 }) => {
   const [isFocused, setIsFocused] = useState(false);
@@ -107,6 +108,7 @@ export default ({
   return (
     <>
       <FieldWrapper
+        removeBorder={removeBorder}
         highlight={highlightOnFocus && isFocused}
         message={message}
         messageType={messageType}

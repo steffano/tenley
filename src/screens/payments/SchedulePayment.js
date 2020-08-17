@@ -1,6 +1,13 @@
 import React, {useContext, useState} from 'react';
 import {GlobalContext} from '../../GlobalContext';
-import {SafeAreaView, Text, View, StyleSheet, Image} from 'react-native';
+import {
+  SafeAreaView,
+  Text,
+  View,
+  StyleSheet,
+  Image,
+  ScrollView,
+} from 'react-native';
 import {colors, Spacing} from '../../utilities/styles';
 import {Button} from '../../components/Button';
 import {RFValue, RFPercentage} from 'react-native-responsive-fontsize';
@@ -138,126 +145,131 @@ const SchedulePayment = ({navigation, route}) => {
   return (
     <>
       <SafeAreaView style={styles.container}>
-        <ScreenHeader
-          title={
-            paymentType === 'oneTime' ? 'Schedule Payment' : 'Schedule Payments'
-          }
-          navigation={navigation}
-        />
-        {/* <View> */}
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            marginHorizontal: RFValue(15),
-            marginTop: RFValue(15),
-          }}>
-          <Image
-            source={require('../../assets/mascot/tenley-mascot4-right.png')}
-            resizeMode="contain"
-            style={styles.tenleyImage}
+        <ScrollView>
+          <ScreenHeader
+            title={
+              paymentType === 'oneTime'
+                ? 'Schedule Payment'
+                : 'Schedule Payments'
+            }
+            navigation={navigation}
           />
+          {/* <View> */}
           <View
             style={{
-              height: RFValue(70),
-              width: '65%',
-              marginVertical: 10,
-              borderWidth: 1,
-              borderColor: colors.lightGray,
-              justifyContent: 'center',
-              paddingHorizontal: 15,
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              marginHorizontal: RFValue(15),
+              marginTop: RFValue(5),
             }}>
-            <Text style={styles.text}>
-              Your {paymentType === 'recurring' ? 'first ' : null}transfer will
-              occur on
-            </Text>
-            <Text
-              style={{
-                fontFamily: 'Poppins-Bold',
-                letterSpacing: 0.8,
-                fontSize: RFValue(12),
-              }}>
-              {moment(date).format('MMMM D, YYYY')}
-            </Text>
-          </View>
-        </View>
-        <View style={{height: 2, backgroundColor: colors.tenleyGreen}} />
-        <View
-          style={{
-            flex: 4,
-          }}>
-          <Calendar
-            minDate={moment().format('YYYY-MM-DD')}
-            calendarHeight={RFValue(200)}
-            style={styles.calendar}
-            onDayPress={day => setDate(day.dateString)}
-            markedDates={{
-              [date]: {
-                selected: true,
-                disableTouchEvent: true,
-                selectedColor: colors.mediumGreen,
-                selectedTextColor: 'white',
-              },
-            }}
-            theme={calendarTheme}
-          />
-          {paymentType === 'recurring' && (
-            // <View>
-            <RNPickerSelect
-              pickerProps={{
-                style: {
-                  height: 200,
-                  overflow: 'hidden',
-                },
-              }}
-              placeholder={{
-                label: 'Select Frequency',
-                value: '',
-                color: 'gray',
-              }}
-              onDonePress={console.log(frequency)}
-              value={frequency}
-              doneText={'Done'}
-              onValueChange={value => setFrequency(value)}
-              items={pickerData}
-              useNativeAndroidPickerStyle={false}
-              style={{
-                inputIOS: [styles.input],
-                inputAndroid: {
-                  fontFamily: 'Poppins-Regular',
-                  fontSize: RFValue(13),
-                },
-                inputAndroidContainer: [styles.input],
-                placeholder: {
-                  fontFamily: 'Poppins-Regular',
-                  color: '#666666',
-                  fontSize: RFValue(13),
-                },
-                iconContainer: {
-                  top: 33,
-                  right: 50,
-                },
-              }}
-              Icon={() => {
-                return (
-                  <Image
-                    source={require('../../assets/icons/carat.png')}
-                    resizeMode="contain"
-                    style={{
-                      height: RFValue(10),
-                      width: RFValue(10),
-                      margin: 0,
-                      transform: [{rotate: '90deg'}],
-                    }}
-                  />
-                );
-              }}
+            <Image
+              source={require('../../assets/mascot/tenley-mascot4-right.png')}
+              resizeMode="contain"
+              style={styles.tenleyImage}
             />
-            // </View>
-          )}
-        </View>
-
-        <View style={Spacing.bottomButtonsContainer}>
+            <View
+              style={{
+                height: RFValue(60),
+                width: '65%',
+                marginVertical: RFValue(5),
+                borderWidth: 1,
+                borderColor: colors.lightGray,
+                justifyContent: 'center',
+                paddingHorizontal: RFValue(15),
+                borderRadius: 5,
+              }}>
+              <Text style={styles.text}>
+                Your {paymentType === 'recurring' ? 'first ' : null}transfer
+                will occur on
+              </Text>
+              <Text
+                style={{
+                  fontFamily: 'Poppins-Bold',
+                  letterSpacing: 0.8,
+                  fontSize: RFValue(12),
+                }}>
+                {moment(date).format('MMMM D, YYYY')}
+              </Text>
+            </View>
+          </View>
+          <View style={{height: 2, backgroundColor: colors.tenleyGreen}} />
+          <View
+            style={{
+              flex: 4,
+            }}>
+            <Calendar
+              minDate={moment().format('YYYY-MM-DD')}
+              calendarHeight={RFValue(200)}
+              style={styles.calendar}
+              onDayPress={day => setDate(day.dateString)}
+              markedDates={{
+                [date]: {
+                  selected: true,
+                  disableTouchEvent: true,
+                  selectedColor: colors.mediumGreen,
+                  selectedTextColor: 'white',
+                },
+              }}
+              theme={calendarTheme}
+            />
+            {paymentType === 'recurring' && (
+              // <View>
+              <RNPickerSelect
+                pickerProps={{
+                  style: {
+                    height: 200,
+                    overflow: 'hidden',
+                  },
+                }}
+                placeholder={{
+                  label: 'Select Frequency',
+                  value: '',
+                  color: 'gray',
+                }}
+                onDonePress={console.log(frequency)}
+                value={frequency}
+                doneText={'Done'}
+                onValueChange={value => setFrequency(value)}
+                items={pickerData}
+                useNativeAndroidPickerStyle={false}
+                style={{
+                  inputIOS: [styles.input],
+                  inputAndroid: {
+                    fontFamily: 'Poppins-Regular',
+                    fontSize: RFValue(13),
+                  },
+                  inputAndroidContainer: [styles.input],
+                  placeholder: {
+                    fontFamily: 'Poppins-Regular',
+                    color: '#666666',
+                    fontSize: RFValue(13),
+                  },
+                  iconContainer: {
+                    top: 33,
+                    right: 50,
+                  },
+                }}
+                Icon={() => {
+                  return (
+                    <Image
+                      source={require('../../assets/icons/carat.png')}
+                      resizeMode="contain"
+                      style={{
+                        height: RFValue(10),
+                        width: RFValue(10),
+                        margin: 0,
+                        transform: [{rotate: '90deg'}],
+                      }}
+                    />
+                  );
+                }}
+              />
+              // </View>
+            )}
+          </View>
+        </ScrollView>
+        <View
+          style={[Spacing.bottomButtonsContainer, {backgroundColor: 'white'}]}>
           {!withdrawalAccount ? (
             <Button
               // disabled={paymentType === 'recurring' ? frequency === '' : false}

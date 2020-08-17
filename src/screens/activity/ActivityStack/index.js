@@ -25,12 +25,12 @@ export function ActivityStackScreen() {
     <ActivityStack.Navigator>
       <ActivityStack.Screen
         options={{headerShown: false}}
-        name="Activity Home"
+        name="Activity"
         component={Activity}
       />
       <ActivityStack.Screen
         options={{headerShown: false}}
-        name="Payment Activity"
+        name="PaymentActivity"
         component={PaymentActivity}
       />
       <ActivityStack.Screen

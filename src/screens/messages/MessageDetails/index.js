@@ -16,16 +16,27 @@ import {colors, Spacing} from '../../../utilities/styles';
 import {RFValue} from 'react-native-responsive-fontsize';
 
 const MessageDetails = ({navigation, route}) => {
+  const [globalData, setGlobalData] = useContext(GlobalContext);
+  const {accountName, message} = route.params;
+  const {user} = globalData;
+  console.log(accountName);
   return (
     <>
       <SafeAreaView style={styles.container}>
-        <ScreenHeader title={route.params} navigation={navigation} />
+        <ScreenHeader title="Message from Creditor" navigation={navigation} />
         <View style={[styles.container, {justifyContent: 'flex-start'}]}>
           <ScrollView style={{padding: 20}}>
-            <Text style={styles.text}>Citibank Creditor Name</Text>
-            <Text style={styles.text}>02.24.2020 - 2:50 PM</Text>
+            <Text style={styles.text}>{accountName}</Text>
+            <Text style={styles.text}>07.24.2020 - 2:50 PM</Text>
             <View style={styles.row}>
-              <TouchableOpacity style={styles.row}>
+              <TouchableOpacity
+                style={styles.row}
+                onPress={() =>
+                  setGlobalData({
+                    ...globalData,
+                    user: {...user, newMessage: true},
+                  })
+                }>
                 <Image
                   source={require('../../../assets/icons/mark-unread.png')}
                   style={{
@@ -63,22 +74,7 @@ const MessageDetails = ({navigation, route}) => {
                   borderColor: colors.lightGray,
                 }}
               />
-              <Text style={styles.text}>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-                enim ad minim veniam, quis nostrud exercitation ullamco laboris
-                nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor
-                in reprehenderit in voluptate velit esse cillum dolore eu fugiat
-                nulla pariatur. Excepteur sint occaecat cupidatat non proident,
-                sunt in culpa qui officia deserunt mollit anim id est laborum.
-                {'\n'}
-                {'\n'}
-                {'\n'}
-                Duis aute irure dolor in reprehenderit in voluptate velit esse
-                cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
-                cupidatat non proident, sunt in culpa qui officia deserunt
-                mollit anim id est laborum.
-              </Text>
+              <Text style={styles.text}>{message}</Text>
             </View>
           </ScrollView>
         </View>

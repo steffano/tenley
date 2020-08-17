@@ -6,6 +6,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   Image,
+  ScrollView,
 } from 'react-native';
 import {GlobalContext} from '../../GlobalContext';
 import {Button} from '../../components/Button';
@@ -66,173 +67,176 @@ const PaymentCalculator = ({navigation, route}) => {
           }
           navigation={navigation}
         />
-        <View style={styles.container}>
-          <View style={Spacing.blockContainer}>
-            <View style={styles.accountWrap}>
-              <View style={styles.row}>
-                <View style={[styles.row, {alignItems: 'flex-start'}]}>
-                  <Text style={[styles.accountTitle, {maxWidth: 250}]}>
-                    {account.originalCreditorName}
-                    {' \u2022 '}
-                    {account.originalCreditorAccountNumber.slice(-4)}
-                  </Text>
-                </View>
-                <View>
-                  <Text style={styles.balanceText}>
-                    {toUSD(account.amountOwed)}
-                  </Text>
+        <ScrollView>
+          <View style={styles.container}>
+            <View style={Spacing.blockContainer}>
+              <View style={styles.accountWrap}>
+                <View style={styles.row}>
+                  <View style={[styles.row, {alignItems: 'flex-start'}]}>
+                    <Text style={[styles.accountTitle, {maxWidth: 250}]}>
+                      {account.originalCreditorName}
+                      {' \u2022 '}
+                      {account.originalCreditorAccountNumber.slice(-4)}
+                    </Text>
+                  </View>
+                  <View>
+                    <Text style={styles.balanceText}>
+                      {toUSD(account.amountOwed)}
+                    </Text>
+                  </View>
                 </View>
               </View>
-            </View>
 
-            {paymentType === 'oneTime' ? (
-              <Slider
-                isCurrency
-                min={20}
-                max={accountTotal}
-                total={payment}
-                onSlide={val => setPayment(val)}
-                title={'Payment Amount'}
-                isPayment={true}
-              />
-            ) : (
+              {paymentType === 'oneTime' ? (
+                <Slider
+                  isCurrency
+                  min={accountTotal > 20 ? 20 : 0}
+                  max={accountTotal}
+                  total={payment}
+                  onSlide={val => setPayment(val)}
+                  title={'Payment Amount'}
+                  isPayment={true}
+                />
+              ) : (
+                <>
+                  <View>
+                    <Slider
+                      min={Math.ceil(accountTotal / 36 / 10) * 10}
+                      max={accountTotal}
+                      total={payment}
+                      onSlide={updatePayment}
+                      isCurrency
+                      title={'Payment Amount'}
+                      isPayment={true}
+                    />
+                    <View style={{height: RFValue(20)}} />
+
+                    <Slider
+                      min={1}
+                      max={36}
+                      total={months}
+                      onSlide={updateMonths}
+                      title={'Payments to Payoff'}
+                      isPayment={true}
+                    />
+                  </View>
+                </>
+              )}
+            </View>
+            {withdrawalAccount && (
               <>
                 <View>
-                  <Slider
-                    min={Math.ceil(accountTotal / 36 / 10) * 10}
-                    max={accountTotal}
-                    total={payment}
-                    onSlide={updatePayment}
-                    isCurrency
-                    title={'Payment Amount'}
-                    isPayment={true}
-                  />
-                  <View style={{height: RFValue(30)}} />
+                  <View
+                    style={[
+                      styles.row,
+                      {marginTop: RFValue(15), paddingHorizontal: RFValue(20)},
+                    ]}>
+                    <Text style={styles.tinyText}>Withdrawal Account</Text>
+                  </View>
 
-                  <Slider
-                    min={1}
-                    max={36}
-                    total={months}
-                    onSlide={updateMonths}
-                    title={'Payments to Payoff'}
-                    isPayment={true}
+                  <RNPickerSelect
+                    pickerProps={{
+                      style: {
+                        height: 200,
+                        overflow: 'hidden',
+                      },
+                    }}
+                    placeholder={{}}
+                    onDonePress={console.log(withdrawalAccount)}
+                    doneText={'Done'}
+                    onValueChange={value => setWithdrawalAccount(value)}
+                    items={pickerData}
+                    useNativeAndroidPickerStyle={false}
+                    style={{
+                      inputIOS: [styles.input],
+                      inputAndroid: {
+                        fontFamily: 'Poppins-Regular',
+                        fontSize: RFValue(13),
+                      },
+                      inputAndroidContainer: [styles.input],
+                      placeholder: {
+                        fontFamily: 'Poppins-Regular',
+                        color: '#666666',
+                        fontSize: RFValue(13),
+                      },
+                      iconContainer: {
+                        top: 33,
+                        right: 50,
+                      },
+                    }}
+                    Icon={() => {
+                      return (
+                        <Image
+                          source={require('../../assets/icons/carat.png')}
+                          resizeMode="contain"
+                          style={{
+                            height: 15,
+                            width: 15,
+                            transform: [{rotate: '90deg'}],
+                          }}
+                        />
+                      );
+                    }}
                   />
+                  <TouchableOpacity>
+                    <Text
+                      style={[
+                        styles.tinyText,
+                        {
+                          paddingHorizontal: RFValue(20),
+                          color: colors.mediumGreen,
+                          textDecorationLine: 'underline',
+                        },
+                      ]}>
+                      Add new payment method
+                    </Text>
+                  </TouchableOpacity>
                 </View>
               </>
             )}
-          </View>
-          {withdrawalAccount && (
-            <>
-              <View>
-                <View
-                  style={[
-                    styles.row,
-                    {marginTop: RFValue(20), paddingHorizontal: RFValue(20)},
-                  ]}>
-                  <Text style={styles.tinyText}>Withdrawal Account</Text>
-                </View>
-
-                <RNPickerSelect
-                  pickerProps={{
-                    style: {
-                      height: 200,
-                      overflow: 'hidden',
-                    },
-                  }}
-                  placeholder={{}}
-                  onDonePress={console.log(withdrawalAccount)}
-                  doneText={'Done'}
-                  onValueChange={value => setWithdrawalAccount(value)}
-                  items={pickerData}
-                  useNativeAndroidPickerStyle={false}
-                  style={{
-                    inputIOS: [styles.input],
-                    inputAndroid: {
-                      fontFamily: 'Poppins-Regular',
-                      fontSize: RFValue(13),
-                    },
-                    inputAndroidContainer: [styles.input],
-                    placeholder: {
-                      fontFamily: 'Poppins-Regular',
-                      color: '#666666',
-                      fontSize: RFValue(13),
-                    },
-                    iconContainer: {
-                      top: 33,
-                      right: 50,
-                    },
-                  }}
-                  Icon={() => {
-                    return (
-                      <Image
-                        source={require('../../assets/icons/carat.png')}
-                        resizeMode="contain"
-                        style={{
-                          height: 15,
-                          width: 15,
-                          transform: [{rotate: '90deg'}],
-                        }}
-                      />
-                    );
-                  }}
-                />
-                <TouchableOpacity>
-                  <Text
-                    style={[
-                      styles.tinyText,
-                      {
-                        paddingHorizontal: RFValue(20),
-                        color: colors.mediumGreen,
-                        textDecorationLine: 'underline',
-                      },
-                    ]}>
-                    Add new payment method
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            </>
-          )}
-          <View
-            style={{
-              marginVertical: RFValue(20),
-              borderBottomWidth: 1,
-              borderColor: colors.lightGray,
-            }}
-          />
-
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              marginHorizontal: 10,
-            }}>
-            <Image
-              source={require('../../assets/icons/checkmark/empty.png')}
-              resizeMode="contain"
+            <View
               style={{
-                maxWidth: RFValue(20),
-                maxHeight: RFValue(20),
+                marginVertical: RFValue(20),
+                borderBottomWidth: 1,
+                borderColor: colors.lightGray,
+              }}
+            />
+
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
                 marginHorizontal: RFValue(10),
-              }}
-            />
-            <Text
-              style={{
-                fontFamily: 'Poppins-Regular',
-                fontSize: RFValue(11),
-                letterSpacing: RFValue(1),
               }}>
-              Apply Tenley Bucks to this payment{'  '}
-            </Text>
-            <Image
-              source={require('../../assets/icons/info/gray.png')}
-              resizeMode="contain"
-              style={{
-                maxWidth: RFValue(20),
-                maxHeight: RFValue(20),
-              }}
-            />
+              <Image
+                source={require('../../assets/icons/checkmark/empty.png')}
+                resizeMode="contain"
+                style={{
+                  maxWidth: RFValue(20),
+                  maxHeight: RFValue(20),
+                  marginHorizontal: RFValue(10),
+                }}
+              />
+              <Text
+                style={{
+                  fontFamily: 'Poppins-Regular',
+                  fontSize: RFValue(11),
+                  letterSpacing: RFValue(1),
+                }}>
+                Apply Tenley Bucks to this payment{'  '}
+              </Text>
+              <Image
+                source={require('../../assets/icons/info/gray.png')}
+                resizeMode="contain"
+                style={{
+                  maxWidth: RFValue(20),
+                  maxHeight: RFValue(20),
+                }}
+              />
+            </View>
           </View>
-        </View>
+        </ScrollView>
+
         <View
           style={[Spacing.bottomButtonsContainer, {maxHeight: RFValue(100)}]}>
           {paymentType === 'recurring' ? (
@@ -315,9 +319,9 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     borderColor: colors.lightGray,
     justifyContent: 'center',
-    paddingHorizontal: 15,
-    marginTop: 15,
-    marginBottom: 30,
+    paddingHorizontal: RFValue(15),
+    marginTop: RFValue(10),
+    marginBottom: RFValue(20),
   },
   accountTitle: {
     fontFamily: 'Poppins-Regular',

@@ -115,7 +115,7 @@ const TenleyBucks = ({navigation}) => {
               style={styles.iconBadge}
             />
             <Text style={styles.buttonText}>
-              Share Tenley with a friend for 5 Bucks
+              Share Tenley with a friend {'\n'}to earn 5 Tenley Bucks
             </Text>
           </TouchableOpacity>
 
@@ -129,7 +129,7 @@ const TenleyBucks = ({navigation}) => {
                 style={styles.iconBadge}
               />
               <Text style={styles.buttonText}>
-                Make a payment today for 15 Bucks
+                Make a payment today {'\n'}to earn 15 Tenley Bucks
               </Text>
             </TouchableOpacity>
           )}
@@ -143,7 +143,7 @@ const TenleyBucks = ({navigation}) => {
               style={styles.iconBadge}
             />
             <Text style={styles.buttonText}>
-              Complete 20 payments for 20 Bucks
+              Complete 20 payments {'\n'}to earn 20 Tenley Bucks
             </Text>
           </TouchableOpacity>
         </View>
@@ -418,8 +418,8 @@ const styles = StyleSheet.create({
     fontSize: RFValue(10),
     letterSpacing: 0.8,
     alignSelf: 'center',
-    textAlign: 'center',
-    marginHorizontal: 15,
+    // textAlign: 'center',
+    marginHorizontal: RFValue(15),
   },
   closeIcon: {
     height: 15,

@@ -86,18 +86,13 @@ const AskTenley = ({navigation}) => {
               </View>
               {expandQ1 && (
                 <Text style={styles.buttonText}>
-                  {'\n\n'}
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                  do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                  Ut enim ad minim veniam, quis nostrud exercitation ullamco
-                  laboris nisi ut aliquip.{'\n\n'}
-                  Duis aute irure dolor in reprehenderit in voluptate velit esse
-                  cillum dolore eu fugiat nulla pariatur. Excepteur sint
-                  occaecat cupidatat non proident, sunt in culpa qui officia
-                  deserunt mollit anim id est laborum.
-                  {'\n\n'}
-                  Ut enim ad minima veniam, quis nostrum exercitationem ullam
-                  corpori?
+                  {'\n'}A settlement of your debt is when the creditor, or debt
+                  collector acting on the creditor's behalf, agrees to settle
+                  your account for less than the total amount due. Once the
+                  settlement is complete, often the creditor, or debt collector
+                  acting on the creditor's behalf, will report the account to
+                  the credit reporting agencies as settled for less than the
+                  full balance or paid in full for less than the full balance.
                 </Text>
               )}
             </TouchableOpacity>
@@ -116,18 +111,13 @@ const AskTenley = ({navigation}) => {
               </View>
               {expandQ2 && (
                 <Text style={styles.buttonText}>
-                  {'\n\n'}
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                  do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                  Ut enim ad minim veniam, quis nostrud exercitation ullamco
-                  laboris nisi ut aliquip.{'\n\n'}
-                  Duis aute irure dolor in reprehenderit in voluptate velit esse
-                  cillum dolore eu fugiat nulla pariatur. Excepteur sint
-                  occaecat cupidatat non proident, sunt in culpa qui officia
-                  deserunt mollit anim id est laborum.
-                  {'\n\n'}
-                  Ut enim ad minima veniam, quis nostrum exercitationem ullam
-                  corpori?
+                  {'\n'}
+                  With Tenley you can make offers to settle an account directly
+                  to the creditor, or debt collector acting on behalf of the
+                  creditor. Keep in mind, most creditors have limits on
+                  settlement offers, therefore any settlement offer below the
+                  creditor's minimum settlement will likely be rejected by the
+                  creditor, or debt collector acting on their behalf.
                 </Text>
               )}
             </TouchableOpacity>
@@ -147,17 +137,10 @@ const AskTenley = ({navigation}) => {
               {expandQ3 && (
                 <Text style={styles.buttonText}>
                   {'\n\n'}
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                  do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                  Ut enim ad minim veniam, quis nostrud exercitation ullamco
-                  laboris nisi ut aliquip.{'\n\n'}
-                  Duis aute irure dolor in reprehenderit in voluptate velit esse
-                  cillum dolore eu fugiat nulla pariatur. Excepteur sint
-                  occaecat cupidatat non proident, sunt in culpa qui officia
-                  deserunt mollit anim id est laborum.
-                  {'\n\n'}
-                  Ut enim ad minima veniam, quis nostrum exercitationem ullam
-                  corpori?
+                  As soon as the creditor, or debt collector acting on behalf of
+                  the creditor, responds to your offer, Tenley will send you a
+                  notification. If you have notifications turned off, a message
+                  will appear in the Message section of your Tenley account.
                 </Text>
               )}
             </TouchableOpacity>

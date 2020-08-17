@@ -75,7 +75,7 @@ const ActiveUser = ({navigation, route, accounts}) => {
     setShowCeaseDesist(false);
     setGlobalData({
       ...globalData,
-      user: {...user, acknowledgedCeaseAndDesist: true},
+      user: {...user, acknowledgedCeaseAndDesist: true, newMessage: true},
     });
     updateUser();
   };
@@ -84,7 +84,7 @@ const ActiveUser = ({navigation, route, accounts}) => {
     setShowCeaseDesist(false);
     setGlobalData({
       ...globalData,
-      user: {...user, acknowledgedCeaseAndDesist: true},
+      user: {...user, acknowledgedCeaseAndDesist: true, newMessage: false},
     });
   };
 
@@ -313,6 +313,7 @@ const ActiveUser = ({navigation, route, accounts}) => {
         backdropColor={colors.transparentGreen}
         onBackdropPress={() => declineCeaseAndDesist()}>
         <CeaseAndDesist
+          user={user}
           onDecline={() => declineCeaseAndDesist()}
           onAccept={() => acceptCeaseAndDesist()}
           accounts={accounts}

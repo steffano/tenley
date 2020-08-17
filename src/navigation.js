@@ -59,7 +59,6 @@ function Navigation() {
                 marginTop: RFValue(7),
               },
               style: {
-                // backgroundColor: 'red',
                 height: RFPercentage(11),
                 paddingTop: RFValue(15),
                 shadowColor: colors.mediumGray,
@@ -71,7 +70,6 @@ function Navigation() {
                 },
               },
               tabStyle: {
-                // backgroundColor: 'blue',
                 height: RFValue(50),
                 justifyContent: 'center',
               },
@@ -107,6 +105,14 @@ function Navigation() {
                   />
                 ),
               }}
+              listeners={({navigation}) => ({
+                tabPress: event => {
+                  event.preventDefault();
+                  navigation.navigate('Activity', {
+                    screen: 'Activity',
+                  });
+                },
+              })}
             />
             <Tab.Screen
               name="Messages"
@@ -137,11 +143,11 @@ function Navigation() {
                   />
                 ),
               }}
-              listeners={({navigation}) => ({
-                tabPress: e => {
-                  navigation.navigate('Profile', {screen: 'Profile Home'});
-                },
-              })}
+              // listeners={({navigation}) => ({
+              //   tabPress: e => {
+              //     navigation.navigate('Profile', {screen: 'Profile Home'});
+              //   },
+              // })}
             />
           </Tab.Navigator>
         )}

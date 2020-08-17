@@ -3,7 +3,14 @@ import {View, StyleSheet, Text} from 'react-native';
 import {RFValue} from 'react-native-responsive-fontsize';
 import {colors, Typography} from '../../utilities/styles';
 
-export default ({children, message, messageType, highlight, invalid}) => {
+export default ({
+  children,
+  message,
+  messageType,
+  highlight,
+  invalid,
+  removeBorder,
+}) => {
   const messageStyles = [styles.messageText];
 
   const borderStyle = [styles.container];
@@ -13,6 +20,9 @@ export default ({children, message, messageType, highlight, invalid}) => {
   }
   if (invalid) {
     borderStyle.push(styles.invalid);
+  }
+  if (removeBorder) {
+    borderStyle.push(styles.noBorder);
   }
 
   return (
@@ -43,6 +53,12 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 6,
     borderColor: colors.darkRed,
+    marginVertical: 5,
+  },
+  noBorder: {
+    borderWidth: 1,
+    borderRadius: 6,
+    borderColor: 'transparent',
     marginVertical: 5,
   },
   messageText: {

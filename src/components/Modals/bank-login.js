@@ -77,7 +77,7 @@ const BankLogin = ({onClose, onSuccess}) => {
                   placeholder="Password"
                   placeholderTextColor="#d1e5f3"
                   style={styles.input}
-                  obscured
+                  secureTextEntry
                 />
               </View>
 

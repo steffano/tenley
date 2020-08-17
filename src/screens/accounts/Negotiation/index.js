@@ -100,8 +100,8 @@ const Negotiation = ({route, navigation}) => {
           contentInsetAdjustmentBehavior="automatic">
           <View style={{padding: RFValue(15)}}>
             <Text style={styles.blockText}>
-              To start the settlement process, send an offer to your creditor or
-              debt collector for how much you'd like to lower your balance.
+              To start the settlement negotiation process, send an offer to your
+              creditor or debt collector.
             </Text>
             <View style={{height: RFValue(20)}} />
             <View style={styles.row}>
@@ -145,8 +145,9 @@ const Negotiation = ({route, navigation}) => {
           <View style={styles.rowSeparator} />
           <View style={{padding: 15}}>
             <Text style={[styles.blockText, {fontSize: 12}]}>
-              Once you submit your offer, the creditor will review and either
-              reply with a counter offer or accept your offer.
+              Once you submit your offer, the creditor, or debt collector acting
+              on their behalf, will review and either reply with an acceptance
+              of your offer or counteroffer.
             </Text>
             <View style={{height: 20}} />
             <Text style={Typography.errorText}>{error}</Text>

@@ -17,14 +17,14 @@ import {ScreenHeader} from '../../../components/ScreenHeader';
 import filter from 'lodash/filter';
 
 const PaymentActivity = ({navigation, route}) => {
-  const account = route.params.account;
+  const {account, fromAccount} = route.params;
   const upcomingPayments = filter(account.payments, ['status', 'SCHEDULED']);
   const pastPayments = filter(account.payments, ['status', 'POSTED']);
 
   const [section, setSection] = useState(
     upcomingPayments.length === 0 ? 'Past' : 'Upcoming',
   );
-  console.log(account, upcomingPayments);
+  console.log(route);
 
   return (
     <>
@@ -32,6 +32,7 @@ const PaymentActivity = ({navigation, route}) => {
         <ScreenHeader
           title={`${account.originalCreditorName} Payments`}
           navigation={navigation}
+          onPress={() => navigation.goBack()}
         />
         <View style={styles.headerBar}>
           <View style={styles.row}>
@@ -124,7 +125,15 @@ const PaymentActivity = ({navigation, route}) => {
               borderTopColor: colors.lightGray,
               borderTopWidth: 1,
             }}>
-            <Button title="Make a One Time Payment" />
+            <Button
+              title="Make a One Time Payment"
+              onPress={() =>
+                navigation.navigate('PaymentCalculator', {
+                  account,
+                  paymentType: 'oneTime',
+                })
+              }
+            />
           </View>
         )}
       </SafeAreaView>

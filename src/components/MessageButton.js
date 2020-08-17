@@ -5,7 +5,7 @@ import {RFPercentage, RFValue} from 'react-native-responsive-fontsize';
 
 import PropTypes from 'prop-types';
 
-export const MessageButton = ({onPress, subject, date, unread, markRead}) => {
+export const MessageButton = ({onPress, subject, date, unread}) => {
   const containerStyle = [styles.container];
   const textStyle = [styles.text];
   const linkStyle = [styles.link];

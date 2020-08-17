@@ -19,8 +19,7 @@ export default function Welcome({navigation}) {
   const slides = [
     {
       key: '1',
-      text:
-        'Let Tenley be your superhero and help \n you get out of debt fast!',
+      text: 'Let Tenley’s superpowers help you \n get out of debt fast!',
       image: require('../assets/mascot/tenley-mascot1.png'),
       backgroundColor: colors.white,
       styles: {marginRight: 20},
@@ -28,9 +27,9 @@ export default function Welcome({navigation}) {
     {
       key: '2',
       text:
-        'With Tenley, you can maximize your \n payments, control how collectors \n contact you, and ',
+        'With Tenley you can get rewards, maximize your payments, control how creditors and debt collectors contact you, and ',
       text2: 'FLY ',
-      text3: 'to debt freedom!',
+      text3: 'towards debt freedom!',
       image: require('../assets/mascot/tenley-mascot2.png'),
       backgroundColor: colors.white,
       styles: {marginLeft: 25},
@@ -38,7 +37,7 @@ export default function Welcome({navigation}) {
     {
       key: '3',
       text:
-        'Tenley can even help you negotiate \n with collectors and lower your debt',
+        'Tenley can even help you negotiate \n and lower your debts, all through the \n easy to use app',
       image: require('../assets/mascot/tenley-mascot3.png'),
       backgroundColor: colors.white,
       styles: {marginLeft: RFPercentage(7)},

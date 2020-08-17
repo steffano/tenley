@@ -184,8 +184,9 @@ const AccountDetails = ({route, navigation}) => {
               <View style={styles.contentBlock}>
                 <View style={styles.contentWrap}>
                   <Text style={styles.blockText}>
-                    Set up a payment plan or make a {'\n'}single payment now to
-                    see the most improvement to your credit score.{'  '}
+                    Set up a payment plan or make a single payment now to start
+                    your journey to debt freedom and improving your credit
+                    score.{' '}
                     <Image
                       style={{
                         width: RFValue(15),
@@ -207,8 +208,8 @@ const AccountDetails = ({route, navigation}) => {
               <View style={styles.contentBlock}>
                 <View style={styles.contentWrap}>
                   <Text style={styles.blockText}>
-                    Negotiate a settlement with your {'\n'}creditor or debt
-                    collector to lower your account's total debt.{'  '}
+                    Start negotiating a settlement with your creditor or debt
+                    collector to lower your total amount due on this account.{' '}
                     <Image
                       style={{
                         width: RFValue(15),
@@ -243,8 +244,8 @@ const AccountDetails = ({route, navigation}) => {
               title="See all activity"
               onPress={() =>
                 navigation.navigate('Activity', {
-                  params: {account},
-                  screen: 'Payment Activity',
+                  screen: 'PaymentActivity',
+                  params: {account, fromAccount: true},
                 })
               }
             />

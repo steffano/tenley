@@ -107,6 +107,7 @@ const Personal = ({navigation}) => {
             invalid={!emailValid}
             message={'Please enter your email'}
             editable={false}
+            removeBorder
           />
           <TextInput
             onChangeText={text => {

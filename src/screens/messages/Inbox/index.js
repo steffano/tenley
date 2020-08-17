@@ -20,7 +20,12 @@ import {RFValue} from 'react-native-responsive-fontsize';
 
 const Inbox = ({route, navigation}) => {
   const accountName = route.params.account.originalCreditorName;
-  const [unread, setUnread] = useState(true);
+  const payments = route.params.account.payments;
+  const settlements = route.params.account.settlements;
+  const {key, hasNotification} = route.params;
+  const [unread, setUnread] = useState(hasNotification);
+
+  console.log('hello??', key, payments, settlements);
 
   return (
     <>
@@ -33,19 +38,48 @@ const Inbox = ({route, navigation}) => {
             <SearchFilter />
 
             <MessageButton
-              unread={unread}
-              markRead={() => setUnread(false)}
+              unread={key === 0 && unread}
               subject={'Message from Creditor'}
-              date={'02.24.2020'}
+              date={'07.30.2020'}
               onPress={() => {
-                navigation.navigate('Details', 'Message from Creditor');
+                navigation.navigate('Details', {
+                  accountName,
+                  message:
+                    'Dear Consumer: \n\nWe want to help your resolve your account for less than the amount due. ',
+                });
                 setUnread(false);
               }}
             />
+            {payments.length > 0 && (
+              <MessageButton
+                subject={'Message from Creditor'}
+                date={'07.24.2020'}
+                onPress={() => {
+                  navigation.navigate('Details', {
+                    accountName,
+                    message:
+                      'Dear Consumer: \n\nWe have received your scheduled payment. ',
+                  });
+                }}
+              />
+            )}
+            {settlements.length > 0 && (
+              <MessageButton
+                subject={'Message from Creditor'}
+                date={'07.21.2020'}
+                onPress={() => {
+                  navigation.navigate('Details', {
+                    accountName,
+                    message:
+                      'Dear Consumer: \n\nWe have received your offer to settle your account for less than the full balance.',
+                  });
+                }}
+              />
+            )}
             <MessageButton
               subject={'Statement'}
-              date={'02.24.2020'}
-              onPress={() => navigation.navigate('Details', 'Statement')}
+              date={'06.24.2020'}
+              // onPress={() => navigation.navigate('Details', 'Statement')}
             />
           </ScrollView>
         </View>

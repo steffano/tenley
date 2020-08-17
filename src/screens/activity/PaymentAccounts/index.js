@@ -78,7 +78,7 @@ const PaymentAccounts = ({navigation}) => {
                       accountName={account.originalCreditorName}
                       lastFour={account.originalCreditorAccountNumber.slice(-4)}
                       onPress={() =>
-                        navigation.navigate('Payment Activity', {
+                        navigation.navigate('PaymentActivity', {
                           account,
                           index,
                         })

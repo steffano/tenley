@@ -21,7 +21,12 @@ const Message = ({navigation}) => {
   const [globalData, setGlobalData] = useContext(GlobalContext);
   const [section, setSection] = useState('Messages');
   const [searchQuery, setSearchQuery] = useState('');
-  const {accounts} = globalData;
+  const {accounts, user} = globalData;
+
+  const newMessage = user.newMessage;
+  console.log(newMessage);
+
+  const [hasNotification, setHasNotification] = useState(true);
 
   useFocusEffect(
     React.useCallback(() => {
@@ -90,17 +95,20 @@ const Message = ({navigation}) => {
                   return (
                     account && (
                       <AccountButton
-                        notification={key === 0}
+                        notification={key === 0 && hasNotification}
                         key={key}
                         accountName={account.originalCreditorName}
                         lastFour={account.originalCreditorAccountNumber.slice(
                           -4,
                         )}
-                        onPress={() =>
+                        onPress={() => {
                           navigation.navigate('Inbox', {
                             account,
-                          })
-                        }
+                            key,
+                            hasNotification,
+                          });
+                          key === 0 && setHasNotification(false);
+                        }}
                       />
                     )
                   );
