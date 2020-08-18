@@ -1,7 +1,6 @@
 import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import Activity from '../Activity';
-import TenleyBucks from '../Activity/TenleyBucks';
 import {Image} from 'react-native';
 import {getScreenOptions} from '../../../utilities/styles';
 import PaymentSetup from '../../payments/PaymentSetup';
@@ -21,12 +20,6 @@ const renderScreen = (name, component, withHeader) => {
   );
 };
 
-const forFade = ({current}) => ({
-  cardStyle: {
-    opacity: current.progress,
-  },
-});
-
 export function ActivityStackScreen() {
   return (
     <ActivityStack.Navigator>
@@ -44,11 +37,6 @@ export function ActivityStackScreen() {
         options={{headerShown: false}}
         name="Payment Details"
         component={PaymentDetails}
-      />
-      <ActivityStack.Screen
-        options={{headerShown: false}}
-        name="TenleyBucks"
-        component={TenleyBucks}
       />
       {renderScreen('Payment Setup', PaymentSetup)}
       {renderScreen('AskTenley', AskTenley)}
