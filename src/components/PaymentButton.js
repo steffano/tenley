@@ -4,6 +4,7 @@ import {colors} from '../utilities/styles';
 import {RFPercentage, RFValue} from 'react-native-responsive-fontsize';
 import moment from 'moment';
 import PropTypes from 'prop-types';
+import currency from 'currency.js';
 
 export const PaymentButton = ({onPress, payment, account}) => {
   const containerStyle = [styles.container];
@@ -16,13 +17,15 @@ export const PaymentButton = ({onPress, payment, account}) => {
   //   linkStyle.push(styles.unreadLink);
   // }
 
+  const toUSD = value => currency(value, {symbol: '$', precision: 0}).format();
+
   return (
     <TouchableOpacity onPress={onPress} style={containerStyle}>
       <View style={styles.row}>
         <View>
           <Text style={textStyle}>
             <Text style={[textStyle, {fontFamily: 'Poppins-Bold'}]}>
-              {payment.amount}
+              {toUSD(payment.amount)}
             </Text>{' '}
             to {account.originalCreditorName}
           </Text>

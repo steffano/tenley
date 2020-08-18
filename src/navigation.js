@@ -46,6 +46,7 @@ function Navigation() {
         ) : (
           <Tab.Navigator
             tabBarOptions={{
+              lazy: false,
               safeAreaInset: true,
               showIcon: true,
               activeTintColor: colors.tenleyGreen,

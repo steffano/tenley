@@ -245,6 +245,7 @@ const AccountDetails = ({route, navigation}) => {
               onPress={() =>
                 navigation.navigate('Activity', {
                   screen: 'PaymentActivity',
+                  initial: false,
                   params: {account, fromAccount: true},
                 })
               }
