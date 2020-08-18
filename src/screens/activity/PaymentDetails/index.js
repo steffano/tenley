@@ -91,7 +91,7 @@ const PaymentDetails = ({route, navigation}) => {
             {renderRow('Payment Amount', toUSD(payment.amount))}
             {renderRow(
               'Payment Date',
-              moment(payment.date).format('MMMM Do, YYYY'),
+              moment.utc(payment.date).format('MMMM Do, YYYY'),
             )}
             {payment.type !== 'ONE-TIME' && (
               <>

@@ -144,7 +144,7 @@ const AccountTile = ({navigation, account, hideButton, progressOnly}) => {
                     ]}>
                     <Text style={styles.rowText}>
                       Est. Payoff:{' '}
-                      {moment(finalPayment.date).format('MM.DD.YYYY')}
+                      {moment.utc(finalPayment.date).format('MM.DD.YYYY')}
                     </Text>
 
                     {progressOnly ? (
@@ -156,7 +156,7 @@ const AccountTile = ({navigation, account, hideButton, progressOnly}) => {
                     ) : (
                       <Text style={styles.rowText}>
                         Next Payment:{' '}
-                        {moment(nextPayment.date).format('MM.DD.YYYY')}
+                        {moment.utc(nextPayment.date).format('MM.DD.YYYY')}
                       </Text>
                     )}
                   </View>
@@ -203,7 +203,7 @@ const AccountTile = ({navigation, account, hideButton, progressOnly}) => {
                       </Text>
                       on{' '}
                       <Text style={styles.bold}>
-                        {moment(nextPayment.date).format('MM.DD.YYYY')}
+                        {moment.utc(nextPayment.date).format('MM.DD.YYYY')}
                       </Text>
                     </Text>
                   </>
@@ -226,7 +226,7 @@ const AccountTile = ({navigation, account, hideButton, progressOnly}) => {
                         <Text style={styles.boldGreen}>
                           {toUSD(nextPayment.amount)}{' '}
                         </Text>
-                        on {moment(nextPayment.date).format('MM.DD.YYYY')}
+                        on {moment.utc(nextPayment.date).format('MM.DD.YYYY')}
                       </Text>
                     ) : (
                       <Text style={styles.text}>
@@ -234,7 +234,7 @@ const AccountTile = ({navigation, account, hideButton, progressOnly}) => {
                           {toUSD(recentPayment.amount)}{' '}
                         </Text>
                         payment processed on{' '}
-                        {moment(recentPayment.date).format('MM.DD.YYYY')}
+                        {moment.utc(recentPayment.date).format('MM.DD.YYYY')}
                       </Text>
                     )}
                   </>

@@ -55,18 +55,23 @@ const PaymentConfirmation = ({navigation, route}) => {
       ? {date_1: paymentDay, date_2: secondPaymentDay}
       : null;
 
-  const oneTimePayment = {
-    paymentAmount: toUSD(paymentAmount),
-    tenleyBucksApplied: '10',
-  };
-
+  const oneTimePayment = paymentDate
+    ? {
+        paymentAmount: toUSD(paymentAmount),
+        tenleyBucksApplied: '10',
+        date: paymentDate,
+      }
+    : {
+        paymentAmount: toUSD(paymentAmount),
+        tenleyBucksApplied: '10',
+      };
   const recurringPayment = {
     strategy: frequency,
     paymentAmount: toUSD(paymentAmount),
     params: paymentParams,
   };
 
-  console.log(paymentParams);
+  console.log(paymentDate, 'test');
 
   const handlePaymentConfirm = async () => {
     setIsLoading(true);

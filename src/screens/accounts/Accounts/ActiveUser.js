@@ -88,6 +88,7 @@ const ActiveUser = ({navigation, route, accounts}) => {
     });
   };
 
+  console.log(user);
   const optIn = get(user, 'custom:cd_optIn');
   const optOut = get(user, 'acknowledgedCeaseAndDesist');
 

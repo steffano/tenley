@@ -30,7 +30,7 @@ export const PaymentButton = ({onPress, payment, account}) => {
             to {account.originalCreditorName}
           </Text>
           <Text style={textStyle}>
-            {moment(payment.date).format('MM.DD.YYYY')}
+            {moment.utc(payment.date).format('MM.DD.YYYY')}
           </Text>
         </View>
 

@@ -76,7 +76,7 @@ const AccountDetails = ({route, navigation}) => {
                 )}
                 {renderRow(
                   'Date Opened',
-                  moment(account.openDate).format('MMMM Do, YYYY'),
+                  moment.utc(account.openDate).format('MMMM Do, YYYY'),
                 )}
                 {renderRow(
                   'Status',
@@ -115,7 +115,7 @@ const AccountDetails = ({route, navigation}) => {
                   )}
                   {renderRow(
                     'Date Opened',
-                    moment(account.openDate).format('MMMM Do, YYYY'),
+                    moment.utc(account.openDate).format('MMMM Do, YYYY'),
                   )}
                   {renderRow(
                     'Status',
