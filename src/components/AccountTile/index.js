@@ -3,20 +3,28 @@ import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import {RFValue, RFPercentage} from 'react-native-responsive-fontsize';
 import {colors} from '../../utilities/styles';
 import ProgressGauge from '../ProgressGauge';
+import AccountHeaderRow from '../AccountHeaderRow';
 import Bullet from '../Bullet';
 import currency from 'currency.js';
 import moment from 'moment';
 import filter from 'lodash/filter';
+import reject from 'lodash/reject';
 import last from 'lodash/last';
 
 const AccountTile = ({navigation, account, progressOnly}) => {
   const statusBlockStyle = [styles.statusBlock];
   const statusBlockText = [styles.offeredText];
-
   const containerStyle = [styles.accountContainer];
 
+  const payments = account.payments;
   const settlements = account.settlements;
   const currentSettlement = settlements[0];
+
+  const upcomingPayments = filter(account.payments, ['status', 'SCHEDULED']);
+  const postedPayments = filter(account.payments, ['status', 'POSTED']);
+  const nextPayment = upcomingPayments[0];
+  const finalPayment = last(upcomingPayments);
+  const recentPayment = account.payments[0];
 
   if (settlements.length !== 0) {
     if (currentSettlement.status === 'OFFERED') {
@@ -29,54 +37,22 @@ const AccountTile = ({navigation, account, progressOnly}) => {
       statusBlockStyle.push(styles.countered);
     }
   }
-
-  const payments = account.payments;
-
   if (payments.length > 0) {
     if (payments[0].status === 'FAILED') {
       containerStyle.push(styles.failedPayment);
     }
   }
-
   if (progressOnly) {
     containerStyle.push(styles.progressOnly);
   }
 
   const toUSD = value => currency(value, {symbol: '$', precision: 0}).format();
 
-  const getWholePercent = (percentFor, percentOf) => {
-    return Math.floor((percentFor / percentOf) * 100);
-  };
-
   const balance = currency(account.amountOwed).value;
   const originalBalance = currency(account.originalAmountOwed).value;
 
-  const settlementBalance = 0;
-
-  const paid = originalBalance - balance;
-  const settled = 0;
-
-  const percentPaid = getWholePercent(paid, originalBalance);
-  const percentSaved = getWholePercent(settled, originalBalance);
-
-  const upcomingPayments = filter(account.payments, ['status', 'SCHEDULED']);
-  const postedPayments = filter(account.payments, ['status', 'POSTED']);
-  const nextPayment = upcomingPayments[0];
-  const finalPayment = last(upcomingPayments);
-  const recentPayment = account.payments[0];
-
-  const progressPercentages = [
-    // {
-    //   label: 'settlement',
-    //   percentage: percentSaved + '%',
-    //   color: colors.mediumGreen,
-    // },
-    {
-      label: 'payments',
-      percentage: percentPaid + '%',
-      color: colors.tenleyGreen,
-    },
-  ];
+  const hasPaymentSchedule =
+    reject(upcomingPayments, ['type', 'ONE-TIME']).length !== 0;
 
   return (
     <>
@@ -91,20 +67,7 @@ const AccountTile = ({navigation, account, progressOnly}) => {
         <View style={styles.detailWrap}>
           {!progressOnly && (
             <>
-              <View style={[styles.row, {marginBottom: RFValue(10)}]}>
-                <View style={[styles.row, {alignItems: 'flex-start'}]}>
-                  <Text style={[styles.accountTitle, {maxWidth: RFValue(200)}]}>
-                    {account.originalCreditorName}
-                    {' \u2022 '}
-                    {account.originalCreditorAccountNumber.slice(-4)}
-                  </Text>
-                </View>
-                <View>
-                  <Text style={styles.balanceText}>
-                    {toUSD(account.amountOwed)}
-                  </Text>
-                </View>
-              </View>
+              <AccountHeaderRow account={account} />
 
               <View style={styles.row}>
                 <View style={statusBlockStyle}>
@@ -131,60 +94,13 @@ const AccountTile = ({navigation, account, progressOnly}) => {
 
           {postedPayments.length > 0 && (
             <>
-              {upcomingPayments.length > 0 && (
-                <View style={{marginBottom: RFValue(15)}}>
-                  <View
-                    style={[
-                      styles.row,
-                      {
-                        justifyContent: 'space-between',
-                        paddingHorizontal: progressOnly ? RFValue(5) : null,
-                      },
-                    ]}>
-                    <Text style={styles.rowText}>
-                      Est. Payoff:{' '}
-                      {moment.utc(finalPayment.date).format('MM.DD.YYYY')}
-                    </Text>
-
-                    {progressOnly ? (
-                      <View>
-                        <Text style={styles.rowTextBold}>
-                          {upcomingPayments.length} payments to go
-                        </Text>
-                      </View>
-                    ) : (
-                      <Text style={styles.rowText}>
-                        Next Payment:{' '}
-                        {moment.utc(nextPayment.date).format('MM.DD.YYYY')}
-                      </Text>
-                    )}
-                  </View>
-                </View>
-              )}
-
-              <View>
-                <ProgressGauge
-                  backgroundColor="lightgrey"
-                  visualParts={progressPercentages}
-                />
-                <View style={{height: 15}} />
-
-                <View style={styles.rowLeft}>
-                  {settlements.length > 0 && (
-                    <>
-                      <View style={styles.row}>
-                        <Bullet color={colors.mediumGreen} />
-                        <Text style={styles.rowText}>Settlement reduction</Text>
-                      </View>
-                      <View style={{width: 10}} />
-                    </>
-                  )}
-                  <View style={styles.row}>
-                    <Bullet color={colors.tenleyGreen} />
-                    <Text style={styles.rowText}>Your progress</Text>
-                  </View>
-                </View>
-              </View>
+              <ProgressGauge
+                tile
+                account={account}
+                showDetails={hasPaymentSchedule}
+                nextPayment={nextPayment || null}
+                finalPayment={finalPayment || null}
+              />
             </>
           )}
         </View>
@@ -208,42 +124,20 @@ const AccountTile = ({navigation, account, progressOnly}) => {
                   </>
                 ) : (
                   <>
-                    {!progressOnly ? (
-                      <Text style={styles.text}>
-                        Original Balance{' '}
-                        <Text style={styles.bold}>
-                          {toUSD(originalBalance)}
-                        </Text>{' '}
-                        | Paid{' '}
-                        <Text style={styles.bold}>
-                          {toUSD(originalBalance - balance)}
-                        </Text>
+                    <Text style={styles.text}>
+                      Original Balance{' '}
+                      <Text style={styles.bold}>{toUSD(originalBalance)}</Text>{' '}
+                      | Paid{' '}
+                      <Text style={styles.bold}>
+                        {toUSD(originalBalance - balance)}
                       </Text>
-                    ) : progressOnly && upcomingPayments.length > 0 ? (
-                      <Text style={styles.text}>
-                        Next payment of{' '}
-                        <Text style={styles.boldGreen}>
-                          {toUSD(nextPayment.amount)}{' '}
-                        </Text>
-                        on {moment.utc(nextPayment.date).format('MM.DD.YYYY')}
-                      </Text>
-                    ) : (
-                      <Text style={styles.text}>
-                        <Text style={styles.boldGreen}>
-                          {toUSD(recentPayment.amount)}{' '}
-                        </Text>
-                        payment processed on{' '}
-                        {moment.utc(recentPayment.date).format('MM.DD.YYYY')}
-                      </Text>
-                    )}
+                    </Text>
                   </>
                 )}
 
-                {!progressOnly && (
-                  <View>
-                    <Text style={styles.linkText}>VIEW ></Text>
-                  </View>
-                )}
+                <View>
+                  <Text style={styles.linkText}>VIEW ></Text>
+                </View>
               </View>
             </View>
           </View>
