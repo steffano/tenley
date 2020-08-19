@@ -1,11 +1,5 @@
-import React, {useContext, useState} from 'react';
-import {
-  View,
-  Text,
-  Button,
-  StyleSheet,
-  TouchableWithoutFeedback,
-} from 'react-native';
+import React, {useState} from 'react';
+import {View, Text, StyleSheet, TouchableWithoutFeedback} from 'react-native';
 import Slider from './Slider';
 import {RFValue, RFPercentage} from 'react-native-responsive-fontsize';
 import {colors} from '../../utilities/styles';
@@ -13,7 +7,6 @@ import Modal from 'react-native-modal';
 import AverageGraph from '../Modals/average-graph';
 
 const Calculator = ({
-  navigation,
   totalDebt,
   debtBalance,
   setDebtBalance,
@@ -23,17 +16,11 @@ const Calculator = ({
   months,
   setMonths,
 }) => {
-  // const [debtBalance, setDebtBalance] = useState(totalDebt);
-  // const [payment, setPayment] = useState(totalDebt * 0.5);
-  // const [months, setMonths] = useState(totalDebt / payment);
   const [showGraph, setShowGraph] = useState(false);
 
   const updateDebtBalance = val => {
     if (isNaN(val)) {
-      console.log('yo');
-      // const num = parseInt(val.replace(/[^\d\.\-]/g, ''));
-      // setDebtBalance(Number(num));
-      // setPayment(Math.ceil(Number(num) / months / 10) * 10);
+      console.log('nan');
     } else {
       setDebtBalance(val);
       setPayment(val / months);
@@ -54,13 +41,7 @@ const Calculator = ({
     <>
       {showTotalDebt && (
         <>
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              paddingHorizontal: 15,
-              paddingVertical: 15,
-            }}>
+          <View style={styles.row}>
             <Text style={styles.text}>Total Debt</Text>
 
             <View style={styles.valueBox}>
@@ -75,14 +56,8 @@ const Calculator = ({
           </View>
         </>
       )}
-      <View
-        style={{
-          width: '100%',
-          backgroundColor: 'white',
-          alignContent: 'center',
-          borderRadius: 5,
-          padding: 15,
-        }}>
+
+      <View style={styles.wrap}>
         <Slider
           min={Math.ceil(totalDebt * 0.4)}
           max={totalDebt}
@@ -101,7 +76,7 @@ const Calculator = ({
             </Text>
           </TouchableWithoutFeedback>
         </View>
-        <View style={{height: 30}} />
+        <View style={{height: RFValue(30)}} />
         <Slider
           min={Math.ceil(debtBalance / 36)}
           max={debtBalance}
@@ -110,7 +85,7 @@ const Calculator = ({
           isCurrency
           title={'Monthly Payment'}
         />
-        <View style={{height: 30}} />
+        <View style={{height: RFValue(30)}} />
 
         <Slider
           min={1}
@@ -144,8 +119,6 @@ const styles = StyleSheet.create({
     height: 41,
     width: RFPercentage(15),
     borderRadius: 5,
-    // borderWidth: 1,
-    // borderColor: colors.tenleyGreen,
     backgroundColor: colors.lightestGray,
     alignItems: 'center',
     justifyContent: 'space-between',
@@ -161,6 +134,19 @@ const styles = StyleSheet.create({
     backgroundColor: colors.tenleyGreen,
     borderWidth: 4,
     borderColor: colors.white,
+  },
+  row: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingHorizontal: 15,
+    paddingVertical: 15,
+  },
+  wrap: {
+    width: '100%',
+    backgroundColor: 'white',
+    alignContent: 'center',
+    borderRadius: 5,
+    padding: 15,
   },
   track: {
     height: 8,

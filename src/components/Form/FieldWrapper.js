@@ -27,10 +27,7 @@ export default ({
 
   return (
     <>
-      <View style={borderStyle}>
-        {children}
-        {/* <Text style={styles.messageText}>{invalid && message}</Text> */}
-      </View>
+      <View style={borderStyle}>{children}</View>
       {invalid && <Text style={styles.messageText}>{message}</Text>}
     </>
   );

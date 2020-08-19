@@ -11,7 +11,6 @@ import {GlobalContext} from '../../../GlobalContext';
 import ActiveUser from '../../accounts/Accounts/ActiveUser';
 import {RFValue} from 'react-native-responsive-fontsize';
 import {colors} from '../../../utilities/styles';
-import {Header} from '../../../components/Header';
 import {Button} from '../../../components/Button';
 import {AccountButton} from '../../../components/AccountButton';
 import PaymentAccounts from '../PaymentAccounts';

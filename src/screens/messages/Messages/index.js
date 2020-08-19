@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import {GlobalContext} from '../../../GlobalContext';
 import {AccountButton} from '../../../components/AccountButton';
-import {Header} from '../../../components/Header';
+
 import {colors, Spacing} from '../../../utilities/styles';
 import {SearchFilter} from '../../../components/SearchFilter';
 import {RFValue} from 'react-native-responsive-fontsize';
@@ -37,7 +37,6 @@ const Message = ({navigation}) => {
   return (
     <>
       <SafeAreaView style={styles.container}>
-        {/* <Header header={'Messages'} /> */}
         <View style={styles.headerBar}>
           <View
             style={{

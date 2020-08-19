@@ -160,9 +160,12 @@ const styles = StyleSheet.create({
   },
   emptyText: {
     fontFamily: 'Poppins-Bold',
+    fontSize: RFValue(12),
     letterSpacing: 1.25,
     color: colors.darkGreen,
     alignSelf: 'center',
+    textAlign: 'center',
+    paddingHorizontal: RFValue(25),
   },
   headerText: {
     width: 71,

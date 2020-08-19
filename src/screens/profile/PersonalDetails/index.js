@@ -9,7 +9,6 @@ import {
   Switch,
 } from 'react-native';
 import {GlobalContext} from '../../../GlobalContext';
-import {Header} from '../../../components/Header';
 import {Form, TextInput} from '../../../components/Form';
 import {Button} from '../../../components/Button';
 import {ScreenHeader} from '../../../components/ScreenHeader';

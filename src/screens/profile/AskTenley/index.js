@@ -10,7 +10,6 @@ import {
   Button,
 } from 'react-native';
 import {GlobalContext} from '../../../GlobalContext';
-import {Header} from '../../../components/Header';
 import {ScreenHeader} from '../../../components/ScreenHeader';
 import {colors, Spacing} from '../../../utilities/styles';
 import {RFValue, RFPercentage} from 'react-native-responsive-fontsize';
@@ -64,7 +63,6 @@ const AskTenley = ({navigation}) => {
           <View style={{paddingHorizontal: 15, paddingVertical: 20}}>
             <TextInput
               label="What are you looking for?"
-              keyboardType="numeric"
               onChangeText={text => setSearchQuery(text)}
               value={searchQuery}
               highlightOnFocus

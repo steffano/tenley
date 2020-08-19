@@ -1,18 +1,16 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import {
   TextInput,
   StyleSheet,
   View,
   Text,
   TouchableOpacity,
-  Animated,
 } from 'react-native';
 import {RFPercentage, RFValue} from 'react-native-responsive-fontsize';
 import Slider from 'react-native-slider';
 import {colors} from '../../utilities/styles';
 import currency from 'currency.js';
 import Modal from 'react-native-modal';
-import {Button} from '../Button';
 
 export default ({min, max, title, total, isCurrency, onSlide, isPayment}) => {
   const [calcValue, setCalcValue] = useState(
@@ -22,10 +20,6 @@ export default ({min, max, title, total, isCurrency, onSlide, isPayment}) => {
   );
   const [showCalcValue, setShowCalcValue] = useState(false);
   const [showModal, setShowModal] = useState(false);
-
-  // const min = 2000;
-  // const max = 15700;
-  // const title = 'Total Debt Balance';
 
   const handleDone = () => {
     const val = currency(calcValue).value;

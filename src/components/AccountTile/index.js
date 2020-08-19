@@ -1,8 +1,7 @@
-import React, {useContext, useState} from 'react';
+import React from 'react';
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import {RFValue, RFPercentage} from 'react-native-responsive-fontsize';
 import {colors} from '../../utilities/styles';
-import sortBy from 'lodash/sortBy';
 import ProgressGauge from '../ProgressGauge';
 import Bullet from '../Bullet';
 import currency from 'currency.js';
@@ -10,7 +9,7 @@ import moment from 'moment';
 import filter from 'lodash/filter';
 import last from 'lodash/last';
 
-const AccountTile = ({navigation, account, hideButton, progressOnly}) => {
+const AccountTile = ({navigation, account, progressOnly}) => {
   const statusBlockStyle = [styles.statusBlock];
   const statusBlockText = [styles.offeredText];
 

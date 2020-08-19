@@ -9,11 +9,9 @@ import {maskSSn, unmask} from '../../../utilities/validation';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import currency from 'currency.js';
 import {RFValue} from 'react-native-responsive-fontsize';
-// import {maskCurrency} from '../../../utilities/validation';
+import {TextInputMask} from 'react-native-masked-text';
 import {Auth} from 'aws-amplify';
-import get from 'lodash/get';
 import apis from '../../../apis/';
-// import {GlobalContext} from '../../GlobalContext';
 
 const ManualAdd = ({navigation}) => {
   const [globalData, setGlobalData] = useContext(GlobalContext);
@@ -220,16 +218,17 @@ const ManualAdd = ({navigation}) => {
               maxLength={16}
             />
             <TextInput
+              isCurrency
               onSubmitEditing={() => setAmountOwed(toUSD(amountOwed))}
               label="Amount Owed"
+              highlightOnFocus
+              invalid={!amountValid}
+              message={'Please enter an amount below 1,000,000'}
               onChangeText={value => {
                 setAmountOwed(value);
                 setAmountValid(true);
               }}
               value={amountOwed}
-              highlightOnFocus
-              invalid={!amountValid}
-              message={'Please enter an amount below 1,000,000'}
             />
           </Form>
           <View style={Spacing.bottomButtonsContainer}>
@@ -264,5 +263,14 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     maxHeight: 90,
     marginBottom: 15,
+  },
+  textInput: {
+    fontSize: RFValue(14),
+    fontFamily: 'Poppins-Bold',
+    color: colors.darkGreen,
+    letterSpacing: 0.75,
+    marginTop: RFValue(22),
+    marginHorizontal: 15,
+    height: RFValue(29),
   },
 });

@@ -10,18 +10,16 @@ import {
 import {RFValue} from 'react-native-responsive-fontsize';
 import {colors, Spacing} from '../../../utilities/styles';
 import {GlobalContext} from '../../../GlobalContext';
-import {Header} from '../../../components/Header';
-import {Button} from '../../../components/Button';
 
 const Profile = ({navigation}) => {
   const [globalData, setGlobalData] = useContext(GlobalContext);
 
-  // console.log(globalData.user, 'user!!!');
-
   return (
     <>
       <SafeAreaView style={{flex: 1, backgroundColor: 'white'}}>
-        <Header header={'Profile'} />
+        <View style={styles.headerBar}>
+          <Text style={styles.title}>Profile</Text>
+        </View>
         <View style={{paddingHorizontal: 15, paddingVertical: 20}}>
           <TouchableOpacity
             style={styles.button}
@@ -132,5 +130,23 @@ const styles = StyleSheet.create({
     height: RFValue(30),
     alignSelf: 'center',
     marginRight: RFValue(10),
+  },
+  headerBar: {
+    height: 50,
+    flexDirection: 'row',
+    borderBottomWidth: 2,
+    borderBottomColor: colors.lightGray,
+    paddingHorizontal: 20,
+    marginTop: 10,
+    justifyContent: 'flex-start',
+  },
+  title: {
+    color: colors.darkGreen,
+    fontFamily: 'Poppins-Bold',
+    fontSize: RFValue(16),
+    letterSpacing: 0.75,
+    textAlign: 'center',
+    alignSelf: 'flex-end',
+    marginBottom: 5,
   },
 });

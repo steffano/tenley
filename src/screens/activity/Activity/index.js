@@ -11,7 +11,6 @@ import {
 import ActiveUser from '../../accounts/Accounts/ActiveUser';
 import {RFValue} from 'react-native-responsive-fontsize';
 import {colors} from '../../../utilities/styles';
-import {Header} from '../../../components/Header';
 import TenleyBucks from './TenleyBucks';
 import PaymentAccounts from '../PaymentAccounts';
 

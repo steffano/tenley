@@ -70,26 +70,40 @@ const NewUser = ({navigation}) => {
           style={{
             backgroundColor: 'white',
             alignContent: 'center',
-            padding: 15,
+            padding: RFValue(15),
             borderRadius: 5,
           }}>
           <Text style={[styles.header, {fontSize: RFValue(14)}]}>
             Auto Add Details
           </Text>
-          <View style={{height: 20}} />
-          <Text
-            style={[
-              styles.blockText,
-              {fontSize: RFValue(12), paddingHorizontal: 10},
-            ]}>
-            To help you on your journey to becoming debt free. Tenley will
-            perform a pull of your credit reports. Tenley will only use this
-            data to show you your total debt amounts, each accounts’ details,
-            and allow you to being payments or negotiations on your accounts.
-          </Text>
-          <View style={{height: 10}} />
+          <View style={{height: RFValue(20)}} />
+          <ScrollView>
+            <Text
+              style={[
+                styles.blockText,
+                {fontSize: RFValue(11), paddingHorizontal: 10},
+              ]}>
+              To help you on your journey to becoming debt free, Tenley will
+              perform a pull of your credit reports. Tenley will only use this
+              data to show you your total debt amount, the detail of each
+              account, and allow you to begin making payments or negotiations on
+              your accounts. {'\n\n'}Tenley has relationships with the major
+              credit reporting bureaus that enable Tenley’s users to simplify
+              the processes of uploading their debts into Tenley. In order to
+              utilize this functionality, you will need to review and agree to
+              certain privacy disclosures and authorize us to receive your
+              credit report information. {'\n\n'}Tenley will never sell your
+              data to third party companies and will only use any information
+              provided for identification, validation, and authorization
+              purposes in order to enable you to use the functionality of the
+              Tenley app. In the event that the Tenley app is unable to
+              automatically detect an existing account, you can still access
+              that account by entering the relevant information manually.
+            </Text>
+          </ScrollView>
+          <View style={{height: RFValue(10)}} />
           <Text style={Typography.textLink}>See more details</Text>
-          <View style={{height: 20}} />
+          <View style={{height: RFValue(20)}} />
 
           <View>
             <Button

@@ -11,7 +11,6 @@ import {
 } from 'react-native';
 import get from 'lodash/get';
 import {GlobalContext} from '../../../GlobalContext';
-import {Header} from '../../../components/Header';
 import {ScreenHeader} from '../../../components/ScreenHeader';
 import {colors, Spacing} from '../../../utilities/styles';
 import {RFValue, RFPercentage} from 'react-native-responsive-fontsize';

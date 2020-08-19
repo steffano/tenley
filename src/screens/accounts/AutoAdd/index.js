@@ -68,6 +68,10 @@ const AutoAdd = ({navigation}) => {
     } catch (err) {
       console.log(err);
     }
+    setGlobalData({
+      ...globalData,
+      user: {...user, address},
+    });
   };
 
   const validateForm = () => {

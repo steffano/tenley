@@ -14,7 +14,6 @@ import {MessageButton} from '../../../components/MessageButton';
 import {SearchFilter} from '../../../components/SearchFilter';
 import {ScreenHeader} from '../../../components/ScreenHeader';
 
-import {Header} from '../../../components/Header';
 import {colors, Spacing} from '../../../utilities/styles';
 import {RFValue} from 'react-native-responsive-fontsize';
 
@@ -30,7 +29,6 @@ const Inbox = ({route, navigation}) => {
   return (
     <>
       <SafeAreaView style={styles.container}>
-        {/* <Header header={'Messages'} /> */}
         <ScreenHeader title={'Messages'} navigation={navigation} />
 
         <View style={[styles.container, {justifyContent: 'flex-start'}]}>

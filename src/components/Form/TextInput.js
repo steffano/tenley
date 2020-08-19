@@ -16,6 +16,7 @@ import FieldWrapper from './FieldWrapper';
 import {colors} from '../../utilities/styles';
 import moment from 'moment';
 import Modal from 'react-native-modal';
+import {TextInputMask} from 'react-native-masked-text';
 
 export default ({
   label,
@@ -31,6 +32,7 @@ export default ({
   eyeball,
   tooltip,
   removeBorder,
+  isCurrency,
   ...rest
 }) => {
   const [isFocused, setIsFocused] = useState(false);
@@ -113,16 +115,35 @@ export default ({
         message={message}
         messageType={messageType}
         invalid={invalid}>
-        <Animated.Text style={placeholderToLabel}>{label}</Animated.Text>
+        {!hasChildren && (
+          <Animated.Text style={placeholderToLabel}>{label}</Animated.Text>
+        )}
 
         {hasChildren ? (
-          <TouchableWithoutFeedback>
-            <View onPress={handleChildren}>{children}</View>
+          <TouchableWithoutFeedback onPress={handleChildren}>
+            <View>{children}</View>
           </TouchableWithoutFeedback>
         ) : datePicker ? (
           <TouchableWithoutFeedback onPress={handleDatePicker}>
             <Text style={[inputStyle, {paddingTop: 5}]}>{value}</Text>
           </TouchableWithoutFeedback>
+        ) : isCurrency ? (
+          <TextInputMask
+            style={inputStyle}
+            type={'money'}
+            onFocus={handleFocus}
+            onBlur={handleBlur}
+            returnKeyType="done"
+            options={{
+              precision: 2,
+              separator: '.',
+              delimiter: ',',
+              unit: '$',
+              suffixUnit: '',
+            }}
+            value={value}
+            {...rest}
+          />
         ) : (
           <TextInput
             secureTextEntry={obscured}
@@ -139,12 +160,7 @@ export default ({
         {eyeball && (
           <TouchableOpacity
             onPress={() => setObscured(!obscured)}
-            style={{
-              height: RFValue(16),
-              position: 'absolute',
-              right: RFValue(20),
-              top: RFValue(18),
-            }}>
+            style={styles.eyeballWrapper}>
             <Image
               style={{height: '100%', width: 20}}
               resizeMode="contain"
@@ -236,5 +252,11 @@ const styles = StyleSheet.create({
     color: '#aaa',
     fontSize: RFValue(12),
     letterSpacing: 1.75,
+  },
+  eyeballWrapper: {
+    height: RFValue(16),
+    position: 'absolute',
+    right: RFValue(20),
+    top: RFValue(18),
   },
 });
