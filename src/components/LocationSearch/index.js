@@ -97,7 +97,8 @@ const LocationSearch = props => {
         query={{
           // available options: https://developers.google.com/places/web-service/autocomplete
           // key: Config.GOOGLE_API_KEY,
-          key: 'AIzaSyDn35ByhPquejOCnGWaP7ekuyVs_63BodQ',
+          // key: 'AIzaSyDn35ByhPquejOCnGWaP7ekuyVs_63BodQ',
+          key: 'AIzaSyB93u7SsuRzW0cy-PJ6WEIG4RgJHa8f-p0',
           language: 'en', // language of the results
           components: 'country:us',
           types: 'address', // default: 'geocode' '(regions)'/'(cities)'/'geocode'/'address'/'establishment';
