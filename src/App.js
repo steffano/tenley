@@ -1,5 +1,6 @@
 import 'react-native-gesture-handler';
 import React, {useEffect} from 'react';
+import {View, Text} from 'react-native';
 import Navigation from './navigation';
 import Amplify from 'aws-amplify';
 // import Config from 'react-native-config';
@@ -33,6 +34,9 @@ export default function App() {
     <>
       <GlobalProvider>
         <Navigation />
+        {/* <View>
+          <Text>test</Text>
+        </View> */}
       </GlobalProvider>
     </>
   );
