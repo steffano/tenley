@@ -103,117 +103,119 @@ const Register = ({navigation}) => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <KeyboardAwareScrollView
-        keyboardOpeningTime={Number.MAX_SAFE_INTEGER}
-        contentInsetAdjustmentBehavior="automatic"
-        contentContainerStyle={{
-          flexGrow: 1,
-        }}>
-        <Form header="Create Your Account">
-          <TextInput
-            label="Legal First Name"
-            onChangeText={text => {
-              setFn(text);
-              setFnValid(true);
-            }}
-            value={fn}
-            highlightOnFocus
-            invalid={!fnValid}
-            message={'Please enter your first name'}
-          />
-          <TextInput
-            label="Legal Last Name"
-            onChangeText={text => {
-              setLn(text);
-              setLnValid(true);
-            }}
-            value={ln}
-            highlightOnFocus
-            invalid={!lnValid}
-            message={'Please enter your last name'}
-          />
-          <TextInput
-            label="Email"
-            keyboardType="email-address"
-            onChangeText={text => {
-              setEmail(text);
-              setEmailValid(true);
-            }}
-            value={email}
-            highlightOnFocus
-            invalid={!emailValid}
-            message={'Please enter a valid email address'}
-          />
-          <TextInput
-            tooltip
-            label="Phone Number"
-            keyboardType="phone-pad"
-            onChangeText={text => {
-              setPhone(maskPhone(text));
-              setPhoneValid(true);
-            }}
-            value={phone}
-            highlightOnFocus
-            invalid={!phoneValid}
-            message={'Please enter your phone number'}
-          />
-          <TextInput
-            label="Password"
-            onChangeText={text => {
-              setPassword(text);
-              setPwValid(true);
-            }}
-            value={password}
-            eyeball
-            highlightOnFocus
-            invalid={!pwValid}
-            textContentType="oneTimeCode"
-            message={
-              'Password must include upper and lower case letters, numbers, and special characters.'
-            }
-          />
-          <TextInput
-            label="Confirm Password"
-            onChangeText={text => {
-              setConfirmPassword(text);
-              setPw2Valid(true);
-            }}
-            value={confirmPassword}
-            eyeball
-            highlightOnFocus
-            invalid={!pw2Valid}
-            textContentType="oneTimeCode"
-            message="Passwords must match"
-          />
-          <Text style={Typography.errorText}>{errorMessage}</Text>
-        </Form>
-        <View style={Spacing.bottomButtonsContainer}>
-          <Button
-            loading={loading}
-            disabled={loading}
-            title="Create Account"
-            onPress={() => startSignup()}
-          />
-          <Button
-            textOnly
-            title="ALREADY A USER? LOG IN HERE"
-            onPress={() => navigation.navigate('Login')}
-          />
-        </View>
-      </KeyboardAwareScrollView>
+    <>
+      <SafeAreaView style={styles.container}>
+        <KeyboardAwareScrollView
+          keyboardOpeningTime={Number.MAX_SAFE_INTEGER}
+          contentInsetAdjustmentBehavior="automatic"
+          contentContainerStyle={{
+            flexGrow: 1,
+          }}>
+          <Form header="Create Your Account">
+            <TextInput
+              label="Legal First Name"
+              onChangeText={text => {
+                setFn(text);
+                setFnValid(true);
+              }}
+              value={fn}
+              highlightOnFocus
+              invalid={!fnValid}
+              message={'Please enter your first name'}
+            />
+            <TextInput
+              label="Legal Last Name"
+              onChangeText={text => {
+                setLn(text);
+                setLnValid(true);
+              }}
+              value={ln}
+              highlightOnFocus
+              invalid={!lnValid}
+              message={'Please enter your last name'}
+            />
+            <TextInput
+              label="Email"
+              keyboardType="email-address"
+              onChangeText={text => {
+                setEmail(text);
+                setEmailValid(true);
+              }}
+              value={email}
+              highlightOnFocus
+              invalid={!emailValid}
+              message={'Please enter a valid email address'}
+            />
+            <TextInput
+              tooltip
+              label="Phone Number"
+              keyboardType="phone-pad"
+              onChangeText={text => {
+                setPhone(maskPhone(text));
+                setPhoneValid(true);
+              }}
+              value={phone}
+              highlightOnFocus
+              invalid={!phoneValid}
+              message={'Please enter your phone number'}
+            />
+            <TextInput
+              label="Password"
+              onChangeText={text => {
+                setPassword(text);
+                setPwValid(true);
+              }}
+              value={password}
+              eyeball
+              highlightOnFocus
+              invalid={!pwValid}
+              textContentType="oneTimeCode"
+              message={
+                'Password must include upper and lower case letters, numbers, and special characters.'
+              }
+            />
+            <TextInput
+              label="Confirm Password"
+              onChangeText={text => {
+                setConfirmPassword(text);
+                setPw2Valid(true);
+              }}
+              value={confirmPassword}
+              eyeball
+              highlightOnFocus
+              invalid={!pw2Valid}
+              textContentType="oneTimeCode"
+              message="Passwords must match"
+            />
+            <Text style={Typography.errorText}>{errorMessage}</Text>
+          </Form>
+          <View style={Spacing.bottomButtonsContainer}>
+            <Button
+              loading={loading}
+              disabled={loading}
+              title="Create Account"
+              onPress={() => startSignup()}
+            />
+            <Button
+              textOnly
+              title="ALREADY A USER? LOG IN HERE"
+              onPress={() => navigation.navigate('Login')}
+            />
+          </View>
+        </KeyboardAwareScrollView>
 
-      <Modal
-        isVisible={showModal}
-        backdropColor={colors.transparentGreen}
-        backdropOpacity={100}
-        onBackdropPress={() => setShowModal(false)}>
-        <Disclosures
-          onAccept={() => handleAgree()}
-          onDecline={() => setShowModal(false)}
-        />
-      </Modal>
-    </SafeAreaView>
+        <Modal
+          isVisible={showModal}
+          backdropColor={colors.transparentGreen}
+          backdropOpacity={100}
+          onBackdropPress={() => setShowModal(false)}>
+          <Disclosures
+            onAccept={() => handleAgree()}
+            onDecline={() => setShowModal(false)}
+          />
+        </Modal>
+      </SafeAreaView>
+    </>
   );
 };
 
