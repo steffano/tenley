@@ -17,7 +17,7 @@ import {ProfileStackScreen} from './screens/profile/ProfileStack';
 import {MessageStackScreen} from './screens/messages/MessagesStack';
 import {Auth} from 'aws-amplify';
 // import Payments from './screens/payments/PaymentStack.js';
-// import StoryBook from '../storybook';
+import StoryBook from '../storybook';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -32,7 +32,7 @@ function Navigation() {
       <NavigationContainer>
         {!globalData.loggedIn ? (
           <Stack.Navigator
-            initialRouteName="Welcome"
+            initialRouteName="StoryBook"
             screenOptions={{
               headerShown: false,
             }}>
@@ -41,7 +41,7 @@ function Navigation() {
             <Stack.Screen name="Register" component={Register} />
             <Stack.Screen name="Verify" component={Verify} />
             <Stack.Screen name="FaceId" component={FaceId} />
-            {/* <Stack.Screen name="Storybook" component={StoryBook} /> */}
+            <Stack.Screen name="Storybook" component={StoryBook} />
           </Stack.Navigator>
         ) : (
           <Tab.Navigator

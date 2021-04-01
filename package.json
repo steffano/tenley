@@ -13,7 +13,8 @@
     "start": "react-native start",
     "test": "jest",
     "lint": "eslint .",
-    "storybook": "start-storybook -p 7007"
+    "storybook": "start-storybook -p 7007",
+    "postinstall": "npx react-native-fix-image"
   },
   "dependencies": {
     "@aws-amplify/core": "^3.3.3",
