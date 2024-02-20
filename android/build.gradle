@@ -3,16 +3,17 @@
 buildscript {
     ext {
         buildToolsVersion = "28.0.3"
-        minSdkVersion = 16
-        compileSdkVersion = 28
-        targetSdkVersion = 28
+        minSdkVersion = 26
+        compileSdkVersion = 31
+        targetSdkVersion = 31
+        androidXCore = "1.6.0"
     }
     repositories {
         google()
         jcenter()
     }
     dependencies {
-        classpath("com.android.tools.build:gradle:3.5.2")
+        classpath('com.android.tools.build:gradle:3.6.4')
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
@@ -34,5 +35,11 @@ allprojects {
         google()
         jcenter()
         maven { url 'https://www.jitpack.io' }
+    }
+    configurations.all {
+        resolutionStrategy {
+            force 'androidx.core:core-ktx:1.6.0'
+            force "com.facebook.react:react-native:0.62.2"
+        }
     }
 }
