@@ -2,11 +2,30 @@ import React, {useContext} from 'react';
 import {View, Text, SafeAreaView, StyleSheet, Image} from 'react-native';
 import {Button} from '../../components/Button';
 import {GlobalContext} from '../../GlobalContext';
+import {useAuth} from '../../contexts/AuthContext';
 import {RFValue, RFPercentage} from 'react-native-responsive-fontsize';
 import {colors, Spacing} from '../../utilities/styles';
 
-const FaceId = () => {
+const FaceId = ({ navigation }) => {
+  const {loginWithBiometric} = useAuth();
   const [globalData, setGlobalData] = useContext(GlobalContext);
+
+  const handleEnableFaceId = async () => {
+    const result = await loginWithBiometric();
+    setGlobalData({
+      ...globalData,
+      loggedIn: true,
+    });
+    navigation.navigate('AutoAdd');
+  };
+
+  const handleSkip = () => {
+    setGlobalData({
+      ...globalData,
+      loggedIn: true,
+    });
+    navigation.navigate('AutoAdd');
+  };
 
   return (
     <>
@@ -40,22 +59,12 @@ const FaceId = () => {
         <View style={Spacing.bottomButtonsContainer}>
           <Button
             title="Enable Face ID"
-            onPress={() =>
-              setGlobalData({
-                ...globalData,
-                loggedIn: true,
-              })
-            }
+            onPress={handleEnableFaceId}
           />
           <Button
             textOnly
             title="SKIP"
-            onPress={() =>
-              setGlobalData({
-                ...globalData,
-                loggedIn: true,
-              })
-            }
+            onPress={handleSkip}
           />
         </View>
       </SafeAreaView>

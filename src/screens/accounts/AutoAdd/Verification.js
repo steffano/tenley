@@ -76,7 +76,10 @@ const Verification = ({navigation}) => {
           <Button
             disabled={selected === 0}
             title="Submit"
-            onPress={() => navigation.navigate('Load Accounts')}
+            onPress={() => navigation.reset({
+              index: 0,
+              routes: [{name: 'Accounts', params: 'fromImportLoading'}],
+            })}
           />
         </View>
       </SafeAreaView>

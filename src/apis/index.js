@@ -1,94 +1,48 @@
 import {create} from 'apisauce';
-import {Auth} from 'aws-amplify';
-
-const getToken = async () => {
-  try {
-    return await Auth.currentSession()
-      .then(res => {
-        let accessToken = res.getAccessToken();
-        let jwt = accessToken.getJwtToken();
-        console.log(`myAccessToken: ${JSON.stringify(accessToken)}`);
-        console.log(jwt);
-      })
-      .catch(err => {
-        console.log(err);
-      });
-  } catch (err) {
-    console.log(err);
-  }
-};
-
-const getJwt = async () => {
-  await Auth.currentSession().then(data => data.accessToken.jwtToken);
-};
 
 const api = create({
-  baseURL:
-    'http://tenleyapi-env.eba-4a3u3vcc.us-west-2.elasticbeanstalk.com/v1',
+  baseURL: 'http://10.0.2.2:3000',
   headers: {Accept: 'application/json'},
 });
 
-const addAccount = async postBody => {
-  const jwt = await Auth.currentSession().then(
-    data => data.accessToken.jwtToken,
-  );
+const signIn = async (email, password) => {
+  return await api.post('/users/sign_in', {
+    user: { email, password }
+  });
+};
+
+const signOut = async (token) => {
+  return await api.delete('/users/sign_out', {}, {
+    headers: { Authorization: `Bearer ${token}` }
+  });
+};
+
+const signUp = async (userData) => {
+  console.log('API: Making signup request to:', `${api.getBaseURL()}/users`);
+  console.log('API: Request payload:', { user: userData });
+  try {
+    const response = await api.post('/users', {
+      user: userData
+    });
+    console.log('API: Response status:', response.status);
+    console.log('API: Response data:', response.data);
+    return response;
+  } catch (error) {
+    console.error('API: Signup error:', error);
+    return error.response || error;
+  }
+};
+
+const addAccount = async (postBody, token) => {
   return await api.post('/accounts', postBody, {
-    headers: {Authorization: `Bearer ${jwt}`},
+    headers: {Authorization: `Bearer ${token}`},
   });
 };
 
-const getAccounts = async () => {
-  const jwt = await Auth.currentSession().then(
-    data => data.accessToken.jwtToken,
-  );
-  api.setHeader('Authorization', `Bearer ${jwt}`);
-  return api.get('/accounts');
-};
-
-const importAccounts = async () => {
-  const jwt = await Auth.currentSession().then(
-    data => data.accessToken.jwtToken,
-  );
-  api.setHeader('Authorization', `Bearer ${jwt}`);
-  return api.post('/accounts/import');
-};
-
-const postSettlement = async (postBody, id) => {
-  const jwt = await Auth.currentSession().then(
-    data => data.accessToken.jwtToken,
-  );
-  return api.post(`/accounts/${id}/settlement`, postBody, {
-    headers: {Authorization: `Bearer ${jwt}`},
+const getAccounts = async (token) => {
+  return await api.get('/accounts', {}, {
+    headers: {Authorization: `Bearer ${token}`}
   });
 };
 
-const oneTimePayment = async (postBody, id) => {
-  const jwt = await Auth.currentSession().then(
-    data => data.accessToken.jwtToken,
-  );
-  return api.post(`/payments/${id}/payment`, postBody, {
-    headers: {Authorization: `Bearer ${jwt}`},
-  });
-};
-
-const schedulePayments = async (postBody, id) => {
-  const jwt = await Auth.currentSession().then(
-    data => data.accessToken.jwtToken,
-  );
-  return api.post(`/payments/${id}/schedule`, postBody, {
-    headers: {Authorization: `Bearer ${jwt}`},
-  });
-};
-
-export default {
-  getAccounts,
-  addAccount,
-  postSettlement,
-  importAccounts,
-  oneTimePayment,
-  schedulePayments,
-};
-
-// export const getAccounts = jwt =>
-//   api.setHeader('Authorization', `Bearer ${jwt}`);
-// api.get('/accounts');
+export { signIn, signOut, signUp, addAccount, getAccounts };

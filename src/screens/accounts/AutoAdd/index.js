@@ -6,15 +6,16 @@ import {Button} from '../../../components/Button';
 import {ScreenHeader} from '../../../components/ScreenHeader';
 import {maskSSn, unmask} from '../../../utilities/validation';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import {Auth} from 'aws-amplify';
 import {RFValue} from 'react-native-responsive-fontsize';
 import LocationSearch from '../../../components/LocationSearch';
 import {GlobalContext} from '../../../GlobalContext';
+import {useAuth} from '../../../contexts/AuthContext';
 import apis from '../../../apis/';
 
 const AutoAdd = ({navigation}) => {
+  const {updateUserProfile} = useAuth();
   const [globalData, setGlobalData] = useContext(GlobalContext);
-  const {user, session} = globalData;
+  const {user} = globalData;
   const [fn, setFn] = useState(user.given_name);
   const [ln, setLn] = useState(user.family_name);
   const [ssn, setSsn] = useState('');
@@ -39,39 +40,40 @@ const AutoAdd = ({navigation}) => {
     if (validateForm()) {
       setIsLoading(true);
       setError('');
-      updateUser();
+      
       try {
-        await apis
-          .importAccounts()
-          .then(res => {
-            console.log('res', res);
-          })
-          .then(navigation.navigate('Verification'));
+        const updateResult = await updateUserProfile({
+          'custom:ssn': unmask(ssn),
+          birthdate: date,
+          address,
+        });
+
+        if (updateResult.success) {
+          setGlobalData({
+            ...globalData,
+            user: { ...updateResult.user },
+          });
+
+          const importResult = await apis.importAccounts();
+          if (importResult) {
+            const accts = await apis.getAccounts();
+            setGlobalData(prev => ({
+              ...prev,
+              user: { ...updateResult.user },
+              accounts: accts.data.with,
+              ceaseAndDesist: false,
+            }));
+            navigation.navigate('Verification');
+          }
+        } else {
+          setError(updateResult.error);
+        }
       } catch (error) {
-        console.log(error.message);
-        setError(
-          'An error occurred, please check your information and try again',
-        );
+        setError('An error occurred, please check your information and try again');
+      } finally {
+        setIsLoading(false);
       }
     }
-    setIsLoading(false);
-  };
-
-  const updateUser = async () => {
-    const u = await Auth.currentAuthenticatedUser();
-    try {
-      await Auth.updateUserAttributes(u, {
-        'custom:ssn': unmask(ssn),
-        birthdate: date,
-        address,
-      });
-    } catch (err) {
-      console.log(err);
-    }
-    setGlobalData({
-      ...globalData,
-      user: {...user, address},
-    });
   };
 
   const validateForm = () => {

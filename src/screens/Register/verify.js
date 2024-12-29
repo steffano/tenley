@@ -14,6 +14,7 @@ import {colors, Spacing} from '../../utilities/styles';
 import {RFValue, RFPercentage} from 'react-native-responsive-fontsize';
 import {maskPhone, unmask} from '../../utilities/validation';
 import Modal from 'react-native-modal';
+import {useAuth} from '../../contexts/AuthContext';
 
 import {
   CodeField,
@@ -23,21 +24,33 @@ import {
 } from 'react-native-confirmation-code-field';
 
 const Verify = ({navigation}) => {
+  const {verifyUser, resendVerificationCode} = useAuth();
   const [globalData, setGlobalData] = useContext(GlobalContext);
-  const user = globalData.user;
+  const {user} = globalData;
   const [showResend, setShowResend] = useState(false);
   const [phone, setPhone] = useState(maskPhone(user.phone_number.slice(2)));
+  const [error, setError] = useState('');
 
-  const handleVerify = () => {
-    navigation.navigate('FaceId');
+  const handleVerify = async () => {
+    const result = await verifyUser(value);
+    if (result.success) {
+      setGlobalData({
+        ...globalData,
+        loggedIn: false
+      });
+      navigation.navigate('FaceId');
+    } else {
+      setError(result.error);
+    }
   };
 
-  const handleResend = () => {
-    setGlobalData({
-      ...globalData,
-      user: {...user, phone_number: '+1' + unmask(phone)},
-    });
-    setShowResend(false);
+  const handleResend = async () => {
+    const result = await resendVerificationCode();
+    if (result.success) {
+      setShowResend(false);
+    } else {
+      setError(result.error);
+    }
   };
 
   const CELL_COUNT = 6;
@@ -92,20 +105,21 @@ const Verify = ({navigation}) => {
               )}
             />
           </View>
+          {error ? <Text style={styles.errorText}>{error}</Text> : null}
+          <View style={Spacing.bottomButtonsContainer}>
+            <Button
+              disabled={value.length < 6}
+              title="Verify"
+              onPress={handleVerify}
+            />
+            <Button
+              textOnly
+              title="RESEND CODE"
+              onPress={handleResend}
+            />
+          </View>
         </View>
       </Form>
-      <View style={Spacing.bottomButtonsContainer}>
-        <Button
-          disabled={value.length < 6}
-          title="Verify"
-          onPress={() => handleVerify()}
-        />
-        <Button
-          textOnly
-          title="RESEND CODE"
-          onPress={() => setShowResend(true)}
-        />
-      </View>
       <Modal
         isVisible={showResend}
         backdropColor={colors.transparentGreen}
@@ -225,5 +239,10 @@ const styles = StyleSheet.create({
   },
   focusCell: {
     borderColor: colors.lightGray,
+  },
+  errorText: {
+    color: colors.red,
+    fontSize: RFValue(12),
+    marginTop: 10,
   },
 });

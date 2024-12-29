@@ -11,12 +11,13 @@ import {
 } from '../../utilities/validation';
 import {Form, TextInput} from '../../components/Form';
 import {Button} from '../../components/Button';
-import {Auth} from 'aws-amplify';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import Modal from 'react-native-modal';
 import Disclosures from '../../components/Modals/disclosures';
+import { useAuth } from '../../contexts/AuthContext';
 
 const Register = ({navigation}) => {
+  const { register, login } = useAuth();
   const [, setGlobalData] = useContext(GlobalContext);
 
   const [fn, setFn] = useState('');
@@ -35,40 +36,49 @@ const Register = ({navigation}) => {
 
   const [showModal, setShowModal] = useState(false);
   const [loading, setLoading] = useState(false);
-
   const [errorMessage, setErrorMessage] = useState('');
 
-  const signup = async () => {
+  const handleSignup = async () => {
     try {
-      const user = await Auth.signUp({
-        username: email,
-        password,
-        attributes: {
-          given_name: fn,
-          family_name: ln,
-          phone_number: '+1' + unmask(phone),
-        },
+      setErrorMessage(''); // Clear any previous errors
+      setLoading(true); // Show loading state
+      console.log('Starting registration with:', {
+        email,
+        given_name: fn,
+        family_name: ln,
+        phone_number: '+1' + unmask(phone)
       });
-      if (user) {
-        storeUser();
+      
+      const registerResult = await register(email, password, {
+        given_name: fn,
+        family_name: ln,
+        phone_number: '+1' + unmask(phone),
+      });
+      console.log('Register result:', registerResult);
+
+      if (registerResult.success) {
+        console.log('Registration successful, attempting login');
+        const loginResult = await login(email, password);
+        console.log('Login result:', loginResult);
+        if (loginResult.success) {
+          setGlobalData({
+            user: loginResult.user,
+            token: loginResult.token,
+            loggedIn: true,
+          });
+          navigation.navigate('Verify');
+        } else {
+          setErrorMessage(loginResult.error || 'Login failed after registration');
+        }
+      } else {
+        setErrorMessage(registerResult.error || 'Registration failed');
       }
     } catch (error) {
-      console.log('error signing up:', error.code);
-      setErrorMessage(error.message);
-      setLoading(false);
+      console.error('Registration error:', error);
+      setErrorMessage(error.message || 'An unexpected error occurred');
+    } finally {
+      setLoading(false); // Hide loading state
     }
-  };
-
-  const storeUser = async () => {
-    const user = await Auth.signIn({username: email, password});
-    console.log('#####', user);
-    setGlobalData({
-      user: user.attributes,
-      session: user.signInUserSession,
-      accounts: [],
-      // loggedIn: true,
-    });
-    navigation.navigate('Verify');
   };
 
   const startSignup = () => {
@@ -81,7 +91,7 @@ const Register = ({navigation}) => {
     setShowModal(false);
     setLoading(true);
     if (validateForm()) {
-      signup();
+      handleSignup();
     }
   };
 

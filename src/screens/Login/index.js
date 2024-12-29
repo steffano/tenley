@@ -1,55 +1,50 @@
-import React, {useContext, useState} from 'react';
-import {SafeAreaView, Text, View, StyleSheet} from 'react-native';
-import {GlobalContext} from '../../GlobalContext';
-import {Form, TextInput} from '../../components/Form';
-import {Button} from '../../components/Button';
-import isEmpty from 'lodash/isEmpty';
-// import * as Keychain from 'react-native-keychain';
-import {colors, Typography, Spacing} from '../../utilities/styles';
-import apis from '../../apis';
+import React, { useState } from 'react';
+import { SafeAreaView, Text, View, StyleSheet } from 'react-native';
+import { Form, TextInput } from '../../components/Form';
+import { Button } from '../../components/Button';
+import { colors, Typography, Spacing } from '../../utilities/styles';
+import { useAuth } from '../../contexts/AuthContext';
+import { useContext } from 'react';
+import { GlobalContext } from '../../GlobalContext';
 
-import {Auth} from 'aws-amplify';
-
-const Login = ({navigation}) => {
-  const [globalData, setGlobalData] = useContext(GlobalContext);
+const Login = ({ navigation }) => {
+  const { login, loginWithBiometric } = useAuth();
+  const [, setGlobalData] = useContext(GlobalContext);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [emailValid, setEmailValid] = useState(true);
   const [pwValid, setPwValid] = useState(true);
   const [errorMessage, setErrorMessage] = useState('');
 
-  const login = async () => {
+  const handleLogin = async () => {
     setErrorMessage('');
     if (validateForm()) {
-      try {
-        const user = await Auth.signIn({
-          username: email,
-          password,
+      const result = await login(email, password);
+      if (result.success) {
+        setGlobalData({
+          user: result.user,
+          token: result.token,
+          accounts: [], // Will be populated by getAccounts
+          loggedIn: true,
         });
-        if (user) {
-          fetchData(user);
-        }
-      } catch (error) {
-        if (error.code === 'UserNotConfirmedException') {
-          setErrorMessage(error.message);
-        }
-        if (error.code === 'NotAuthorizedException') {
-          setErrorMessage(error.message);
-          console.log(error);
-        }
+      } else {
+        setErrorMessage(result.error);
       }
     }
   };
 
-  const fetchData = async user => {
-    const session = user.signInUserSession;
-    const accts = await apis.getAccounts();
-    setGlobalData({
-      user: user.attributes,
-      session,
-      accounts: accts.data.with,
-      loggedIn: true,
-    });
+  const handleBiometricLogin = async () => {
+    const result = await loginWithBiometric();
+    if (result.success) {
+      setGlobalData({
+        user: result.user,
+        token: result.token,
+        accounts: [],
+        loggedIn: true,
+      });
+    } else {
+      setErrorMessage(result.error);
+    }
   };
 
   const validateForm = () => {
@@ -86,10 +81,10 @@ const Login = ({navigation}) => {
           message={'Please enter your password'}
         />
         <Text style={Typography.errorText}>{errorMessage}</Text>
-        <Button textOnly title="USE FACE ID" />
+        <Button textOnly title="USE FACE ID" onPress={handleBiometricLogin} />
       </Form>
       <View style={Spacing.bottomButtonsContainer}>
-        <Button title="Log In" onPress={() => login()} />
+        <Button title="Log In" onPress={handleLogin} />
         <Button
           textOnly
           title="DON'T HAVE AN ACCOUNT? SIGN UP HERE"
