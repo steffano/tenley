@@ -45,4 +45,103 @@ const getAccounts = async (token) => {
   });
 };
 
-export { signIn, signOut, signUp, addAccount, getAccounts };
+// Profile endpoints
+const getProfile = async () => {
+  console.log('API: Fetching user profile');
+  try {
+    const response = await api.get('/api/v1/profile');
+    console.log('API: Profile response:', response.data);
+    return response;
+  } catch (error) {
+    console.error('API: Profile fetch error:', error);
+    return error.response || error;
+  }
+};
+
+const updateProfile = async (profileData) => {
+  console.log('API: Updating profile with:', profileData);
+  try {
+    const response = await api.patch('/api/v1/profile', { profile: profileData });
+    console.log('API: Profile update response:', response.data);
+    return response;
+  } catch (error) {
+    console.error('API: Profile update error:', error);
+    return error.response || error;
+  }
+};
+
+// Account endpoints
+const getAccountsList = async () => {
+  console.log('API: Fetching accounts');
+  try {
+    const response = await api.get('/api/v1/accounts');
+    console.log('API: Accounts response:', response.data);
+    return response;
+  } catch (error) {
+    console.error('API: Accounts fetch error:', error);
+    return error.response || error;
+  }
+};
+
+const getAccount = async (accountId) => {
+  console.log('API: Fetching account:', accountId);
+  try {
+    const response = await api.get(`/api/v1/accounts/${accountId}`);
+    console.log('API: Account response:', response.data);
+    return response;
+  } catch (error) {
+    console.error('API: Account fetch error:', error);
+    return error.response || error;
+  }
+};
+
+const createAccount = async (accountData) => {
+  console.log('API: Creating account:', accountData);
+  try {
+    const response = await api.post('/api/v1/accounts', { account: accountData });
+    console.log('API: Account creation response:', response.data);
+    return response;
+  } catch (error) {
+    console.error('API: Account creation error:', error);
+    return error.response || error;
+  }
+};
+
+const updateAccount = async (accountId, accountData) => {
+  console.log('API: Updating account:', accountId, accountData);
+  try {
+    const response = await api.patch(`/api/v1/accounts/${accountId}`, { account: accountData });
+    console.log('API: Account update response:', response.data);
+    return response;
+  } catch (error) {
+    console.error('API: Account update error:', error);
+    return error.response || error;
+  }
+};
+
+const deleteAccount = async (accountId) => {
+  console.log('API: Deleting account:', accountId);
+  try {
+    const response = await api.delete(`/api/v1/accounts/${accountId}`);
+    console.log('API: Account deletion response:', response.data);
+    return response;
+  } catch (error) {
+    console.error('API: Account deletion error:', error);
+    return error.response || error;
+  }
+};
+
+export {
+  signIn,
+  signOut,
+  signUp,
+  addAccount,
+  getAccounts,
+  getProfile,
+  updateProfile,
+  getAccountsList,
+  getAccount,
+  createAccount,
+  updateAccount,
+  deleteAccount,
+};
