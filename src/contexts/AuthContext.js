@@ -108,6 +108,65 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const fetchUserProfile = async (authToken) => {
+    try {
+      console.log('Fetching user profile');
+      
+      // Try different IP configurations based on platform
+      // For real device testing, you should use your computer's actual IP address
+      const baseUrls = [
+        'http://10.0.2.2:3000',    // Android emulator
+        'http://localhost:3000',   // iOS simulator
+        'http://127.0.0.1:3000'    // Alternative localhost
+      ];
+      
+      let response = null;
+      let fetchError = null;
+      
+      // Try each base URL until one works
+      for (const baseUrl of baseUrls) {
+        try {
+          console.log(`Trying to fetch profile from: ${baseUrl}/api/v1/profile`);
+          
+          response = await fetch(`${baseUrl}/api/v1/profile`, {
+            headers: {
+              'Authorization': `Bearer ${authToken}`,
+              'Accept': 'application/json'
+            },
+            // Add timeout to prevent long hanging requests
+            timeout: 5000
+          });
+          
+          console.log(`Response from ${baseUrl}: ${response.status}`);
+          
+          if (response.ok) {
+            break; // Found a working URL, exit the loop
+          }
+        } catch (error) {
+          console.log(`Error with ${baseUrl}: ${error.message}`);
+          fetchError = error;
+          // Continue to try the next URL
+        }
+      }
+      
+      if (!response || !response.ok) {
+        throw fetchError || new Error('Failed to fetch profile from any endpoint');
+      }
+      
+      const data = await response.json();
+      console.log('Profile data:', data);
+      
+      if (data.data && data.data.user) {
+        return { success: true, user: data.data.user };
+      }
+      
+      return { success: false, error: 'Invalid profile data' };
+    } catch (error) {
+      console.error('Error fetching profile:', error);
+      return { success: false, error: error.message };
+    }
+  };
+
   return (
     <AuthContext.Provider value={{ 
       token, 
@@ -119,6 +178,7 @@ export const AuthProvider = ({ children }) => {
       updateUserProfile,
       loginWithBiometric,
       resendVerificationCode,
+      fetchUserProfile,
       isAuthenticated: !!token 
     }}>
       {children}

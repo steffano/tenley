@@ -21,43 +21,125 @@ import {RFValue, RFPercentage} from 'react-native-responsive-fontsize';
 const Personal = ({navigation}) => {
   const [globalData, setGlobalData] = useContext(GlobalContext);
   const {user} = globalData;
-  const [fn, setFn] = useState(user.given_name);
-  const [ln, setLn] = useState(user.family_name);
-  const [email, setEmail] = useState(user.email);
-  const [phone, setPhone] = useState(maskPhone(user.phone_number.slice(2)));
-
+  
+  console.log('User data in PersonalDetails:', user);
+  
+  // Add defensive checks for all user fields
+  const [fn, setFn] = useState(user?.given_name || '');
+  const [ln, setLn] = useState(user?.family_name || '');
+  const [email, setEmail] = useState(user?.email || '');
+  
+  // Safely handle phone number formatting
+  const [phone, setPhone] = useState(() => {
+    if (!user?.phone_number) return '';
+    // Check if phone number starts with +1 before slicing
+    return user.phone_number.startsWith('+1') 
+      ? maskPhone(user.phone_number.slice(2)) 
+      : maskPhone(user.phone_number);
+  });
   const [fnValid, setFnValid] = useState(true);
   const [lnValid, setLnValid] = useState(true);
   const [emailValid, setEmailValid] = useState(true);
   const [phoneValid, setPhoneValid] = useState(true);
 
   const [faceId, setFaceId] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
   const handleComplete = async () => {
     if (validateForm()) {
+      setLoading(true);
+      
+      // Update local state first for immediate UI feedback
+      const updatedUser = {
+        ...user,
+        given_name: fn,
+        family_name: ln,
+        phone_number: '+1' + unmask(phone),
+      };
+      
       setGlobalData({
         ...globalData,
-        user: {
-          ...user,
-          given_name: fn,
-          family_name: ln,
-          phone_number: '+1' + unmask(phone),
-        },
+        user: updatedUser,
       });
-      const u = await Auth.currentAuthenticatedUser();
+      
+      // Use your Rails API instead of Amplify
       try {
-        await Auth.updateUserAttributes(u, {
-          given_name: fn,
-          family_name: ln,
-          phone_number: '+1' + unmask(phone),
-        }).then(
+        // Try different IP configurations based on platform
+        const baseUrls = [
+          'http://10.0.2.2:3000',    // Android emulator
+          'http://localhost:3000',   // iOS simulator
+          'http://127.0.0.1:3000'    // Alternative localhost
+        ];
+        
+        let response = null;
+        let fetchError = null;
+        
+        // Try each base URL until one works
+        for (const baseUrl of baseUrls) {
+          try {
+            console.log(`Trying to update profile at: ${baseUrl}/api/v1/profile`);
+            
+            response = await fetch(`${baseUrl}/api/v1/profile`, {
+              method: 'PUT',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${globalData.token}`,
+                'Accept': 'application/json'
+              },
+              body: JSON.stringify({
+                profile: {
+                  given_name: fn,
+                  family_name: ln,
+                  phone_number: '+1' + unmask(phone),
+                }
+              })
+            });
+            
+            console.log(`Response from ${baseUrl}: ${response.status}`);
+            
+            if (response) {
+              break; // Found a working URL, exit the loop
+            }
+          } catch (error) {
+            console.log(`Error with ${baseUrl}: ${error.message}`);
+            fetchError = error;
+            // Continue to try the next URL
+          }
+        }
+        
+        if (!response) {
+          throw fetchError || new Error('Failed to update profile on any endpoint');
+        }
+        
+        const rawText = await response.text();
+        console.log('Raw response:', rawText);
+        
+        // Only try to parse as JSON if it looks like JSON
+        let data;
+        if (rawText.trim().startsWith('{')) {
+          data = JSON.parse(rawText);
+          console.log('Profile update response:', data);
+        } else {
+          console.error('Server returned non-JSON response');
+          setErrorMessage('Server returned invalid response format');
+          setLoading(false);
+          return;
+        }
+        
+        if (response.ok) {
           navigation.reset({
             index: 3,
             routes: [{name: 'Profile'}],
-          }),
-        );
-      } catch (err) {
-        console.log(err);
+          });
+        } else {
+          setErrorMessage((data && data.errors) || 'Failed to update profile');
+        }
+      } catch (error) {
+        console.error('Error updating profile:', error);
+        setErrorMessage('Network error. Please try again.');
+      } finally {
+        setLoading(false);
       }
     }
   };

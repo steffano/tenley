@@ -8,7 +8,7 @@ import { useContext } from 'react';
 import { GlobalContext } from '../../GlobalContext';
 
 const Login = ({ navigation }) => {
-  const { login, loginWithBiometric } = useAuth();
+  const { login, loginWithBiometric, fetchUserProfile } = useAuth();
   const [, setGlobalData] = useContext(GlobalContext);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -21,10 +21,13 @@ const Login = ({ navigation }) => {
     if (validateForm()) {
       const result = await login(email, password);
       if (result.success) {
+        // Fetch full profile after login
+        const profileResult = await fetchUserProfile(result.token);
+        
         setGlobalData({
-          user: result.user,
+          user: profileResult.success ? profileResult.user : result.user,
           token: result.token,
-          accounts: [], // Will be populated by getAccounts
+          accounts: [],
           loggedIn: true,
         });
       } else {

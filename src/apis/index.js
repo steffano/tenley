@@ -40,9 +40,15 @@ const addAccount = async (postBody, token) => {
 };
 
 const getAccounts = async (token) => {
-  return await api.get('/accounts', {}, {
-    headers: {Authorization: `Bearer ${token}`}
-  });
+  try {
+    const response = await api.get('/accounts', {}, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    return response.data || []; // Return empty array if data is undefined
+  } catch (error) {
+    console.error('Error fetching accounts:', error);
+    return [];
+  }
 };
 
 export { signIn, signOut, signUp, addAccount, getAccounts };
